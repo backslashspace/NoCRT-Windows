@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="start.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="log_w.c">
+      <Filter>Source Files\core\console</Filter>
+    </ClCompile>
+    <ClCompile Include="log_a.c">
+      <Filter>Source Files\core\console</Filter>
+    </ClCompile>
+    <ClCompile Include="uint_to_wchar.c">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="uint_to_char.c">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="enable_vt100.c">
+      <Filter>Source Files\core\console</Filter>
+    </ClCompile>
+    <ClCompile Include="advapi32.c">
+      <Filter>Source Files\external</Filter>
+    </ClCompile>
+    <ClCompile Include="ntdll.c">
+      <Filter>Source Files\external</Filter>
+    </ClCompile>
+    <ClCompile Include="process_information.c">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="resolve_symbols.c">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="test_console.c">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resolve_symbols.h">
+      <Filter>Header Files\core\base</Filter>
+    </ClInclude>
+    <ClInclude Include="testing.h">
+      <Filter>Header Files\core\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ntdll.h">
+      <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="advapi32.h">
+      <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="intrinsics.h">
+      <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="process_information.h">
+      <Filter>Header Files\core\base</Filter>
+    </ClInclude>
+    <ClInclude Include="console_logging.h">
+      <Filter>Header Files\core\console</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{744bfec4-f6d8-4acd-b1bd-b9483bb5595f}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{f3e08d24-c352-4e62-a7c1-bc2e6eb7b5d7}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{9c3a1af4-f04e-453b-8cc2-2f198e665894}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\core">
+      <UniqueIdentifier>{c9ebf1f8-0c8c-49c9-a384-1ebd50b6c602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core\console">
+      <UniqueIdentifier>{be745247-2165-4872-9818-4ea821ea44b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utility">
+      <UniqueIdentifier>{e92f796f-a82b-4450-bfb8-0c007d17825f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\base">
+      <UniqueIdentifier>{b2ca2aa8-253d-4259-8916-e26f0ba2bf03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\external">
+      <UniqueIdentifier>{4c56a01c-8603-4b78-8ac8-8ae87a6dfb70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core">
+      <UniqueIdentifier>{a1ef8094-0e8a-4c25-a0c2-8dddfe55dac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\external">
+      <UniqueIdentifier>{ba5d0191-3605-48e4-a8d0-82f8c6ac465c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\base">
+      <UniqueIdentifier>{10cf667d-493b-4dcd-afc7-42715f8b1019}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\console">
+      <UniqueIdentifier>{bd3839fa-7785-4f6b-83be-703aa52ad6f5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="__chkstk.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+  </ItemGroup>
+</Project>

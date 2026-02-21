@@ -1,0 +1,14 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Debug Optimized" />
+    <BuildType Name="Release" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path="LICENSE" />
+    <File Path="notes.txt" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="NoCRT-Windows.vcxproj" Id="ac2d0a8c-3aa4-4c77-b0dd-d95441d8401f" />
+</Solution>
