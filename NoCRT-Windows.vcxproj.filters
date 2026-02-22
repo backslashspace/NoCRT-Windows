@@ -37,6 +37,9 @@
     <ClCompile Include="test_console.c">
       <Filter>Source Files\base</Filter>
     </ClCompile>
+    <ClCompile Include="shell32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.h">
@@ -65,6 +68,9 @@
     </ClInclude>
     <ClInclude Include="console_logging.h">
       <Filter>Header Files\core\console</Filter>
+    </ClInclude>
+    <ClInclude Include="shell32.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +117,9 @@
   <ItemGroup>
     <MASM Include="__chkstk.asm">
       <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="get_first_mismatch_index.asm">
+      <Filter>Source Files\utility</Filter>
     </MASM>
   </ItemGroup>
 </Project>

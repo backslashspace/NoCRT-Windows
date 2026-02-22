@@ -6,27 +6,24 @@ MemoryGetFirstByteMatchIndexX86 PROC; (const void* buffer, uint8_t value, uint64
     ; R8  = count
     ; ------------------
     ; R9  = intermediate
-    ; R10 = OK
+    ; R10 = rdi storage
 
-    mov     r11, rdi        ; preserve RDI
+    mov     r10, rdi        ; preserve rdi
+    mov     r9, r8          ; intermediate - store count
 
-    mov     rdi, rcx        ; buffer -> RDI
-    mov     rcx, r8         ; count  -> RCX
-    mov     al, dl          ; value  -> AL
-    mov     r9, r8          ; count  -> R9
-    mov     r10, -1         
-
-    repne   scasb           ; scan for AL in [RDI]
+    mov     rdi, rcx        ; rdi = buffer
+    mov     rcx, r8         ; rcx = count
+    mov     al, dl          ; al  = value
+    repne   scasb           ; scan for al in [rdi]
 
     dec     rcx
-    sub     r9, 2
-    sub     r9, rcx
+    lea     rax, [r9 - 2]
+    sub     rax, rcx
+
     cmp     rcx, -1
-    cmove   r9, r10
+    cmove   rax, rcx         ; -1 if not found
 
-    mov     rax, r9
-    mov     rdi, r11
-
+    mov     rdi, r10        ; restore rdi
     ret
 
 MemoryGetFirstByteMatchIndexX86 ENDP
@@ -37,27 +34,24 @@ MemoryGetFirstWordMatchIndexX86 PROC; (const void* buffer, uint16_t value, uint6
     ; R8  = count
     ; ------------------
     ; R9  = intermediate
-    ; R10 = OK
+    ; R10 = rdi storage
 
-    mov     r11, rdi        ; preserve RDI
+    mov     r10, rdi        ; preserve rdi
+    mov     r9, r8          ; intermediate - store count
 
-    mov     rdi, rcx        ; buffer -> RDI
-    mov     rcx, r8         ; count  -> RCX
-    mov     ax, dx          ; value  -> AL
-    mov     r9, r8          ; count  -> R9
-    mov     r10, -1         
-
-    repne   scasw           ; scan for AL in [RDI]
+    mov     rdi, rcx        ; rdi = buffer
+    mov     rcx, r8         ; rcx = count
+    mov     ax, dx          ; ax  = value
+    repne   scasw           ; scan for ax in [rdi]
 
     dec     rcx
-    sub     r9, 2
-    sub     r9, rcx
+    lea     rax, [r9 - 2]
+    sub     rax, rcx
+
     cmp     rcx, -1
-    cmove   r9, r10
+    cmove   rax, rcx         ; -1 if not found
 
-    mov     rax, r9
-    mov     rdi, r11
-
+    mov     rdi, r10        ; restore rdi
     ret
 
 MemoryGetFirstWordMatchIndexX86 ENDP

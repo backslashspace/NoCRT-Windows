@@ -21,6 +21,10 @@ int32_t Main()
 	uint32_t argc;
 	wchar_t** argv = Shell32.CommandLineToArgvW(processInformation.CommandLineBuffer, &argc);
 
+	char_t* testss = "gurt yo my nuts";
+
+	int64_t inde = MemoryGetFirstByteMatchIndexX86(testss, 'n', 15);
+
 	for (uint16_t i = 0; i < argc; ++i)
 	{
 		int64_t length = MemoryGetFirstWordMatchIndexX86(argv[i], 0, processInformation.CommandLineLength);
