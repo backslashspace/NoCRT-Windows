@@ -222,7 +222,7 @@ typedef NtStatus(*NtSetInformationFile_t)(Handle FileHandle, IO_STATUS_BLOCK *Io
 typedef NtStatus(*NtOpenFile_t)(Handle *fileHandle, uint32_t desiredAccess, OBJECT_ATTRIBUTES *objectAttributes, IO_STATUS_BLOCK *IoStatusBlock, uint32_t shareAccess, uint32_t openOptions);
 
 // https://ntdoc.m417z.com/ldrloaddll
-typedef NtStatus(*LdrLoadDll_t)(const wchar_t *DllPath, uint32_t *DllCharacteristics, const UNICODE_STRING *DllName, Handle DllHandle);
+typedef NtStatus(*LdrLoadDll_t)(wchar_t const *DllPath, uint32_t *DllCharacteristics, UNICODE_STRING const *DllName, Handle DllHandle);
 
 // https://ntdoc.m417z.com/ldrunloaddll
 typedef NtStatus(*LdrUnloadDll_t)(Handle DllHandle);
@@ -287,7 +287,7 @@ static __forceinline NtStatus NtDeviceIoControlFile(Handle FileHandle, Handle Ev
 static __forceinline NtStatus NtSetInformationFile(Handle FileHandle, IO_STATUS_BLOCK *IoStatusBlock, void *FileInformation, uint32_t Length, FILE_INFORMATION_CLASS FileInformationClass) { return NtDll.NtSetInformationFile(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass); }
 static __forceinline NtStatus NtQueryInformationFile(Handle FileHandle, IO_STATUS_BLOCK *IoStatusBlock, void *FileInformation, uint32_t Length, FILE_INFORMATION_CLASS FileInformationClass) { return NtDll.NtQueryInformationFile(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass); }
 
-static __forceinline NtStatus LdrLoadDll(const wchar_t *DllPath, uint32_t *DllCharacteristics, const UNICODE_STRING *DllName, Handle DllHandle) { return NtDll.LdrLoadDll(DllPath, DllCharacteristics, DllName, DllHandle); }
+static __forceinline NtStatus LdrLoadDll(wchar_t const *DllPath, uint32_t *DllCharacteristics, UNICODE_STRING const *DllName, Handle DllHandle) { return NtDll.LdrLoadDll(DllPath, DllCharacteristics, DllName, DllHandle); }
 static __forceinline NtStatus LdrUnloadDll(Handle DllHandle) { return NtDll.LdrUnloadDll(DllHandle); }
 static __forceinline NtStatus NtDelayExecution(boolean_t Alertable, uint64_t *DelayInterval) { return NtDll.NtDelayExecution(Alertable, DelayInterval); }
 static __forceinline NtStatus NtTerminateProcess(Handle ProcessHandle, NtStatus ExitStatus) { return NtDll.NtTerminateProcess(ProcessHandle, ExitStatus); }

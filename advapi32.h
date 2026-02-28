@@ -33,10 +33,10 @@ boolean_t LoadRegisterServiceCtrlHandlerExW();
 // ░░░ advapi32 Function Typedefs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 // https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-startservicectrldispatcherw
-typedef bool_t(*StartServiceCtrlDispatcherW_t)(const SERVICE_TABLE_ENTRYW *lpServiceStartTable);
+typedef bool_t(*StartServiceCtrlDispatcherW_t)(SERVICE_TABLE_ENTRYW const *lpServiceStartTable);
 
 // https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-registerservicectrlhandlerexw
-typedef Handle(*RegisterServiceCtrlHandlerExW_t)(wchar_t *lpServiceName, uint32_t(*lpHandlerProc)(uint32_t dwControl, uint32_t dwEventType, void *lpEventData, void *lpContext), void *lpContext);
+typedef Handle(*RegisterServiceCtrlHandlerExW_t)(wchar_t const *lpServiceName, uint32_t(*lpHandlerProc)(uint32_t dwControl, uint32_t dwEventType, void *lpEventData, void *lpContext), void *lpContext);
 
 // ░░░ Callable Grouped advapi32 Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
@@ -50,5 +50,5 @@ extern struct Advapi32Functions Advapi32;
 
 // ░░░ Wrap to normal Function ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-static __forceinline bool_t StartServiceCtrlDispatcherW(const SERVICE_TABLE_ENTRYW *lpServiceStartTable) { return Advapi32.StartServiceCtrlDispatcherW(lpServiceStartTable); }
-static __forceinline Handle RegisterServiceCtrlHandlerExW(wchar_t *lpServiceName, uint32_t(*lpHandlerProc)(uint32_t dwControl, uint32_t dwEventType, void *lpEventData, void *lpContext), void *lpContext) { return Advapi32.RegisterServiceCtrlHandlerExW(lpServiceName, lpHandlerProc, lpContext); }
+static __forceinline bool_t StartServiceCtrlDispatcherW(SERVICE_TABLE_ENTRYW const *lpServiceStartTable) { return Advapi32.StartServiceCtrlDispatcherW(lpServiceStartTable); }
+static __forceinline Handle RegisterServiceCtrlHandlerExW(wchar_t const *lpServiceName, uint32_t(*lpHandlerProc)(uint32_t dwControl, uint32_t dwEventType, void *lpEventData, void *lpContext), void *lpContext) { return Advapi32.RegisterServiceCtrlHandlerExW(lpServiceName, lpHandlerProc, lpContext); }
