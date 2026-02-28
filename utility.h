@@ -103,7 +103,7 @@ static __forceinline void TicketLock_Unlock(TicketLock *lock)
 // ░░░ X86 String Helper ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 // returns -1 if no match is found, otherwise the index
-int64_t MemoryGetFirstByteMatchIndexX86(void const *const buffer, uint8_t value, uint64_t count);
+int64_t MemoryGetFirstByteMatchIndexX86(void const *buffer, uint8_t const value, uint64_t count);
 
 // returns -1 if no match is found, otherwise the index
-int64_t MemoryGetFirstWordMatchIndexX86(void const *const buffer, uint16_t value, uint64_t count);
+int64_t MemoryGetFirstWordMatchIndexX86(void const *buffer, uint16_t const value, uint64_t count);
