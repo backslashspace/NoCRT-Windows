@@ -11,7 +11,7 @@ static const char_t DIGITS_LUTA[201] = "0001020304050607080910111213141516171819
 /// <param name="value">Input</param>
 /// <param name="buffer">Buffer of length 20</param>
 /// <returns>Length in visual digits</returns>
-uint16_t UInt64ToChar(uint64_t value, char_t* buffer)
+uint16_t UInt64ToChar(uint64_t value, char_t *const buffer)
 {
     uint16_t position = 19; // max length = 20 - 1
     uint16_t index = 0;

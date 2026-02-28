@@ -1,9 +1,7 @@
-#pragma warning(disable: 6255)
-
 #include "ntdll.h"
+#include "console.h"
 #include "utility.h"
 #include "intrinsics.h"
-#include "console_logging.h"
 
 static const wchar_t* _logWords[7] =
 {
@@ -34,10 +32,10 @@ static const uint16_t _logWordLengthMap[7] =
 #define PADDING_TARGET (52 + 9) // 52 is effective padding, plus 9 for ANSI codes (5 color, 4 reset)
 #define MISC_CHAR_AMOUNT 7
 
-static __forceinline void SetTime(wchar_t* buffer, uint64_t* localNow)
+static __forceinline void SetTime(wchar_t *const restrict buffer, uint64_t const *const restrict localNow)
 {
     TIME_FIELDS timeFields;
-    wchar_t* timeStringBuffer = _alloca(10);
+    wchar_t *timeStringBuffer = _alloca(10);
     RtlTimeToTimeFields(localNow, &timeFields);
 
     buffer[0] = '[';
@@ -148,22 +146,21 @@ static __forceinline void SetTime(wchar_t* buffer, uint64_t* localNow)
     }
 }
 
-NtStatus ConsoleLogW(wchar_t* message, uint16_t messageLength, LogLevel logLevel, wchar_t* source, uint16_t sourceLength, Handle outputHandle)
+NtStatus ConsoleLogW(wchar_t const *const message, uint16_t messageLength, LogLevel logLevel, wchar_t const *const source, uint16_t sourceLength, Handle outputHandle)
 {
+    uint32_t bufferOffset = DATE_LENGTH;
     uint64_t localNow = TIME - LOCAL_OFFSET;
 
     uint32_t infoPortionLength = DATE_LENGTH + MISC_CHAR_AMOUNT + sourceLength + _logWordLengthMap[logLevel];
     uint32_t logLineLength = (PADDING_TARGET > infoPortionLength) ? PADDING_TARGET + messageLength + 1 : infoPortionLength + messageLength + 1; // 1 = \n
 
-    wchar_t* logLineBuffer = _alloca((uint64_t)logLineLength << 1);
+    wchar_t *logLineBuffer = _alloca((uint64_t)logLineLength << 1);
 
     /* - - - - - - Insert Time - - - - - - - */
 
     SetTime(logLineBuffer, &localNow);
 
     /* - - - - - - Insert Info - - - - - - - */
-
-    uint32_t bufferOffset = DATE_LENGTH;
 
     logLineBuffer[bufferOffset++] = ' ';
     logLineBuffer[bufferOffset++] = '[';

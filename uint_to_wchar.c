@@ -11,7 +11,7 @@ static const wchar_t DIGITS_LUTW[201] = L"00010203040506070809101112131415161718
 /// <param name="value">Input</param>
 /// <param name="buffer">Buffer of length 20</param>
 /// <returns>Length in visual digits</returns>
-uint16_t UInt64ToWChar(uint64_t value, wchar_t* buffer)
+uint16_t UInt64ToWChar(uint64_t value, wchar_t *const buffer)
 {
     uint16_t position = 19; // max length = 20 - 1
     uint16_t index = 0;

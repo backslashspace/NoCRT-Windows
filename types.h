@@ -26,5 +26,5 @@ typedef unsigned __int16 wchar_t;
 
 // ░░░ Scalars ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-typedef void* Handle;
+typedef void *Handle;
 typedef __int32 NtStatus;

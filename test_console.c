@@ -1,5 +1,5 @@
 #include "ntdll.h"
-#include "console_logging.h"
+#include "console.h"
 
 boolean_t TestConsole(Handle consoleHandle, Handle standardOutput)
 {

@@ -35,10 +35,16 @@
       <Filter>Source Files\base</Filter>
     </ClCompile>
     <ClCompile Include="test_console.c">
-      <Filter>Source Files\base</Filter>
+      <Filter>Source Files\core\testing</Filter>
     </ClCompile>
     <ClCompile Include="shell32.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\external</Filter>
+    </ClCompile>
+    <ClCompile Include="aslr.c">
+      <Filter>Source Files\core\testing</Filter>
+    </ClCompile>
+    <ClCompile Include="basic_console.c">
+      <Filter>Source Files\core\console</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,10 +55,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resolve_symbols.h">
-      <Filter>Header Files\core\base</Filter>
-    </ClInclude>
-    <ClInclude Include="testing.h">
-      <Filter>Header Files\core\base</Filter>
+      <Filter>Header Files\base</Filter>
     </ClInclude>
     <ClInclude Include="ntdll.h">
       <Filter>Header Files\external</Filter>
@@ -64,13 +67,16 @@
       <Filter>Header Files\external</Filter>
     </ClInclude>
     <ClInclude Include="process_information.h">
-      <Filter>Header Files\core\base</Filter>
+      <Filter>Header Files\base</Filter>
     </ClInclude>
-    <ClInclude Include="console_logging.h">
+    <ClInclude Include="console.h">
       <Filter>Header Files\core\console</Filter>
     </ClInclude>
     <ClInclude Include="shell32.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="testing.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -107,19 +113,22 @@
     <Filter Include="Header Files\external">
       <UniqueIdentifier>{ba5d0191-3605-48e4-a8d0-82f8c6ac465c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\core\base">
-      <UniqueIdentifier>{10cf667d-493b-4dcd-afc7-42715f8b1019}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\core\console">
       <UniqueIdentifier>{bd3839fa-7785-4f6b-83be-703aa52ad6f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\core\testing">
+      <UniqueIdentifier>{d83ccfe8-eab6-4e2d-b087-7f1b0ec81af4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\base">
+      <UniqueIdentifier>{10cf667d-493b-4dcd-afc7-42715f8b1019}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="__chkstk.asm">
-      <Filter>Source Files</Filter>
-    </MASM>
     <MASM Include="get_first_mismatch_index.asm">
       <Filter>Source Files\utility</Filter>
+    </MASM>
+    <MASM Include="__chkstk.asm">
+      <Filter>Source Files\base</Filter>
     </MASM>
   </ItemGroup>
 </Project>

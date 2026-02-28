@@ -8,6 +8,7 @@ boolean_t ResolveNtSymbols()
 	if (!LoadRtlTimeToTimeFields()) return false;
 	if (!LoadNtSetInformationFile()) return false;
 	if (!LoadNtQueryInformationFile()) return false;
+	if (!LoadNtAllocateVirtualMemory()) return false;
 
 	return true;
 }

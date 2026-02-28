@@ -5,8 +5,8 @@
 
 typedef struct
 {
-    void* Environment;
-    void* ImageBaseAddress;
+    void *Environment;
+    void *ImageBaseAddress;
 
     Handle StandardInput;
     Handle StandardOutput;
@@ -14,13 +14,13 @@ typedef struct
     Handle ConsoleHandle;
 
     Handle WorkingDirectoryHandle;
-    wchar_t* WorkingDirectoryBuffer;
+    wchar_t *WorkingDirectoryBuffer;
     uint16_t WorkingDirectoryLength;
 
-    wchar_t* ImagePathNameBuffer;
+    wchar_t *ImagePathNameBuffer;
     uint16_t ImagePathNameLength;
 
-    wchar_t* CommandLineBuffer;
+    wchar_t *CommandLineBuffer;
     uint16_t CommandLineLength;
 } BasicProcessInformation;
 
@@ -32,4 +32,4 @@ extern BasicProcessInformation g_BasicProcessInformation;
 
 __declspec(noreturn) void Exit(int32_t exitCode);
 
-void ReadOwnProcessInformation(BasicProcessInformation* processInfo);
+void ReadOwnProcessInformation(BasicProcessInformation *processInfo);
