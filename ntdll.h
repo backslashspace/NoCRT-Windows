@@ -361,6 +361,7 @@ boolean_t LoadLdrUnloadDll();
 boolean_t LoadNtDelayExecution();
 boolean_t LoadNtTerminateProcess();
 boolean_t LoadNtFreeVirtualMemory();
+boolean_t LoadNtWaitForSingleObject();
 boolean_t LoadNtAllocateVirtualMemory();
 
 boolean_t LoadRtlTimeToTimeFields();
@@ -390,6 +391,9 @@ typedef NtStatus(*LdrLoadDll_t)(wchar_t const *DllPath, uint32_t *DllCharacteris
 
 // https://ntdoc.m417z.com/ldrunloaddll
 typedef NtStatus(*LdrUnloadDll_t)(Handle DllHandle);
+
+// https://learn.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntwaitforsingleobject
+typedef NtStatus(*NtWaitForSingleObject_t)(Handle Handle, boolean_t Alertable, uint64_t *Timeout);
 
 // https://ntdoc.m417z.com/ntdelayexecution
 typedef NtStatus(*NtDelayExecution_t)(boolean_t Alertable, uint64_t *DelayInterval);
@@ -442,6 +446,7 @@ struct NtDllFunctions
 	NtFreeVirtualMemory_t NtFreeVirtualMemory;
 	NtSetInformationFile_t NtSetInformationFile;
 	NtDeviceIoControlFile_t NtDeviceIoControlFile;
+	NtWaitForSingleObject_t NtWaitForSingleObject;
 	NtQueryInformationFile_t NtQueryInformationFile;
 	NtAdjustPrivilegesToken_t NtAdjustPrivilegesToken;
 	NtAllocateVirtualMemory_t NtAllocateVirtualMemory;
@@ -472,6 +477,7 @@ static __forceinline NtStatus LdrUnloadDll(Handle DllHandle) { return NtDll.LdrU
 static __forceinline NtStatus NtDelayExecution(boolean_t Alertable, uint64_t *DelayInterval) { return NtDll.NtDelayExecution(Alertable, DelayInterval); }
 static __forceinline NtStatus NtTerminateProcess(Handle ProcessHandle, NtStatus ExitStatus) { return NtDll.NtTerminateProcess(ProcessHandle, ExitStatus); }
 static __forceinline NtStatus NtFreeVirtualMemory(Handle ProcessHandle, void *BaseAddress, uint64_t *RegionSize, uint32_t FreeType) { return NtDll.NtFreeVirtualMemory(ProcessHandle, BaseAddress, RegionSize, FreeType); }
+static __forceinline NtStatus NtWaitForSingleObject(Handle Handle, boolean_t Alertable, uint64_t *Timeout) { return NtDll.NtWaitForSingleObject(Handle, Alertable, Timeout); }
 static __forceinline NtStatus NtAllocateVirtualMemory(Handle ProcessHandle, void *BaseAddress, uint64_t ZeroBits, uint64_t *RegionSize, uint32_t AllocationType, uint32_t Protect) { return NtDll.NtAllocateVirtualMemory(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect); }
 static __forceinline NtStatus LdrGetProcedureAddressEx(Handle DllHandle, STRING *ProcedureName, uint32_t ProcedureNumber, void *ProcedureAddress, uint32_t Flags) { return NtDll.LdrGetProcedureAddressEx(DllHandle, ProcedureName, ProcedureNumber, ProcedureAddress, Flags); }
 

@@ -202,6 +202,19 @@ boolean_t LoadNtAllocateVirtualMemory()
 	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtAllocateVirtualMemory, null);
 }
 
+boolean_t LoadNtWaitForSingleObject()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtWaitForSingleObject != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtWaitForSingleObject";
+	functionName.Length = 21;
+	functionName.MaximumLength = 22;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtWaitForSingleObject, null);
+}
+
 boolean_t LoadNtFreeVirtualMemory()
 {
 	if (NtDllBaseAddress == null) return false;

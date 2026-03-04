@@ -9,6 +9,7 @@ boolean_t ResolveNtSymbols()
 	if (!LoadNtOpenProcessToken()) return false;
 	if (!LoadRtlTimeToTimeFields()) return false;
 	if (!LoadNtSetInformationFile()) return false;
+	if (!LoadNtWaitForSingleObject()) return false;
 	if (!LoadNtQueryInformationFile()) return false;
 	if (!LoadNtAllocateVirtualMemory()) return false;
 	if (!LoadNtAdjustPrivilegesToken()) return false;
