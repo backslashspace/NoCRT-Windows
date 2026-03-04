@@ -1,5 +1,3 @@
-#pragma message("==================================================================================================\n__chkstk has no functionality\nMust commit stack stack pages MANUALLY by touching guard pages OR use stack reserve = stack commit\nhttps://learn.microsoft.com/en-us/windows/win32/devnotes/-win32-__chkstk\n==================================================================================================")
-
 #include "ntdll.h"
 #include "intrinsics.h"
 

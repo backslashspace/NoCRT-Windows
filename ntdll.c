@@ -228,6 +228,45 @@ boolean_t LoadRtlTimeToTimeFields()
 	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.RtlTimeToTimeFields, null);
 }
 
+boolean_t LoadNtOpenProcessToken()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtOpenProcessToken != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtOpenProcessToken";
+	functionName.Length = 18;
+	functionName.MaximumLength = 19;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtOpenProcessToken, null);
+}
+
+boolean_t LoadNtAdjustPrivilegesToken()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtAdjustPrivilegesToken != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtAdjustPrivilegesToken";
+	functionName.Length = 23;
+	functionName.MaximumLength = 24;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtAdjustPrivilegesToken, null);
+}
+
+boolean_t LoadNtQueryInformationToken()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtQueryInformationToken != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtQueryInformationToken";
+	functionName.Length = 23;
+	functionName.MaximumLength = 24;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtQueryInformationToken, null);
+}
+
 boolean_t LoadNtQueryObject()
 {
 	if (NtDllBaseAddress == null) return false;

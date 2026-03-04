@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="adjust_process_token_privileges.c" />
     <ClCompile Include="advapi32.c" />
     <ClCompile Include="aslr.c" />
     <ClCompile Include="enable_vt100.c" />
@@ -30,6 +31,10 @@
     <ClCompile Include="uint_to_char.c" />
     <ClCompile Include="uint_to_wchar.c" />
     <ClCompile Include="basic_console.c" />
+    <MASM Include="memory_compare.asm" />
+    <MASM Include="__chkstk.asm">
+      <FileType>Document</FileType>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="advapi32.h" />
@@ -45,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <MASM Include="get_first_mismatch_index.asm" />
-    <MASM Include="__chkstk.asm" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
@@ -242,7 +246,8 @@
       <MinimalRebuild />
       <SmallerTypeCheck />
       <StructMemberAlignment />
-      <EnableVectorLength>VectorLength512</EnableVectorLength>
+      <EnableVectorLength>
+      </EnableVectorLength>
       <FloatingPointModel />
       <DisableLanguageExtensions />
       <ForceConformanceInForLoopScope />
@@ -389,7 +394,8 @@
       </SmallerTypeCheck>
       <StructMemberAlignment>
       </StructMemberAlignment>
-      <EnableVectorLength>VectorLength512</EnableVectorLength>
+      <EnableVectorLength>
+      </EnableVectorLength>
       <FloatingPointModel>
       </FloatingPointModel>
       <DisableLanguageExtensions>
@@ -574,7 +580,8 @@
       </SmallerTypeCheck>
       <StructMemberAlignment>
       </StructMemberAlignment>
-      <EnableVectorLength>VectorLength512</EnableVectorLength>
+      <EnableVectorLength>
+      </EnableVectorLength>
       <FloatingPointModel>
       </FloatingPointModel>
       <DisableLanguageExtensions>

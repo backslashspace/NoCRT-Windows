@@ -4,7 +4,7 @@
 
 // ░░░ Initialization + State ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-uint8_t* Advapi32BaseAddress = null;
+uint8_t *Advapi32BaseAddress = null;
 struct Advapi32Functions Advapi32 = { 0 };
 
 boolean_t InitializeAdvapi32()
@@ -20,6 +20,32 @@ boolean_t InitializeAdvapi32()
 }
 
 // ░░░ Runtime Loaders ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+boolean_t LoadLookupPrivilegeValueW()
+{
+	if (Advapi32BaseAddress == null) return false;
+	if (Advapi32.StartServiceCtrlDispatcherW != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "LookupPrivilegeValueW";
+	functionName.Length = 21;
+	functionName.MaximumLength = 22;
+
+	return !NtDll.LdrGetProcedureAddressEx(Advapi32BaseAddress, &functionName, null, &Advapi32.LookupPrivilegeValueW, null);
+}
+
+boolean_t LoadLookupPrivilegeNameW()
+{
+	if (Advapi32BaseAddress == null) return false;
+	if (Advapi32.LookupPrivilegeNameW != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "LookupPrivilegeNameW";
+	functionName.Length = 20;
+	functionName.MaximumLength = 21;
+
+	return !NtDll.LdrGetProcedureAddressEx(Advapi32BaseAddress, &functionName, null, &Advapi32.LookupPrivilegeNameW, null);
+}
 
 boolean_t LoadStartServiceCtrlDispatcherW()
 {

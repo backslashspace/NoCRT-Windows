@@ -6,7 +6,7 @@ boolean_t TestConsole(Handle consoleHandle, Handle standardOutput)
 	if (!EnableVT100(consoleHandle)) return false;
 
 	IO_STATUS_BLOCK ioStatusBlock = { 0 };
-	NtStatus status = NtWriteFile(standardOutput, null, null, null, &ioStatusBlock, "Enabled VT100!\n\n", 16, null, null);
+	NtStatus status = NtWriteFile(standardOutput, null, null, null, &ioStatusBlock, "Enabled VT100!\n", 15, null, null);
 
 	return !status;
 }

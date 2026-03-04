@@ -146,9 +146,12 @@ static __forceinline void SetTime(char_t *const restrict buffer, uint64_t const 
     }
 }
 
-void ConsoleLog(char_t const message[], LogLevel logLevel, char_t const source[], Handle outputHandle)
+void ConsoleLog(char_t const *const message, LogLevel logLevel, char_t const *const source)
 {
-    ConsoleLogA(message, sizeof(message) - 1, logLevel, source, sizeof(source) - 1, outputHandle);
+    uint32_t sourceLength = (uint32_t)MemoryGetFirstByteMatchIndexX86(256, null, source);
+    uint32_t messageLength = (uint32_t)MemoryGetFirstByteMatchIndexX86(256, null, message);
+
+    ConsoleLogA(message, messageLength, logLevel, source, sourceLength, ConsoleWriteHandle);
 }
 
 NtStatus ConsoleLogA(char_t const *const message, uint16_t messageLength, LogLevel logLevel, char_t const *const source, uint16_t sourceLength, Handle outputHandle)

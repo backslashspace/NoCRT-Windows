@@ -3,6 +3,14 @@
 
 // ░░░ Definitions uses by NtXxx Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
+// ################# ntstatus.h #################
+
+#define STATUS_SUCCESS                   ((NtStatus)0x00000000L)
+#define STATUS_ACCESS_DENIED             ((NtStatus)0xC0000022L)
+#define STATUS_BUFFER_TOO_SMALL          ((NtStatus)0xC0000023L)
+
+// ################# winnt.h #################
+
 #define PAGE_NOACCESS					0x01    
 #define PAGE_READONLY					0x02    
 #define PAGE_READWRITE					0x04    
@@ -22,6 +30,79 @@
 #define MEM_WRITE_WATCH                 0x00200000  
 #define MEM_PHYSICAL                    0x00400000  
 #define MEM_RESET_UNDO                  0x01000000  
+
+#define MEM_LARGE_PAGES                 0x20000000 
+
+#define SE_PRIVILEGE_ENABLED_BY_DEFAULT 0x00000001L
+#define SE_PRIVILEGE_ENABLED            0x00000002L
+#define SE_PRIVILEGE_REMOVED            0X00000004L
+#define SE_PRIVILEGE_USED_FOR_ACCESS    0x80000000L
+
+#define SE_PRIVILEGE_VALID_ATTRIBUTES   (SE_PRIVILEGE_ENABLED_BY_DEFAULT | \
+                                         SE_PRIVILEGE_ENABLED            | \
+                                         SE_PRIVILEGE_REMOVED            | \
+                                         SE_PRIVILEGE_USED_FOR_ACCESS)
+
+#define TOKEN_ASSIGN_PRIMARY    (0x0001)
+#define TOKEN_DUPLICATE         (0x0002)
+#define TOKEN_IMPERSONATE       (0x0004)
+#define TOKEN_QUERY             (0x0008)
+#define TOKEN_QUERY_SOURCE      (0x0010)
+#define TOKEN_ADJUST_PRIVILEGES (0x0020)
+#define TOKEN_ADJUST_GROUPS     (0x0040)
+#define TOKEN_ADJUST_DEFAULT    (0x0080)
+#define TOKEN_ADJUST_SESSIONID  (0x0100)
+
+#define DELETE                           (0x00010000L)
+#define READ_CONTROL                     (0x00020000L)
+#define WRITE_DAC                        (0x00040000L)
+#define WRITE_OWNER                      (0x00080000L)
+#define SYNCHRONIZE                      (0x00100000L)
+
+#define STANDARD_RIGHTS_REQUIRED         (0x000F0000L)
+
+#define STANDARD_RIGHTS_READ             (READ_CONTROL)
+#define STANDARD_RIGHTS_WRITE            (READ_CONTROL)
+#define STANDARD_RIGHTS_EXECUTE          (READ_CONTROL)
+
+#define STANDARD_RIGHTS_ALL              (0x001F0000L)
+
+#define SPECIFIC_RIGHTS_ALL              (0x0000FFFFL)
+
+
+#define TOKEN_ALL_ACCESS_P (STANDARD_RIGHTS_REQUIRED  |\
+                          TOKEN_ASSIGN_PRIMARY      |\
+                          TOKEN_DUPLICATE           |\
+                          TOKEN_IMPERSONATE         |\
+                          TOKEN_QUERY               |\
+                          TOKEN_QUERY_SOURCE        |\
+                          TOKEN_ADJUST_PRIVILEGES   |\
+                          TOKEN_ADJUST_GROUPS       |\
+                          TOKEN_ADJUST_DEFAULT )
+
+
+#define TOKEN_ALL_ACCESS  (TOKEN_ALL_ACCESS_P |\
+                          TOKEN_ADJUST_SESSIONID )
+
+
+#define TOKEN_READ       (STANDARD_RIGHTS_READ      |\
+                          TOKEN_QUERY)
+
+
+#define TOKEN_WRITE      (STANDARD_RIGHTS_WRITE     |\
+                          TOKEN_ADJUST_PRIVILEGES   |\
+                          TOKEN_ADJUST_GROUPS       |\
+                          TOKEN_ADJUST_DEFAULT)
+
+#define TOKEN_EXECUTE    (STANDARD_RIGHTS_EXECUTE)
+
+#define TOKEN_TRUST_CONSTRAINT_MASK    (STANDARD_RIGHTS_READ  | \
+                                       TOKEN_QUERY  |\
+                                       TOKEN_QUERY_SOURCE )
+
+#define TOKEN_TRUST_ALLOWED_MASK    (TOKEN_TRUST_CONSTRAINT_MASK |\
+                                    TOKEN_DUPLICATE              |\
+                                    TOKEN_IMPERSONATE)
 
 
 // ░░░ Structs uses by NtXxx Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -83,12 +164,35 @@ typedef struct FILE_MODE_INFORMATION
 	uint32_t Mode;
 } FILE_MODE_INFORMATION;
 
+// https://learn.microsoft.com/de-de/windows-hardware/drivers/ddi/igpupvdev/ns-igpupvdev-_luid
+typedef struct LUID
+{
+	uint32_t LowPart;
+	int32_t HighPart;
+} LUID;
+
+// https://learn.microsoft.com/de-de/windows-hardware/drivers/ddi/wdm/ns-wdm-_luid_and_attributes
+typedef struct LUID_AND_ATTRIBUTES
+{
+	LUID Luid;
+	uint32_t Attributes;
+} LUID_AND_ATTRIBUTES;
+
+// https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-token_privileges
+typedef struct TOKEN_PRIVILEGES
+{
+	uint32_t PrivilegeCount;
+	LUID_AND_ATTRIBUTES Privileges[1];
+} TOKEN_PRIVILEGES;
+
+// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ne-ntifs-_object_information_class
 typedef enum OBJECT_INFORMATION_CLASS
 {
 	ObjectBasicInformation = 0,
 	ObjectTypeInformation = 2
 } OBJECT_INFORMATION_CLASS;
 
+// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ne-wdm-_file_information_class
 typedef enum FILE_INFORMATION_CLASS
 {
 	FileDirectoryInformation = 1,
@@ -177,6 +281,62 @@ typedef enum FILE_INFORMATION_CLASS
 	FileMaximumInformation
 } FILE_INFORMATION_CLASS;
 
+// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ne-ntifs-_token_information_class
+typedef enum TOKEN_INFORMATION_CLASS
+{
+	TokenUser = 1,
+	TokenGroups,
+	TokenPrivileges,
+	TokenOwner,
+	TokenPrimaryGroup,
+	TokenDefaultDacl,
+	TokenSource,
+	TokenType,
+	TokenImpersonationLevel,
+	TokenStatistics,
+	TokenRestrictedSids,
+	TokenSessionId,
+	TokenGroupsAndPrivileges,
+	TokenSessionReference,
+	TokenSandBoxInert,
+	TokenAuditPolicy,
+	TokenOrigin,
+	TokenElevationType,
+	TokenLinkedToken,
+	TokenElevation,
+	TokenHasRestrictions,
+	TokenAccessInformation,
+	TokenVirtualizationAllowed,
+	TokenVirtualizationEnabled,
+	TokenIntegrityLevel,
+	TokenUIAccess,
+	TokenMandatoryPolicy,
+	TokenLogonSid,
+	TokenIsAppContainer,
+	TokenCapabilities,
+	TokenAppContainerSid,
+	TokenAppContainerNumber,
+	TokenUserClaimAttributes,
+	TokenDeviceClaimAttributes,
+	TokenRestrictedUserClaimAttributes,
+	TokenRestrictedDeviceClaimAttributes,
+	TokenDeviceGroups,
+	TokenRestrictedDeviceGroups,
+	TokenSecurityAttributes,
+	TokenIsRestricted,
+	TokenProcessTrustLevel,
+	TokenPrivateNameSpace,
+	TokenSingletonAttributes,
+	TokenBnoIsolation,
+	TokenChildProcessFlags,
+	TokenIsLessPrivilegedAppContainer,
+	TokenIsSandboxed,
+	TokenIsAppSilo,
+	TokenLoggingInformation,
+	TokenLearningMode,
+	MaxTokenInfoClass  // MaxTokenInfoClass should always be the last enum
+} TOKEN_INFORMATION_CLASS;
+
 // ░░░ Loader API ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 boolean_t InitializeNtDll();
@@ -191,6 +351,10 @@ boolean_t LoadNtQueryObject();
 boolean_t LoadNtSetInformationFile();
 boolean_t LoadNtDeviceIoControlFile();
 boolean_t LoadNtQueryInformationFile();
+
+boolean_t LoadNtOpenProcessToken();
+boolean_t LoadNtAdjustPrivilegesToken();
+boolean_t LoadNtQueryInformationToken();
 
 boolean_t LoadLdrLoadDll();
 boolean_t LoadLdrUnloadDll();
@@ -242,6 +406,15 @@ typedef NtStatus(*NtReadFile_t)(Handle FileHandle, Handle Event, void *ApcRoutin
 // https://ntdoc.m417z.com/ntterminateprocess
 typedef NtStatus(*NtTerminateProcess_t)(Handle ProcessHandle, NtStatus ExitStatus);
 
+// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntqueryinformationtoken
+typedef NtStatus(*NtQueryInformationToken_t)(Handle TokenHandle, TOKEN_INFORMATION_CLASS TokenInformationClass, void *TokenInformation, uint32_t TokenInformationLength, uint32_t *ReturnLength);
+
+// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntopenprocesstoken
+typedef NtStatus(*NtOpenProcessToken_t)(Handle ProcessHandle, uint32_t DesiredAccess, Handle* TokenHandle);
+
+// https://ntdoc.m417z.com/ntadjustprivilegestoken
+typedef NtStatus(*NtAdjustPrivilegesToken_t)(Handle ProcessHandle, boolean_t DisableAllPrivileges, TOKEN_PRIVILEGES *NewState, uint32_t BufferLength, TOKEN_PRIVILEGES *PreviousState, uint32_t *ReturnLength);
+
 // https://ntdoc.m417z.com/ldrgetprocedureaddressex
 typedef NtStatus(*LdrGetProcedureAddressEx_t)(Handle DllHandle, STRING *ProcedureName, uint32_t ProcedureNumber, void *ProcedureAddress, uint32_t Flags);
 
@@ -264,12 +437,15 @@ struct NtDllFunctions
 	NtQueryObject_t NtQueryObject;
 	NtDelayExecution_t NtDelayExecution;
 	NtTerminateProcess_t NtTerminateProcess;
+	NtOpenProcessToken_t NtOpenProcessToken;
 	RtlTimeToTimeFields_t RtlTimeToTimeFields;
 	NtFreeVirtualMemory_t NtFreeVirtualMemory;
 	NtSetInformationFile_t NtSetInformationFile;
 	NtDeviceIoControlFile_t NtDeviceIoControlFile;
 	NtQueryInformationFile_t NtQueryInformationFile;
+	NtAdjustPrivilegesToken_t NtAdjustPrivilegesToken;
 	NtAllocateVirtualMemory_t NtAllocateVirtualMemory;
+	NtQueryInformationToken_t NtQueryInformationToken;
 	LdrGetProcedureAddressEx_t LdrGetProcedureAddressEx;
 };
 
@@ -286,6 +462,10 @@ static __forceinline NtStatus NtQueryObject(Handle Handle, OBJECT_INFORMATION_CL
 static __forceinline NtStatus NtDeviceIoControlFile(Handle FileHandle, Handle Event, void *ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t IoControlCode, void *InputBuffer, uint32_t InputBufferLength, void *OutputBuffer, uint32_t OutputBufferLength) { return NtDll.NtDeviceIoControlFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, IoControlCode, InputBuffer, InputBufferLength, OutputBuffer, OutputBufferLength); }
 static __forceinline NtStatus NtSetInformationFile(Handle FileHandle, IO_STATUS_BLOCK *IoStatusBlock, void *FileInformation, uint32_t Length, FILE_INFORMATION_CLASS FileInformationClass) { return NtDll.NtSetInformationFile(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass); }
 static __forceinline NtStatus NtQueryInformationFile(Handle FileHandle, IO_STATUS_BLOCK *IoStatusBlock, void *FileInformation, uint32_t Length, FILE_INFORMATION_CLASS FileInformationClass) { return NtDll.NtQueryInformationFile(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass); }
+
+static __forceinline NtStatus NtOpenProcessToken(Handle ProcessHandle, uint32_t DesiredAccess, Handle *TokenHandle) { return NtDll.NtOpenProcessToken(ProcessHandle, DesiredAccess, TokenHandle); }
+static __forceinline NtStatus NtAdjustPrivilegesToken(Handle ProcessHandle, boolean_t DisableAllPrivileges, TOKEN_PRIVILEGES* NewState, uint32_t BufferLength, TOKEN_PRIVILEGES* PreviousState, uint32_t* ReturnLength) { return NtDll.NtAdjustPrivilegesToken(ProcessHandle, DisableAllPrivileges, NewState, BufferLength, PreviousState, ReturnLength); }
+static __forceinline NtStatus NtQueryInformationToken(Handle TokenHandle, TOKEN_INFORMATION_CLASS TokenInformationClass, void *TokenInformation, uint32_t TokenInformationLength, uint32_t *ReturnLength) { return NtDll.NtQueryInformationToken(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength, ReturnLength); }
 
 static __forceinline NtStatus LdrLoadDll(wchar_t const *DllPath, uint32_t *DllCharacteristics, UNICODE_STRING const *DllName, Handle DllHandle) { return NtDll.LdrLoadDll(DllPath, DllCharacteristics, DllName, DllHandle); }
 static __forceinline NtStatus LdrUnloadDll(Handle DllHandle) { return NtDll.LdrUnloadDll(DllHandle); }

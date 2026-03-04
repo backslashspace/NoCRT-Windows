@@ -16,9 +16,11 @@ Handle ConsoleWriteHandle;
 
 boolean_t EnableVT100(Handle consoleHandle);
 
-void ConsoleWrite(char_t const message[]);
+void ConsoleWrite(char_t const *const message);
 void ConsoleWriteA(char_t const *const message, uint32_t length);
 void ConsoleWriteW(wchar_t const *const message, uint32_t length);
+
+void ConsoleLog(char_t const *const message, LogLevel logLevel, char_t const *const source);
 
 NtStatus ConsoleLogA(char_t const *const message, uint16_t messageLength, LogLevel logLevel, char_t const *const source, uint16_t sourceLength, Handle outputHandle);
 NtStatus ConsoleLogW(wchar_t const *const message, uint16_t messageLength, LogLevel logLevel, wchar_t const *const source, uint16_t sourceLength, Handle outputHandle);

@@ -4,9 +4,6 @@
     <ClCompile Include="start.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="log_w.c">
       <Filter>Source Files\core\console</Filter>
     </ClCompile>
@@ -45,6 +42,12 @@
     </ClCompile>
     <ClCompile Include="basic_console.c">
       <Filter>Source Files\core\console</Filter>
+    </ClCompile>
+    <ClCompile Include="adjust_process_token_privileges.c">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="main.c">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,7 +131,10 @@
       <Filter>Source Files\utility</Filter>
     </MASM>
     <MASM Include="__chkstk.asm">
-      <Filter>Source Files\base</Filter>
+      <Filter>Source Files\utility</Filter>
+    </MASM>
+    <MASM Include="memory_compare.asm">
+      <Filter>Source Files\utility</Filter>
     </MASM>
   </ItemGroup>
 </Project>
