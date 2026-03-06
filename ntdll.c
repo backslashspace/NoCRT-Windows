@@ -3,8 +3,9 @@
 
 // ░░░ Initialization + State ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-struct NtDllFunctions NtDll = { 0 };
 uint8_t* NtDllBaseAddress = null;
+struct NtDllFunctions NtDll = { 0 };
+uint64_t NtTerminateThreadFunctionPointer;
 
 boolean_t InitializeNtDll()
 {
@@ -109,6 +110,126 @@ boolean_t LoadNtOpenFile()
 	functionName.MaximumLength = 11;
 
 	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtOpenFile, null);
+}
+
+boolean_t LoadNtCreateThreadEx()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtCreateThreadEx != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtCreateThreadEx";
+	functionName.Length = 16;
+	functionName.MaximumLength = 17;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtCreateThreadEx, null);
+}
+
+boolean_t LoadNtResumeThread()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtResumeThread != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtResumeThread";
+	functionName.Length = 14;
+	functionName.MaximumLength = 15;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtResumeThread, null);
+}
+
+boolean_t LoadNtGetContextThread()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtGetContextThread != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtGetContextThread";
+	functionName.Length = 18;
+	functionName.MaximumLength = 19;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtGetContextThread, null);
+}
+
+boolean_t LoadNtSetContextThread()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtSetContextThread != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtSetContextThread";
+	functionName.Length = 18;
+	functionName.MaximumLength = 19;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtSetContextThread, null);
+}
+
+boolean_t LoadNtTerminateThread()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtTerminateThread != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtTerminateThread";
+	functionName.Length = 17;
+	functionName.MaximumLength = 18;
+
+	NtStatus status = NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtTerminateThread, null);
+	NtTerminateThreadFunctionPointer = NtDll.NtTerminateThread;
+
+	return !status;
+}
+
+boolean_t LoadNtSuspendThread()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtSuspendThread != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtSuspendThread";
+	functionName.Length = 15;
+	functionName.MaximumLength = 16;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtSuspendThread, null);
+}
+
+boolean_t LoadNtYieldExecution()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtYieldExecution != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtYieldExecution";
+	functionName.Length = 16;
+	functionName.MaximumLength = 17;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtYieldExecution, null);
+}
+
+boolean_t LoadNtAlertResumeThread()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtAlertResumeThread != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtAlertResumeThread";
+	functionName.Length = 19;
+	functionName.MaximumLength = 20;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtAlertResumeThread, null);
+}
+
+boolean_t LoadNtAlertThread()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtAlertThread != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtAlertThread";
+	functionName.Length = 13;
+	functionName.MaximumLength = 14;
+
+	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtAlertThread, null);
 }
 
 boolean_t LoadLdrLoadDll()

@@ -6,7 +6,15 @@ boolean_t ResolveNtSymbols()
 {
 	if (!LoadLdrLoadDll()) return false;
 	if (!LoadNtWriteFile()) return false;
+	if (!LoadNtResumeThread()) return false;
+	if (!LoadNtSuspendThread()) return false;
+	if (!LoadNtCreateThreadEx()) return false;
+	if (!LoadNtDelayExecution()) return false;
+	if (!LoadNtYieldExecution()) return false;
+	if (!LoadNtTerminateThread()) return false;
 	if (!LoadNtOpenProcessToken()) return false;
+	if (!LoadNtGetContextThread()) return false;
+	if (!LoadNtSetContextThread()) return false;
 	if (!LoadRtlTimeToTimeFields()) return false;
 	if (!LoadNtSetInformationFile()) return false;
 	if (!LoadNtWaitForSingleObject()) return false;

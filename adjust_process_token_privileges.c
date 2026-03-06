@@ -77,7 +77,6 @@ boolean_t AdjustProcessTokenPrivileges()
 
 	IO_STATUS_BLOCK ioStatusBlock = { 0 };
 	wchar_t *name = (wchar_t *)_alloca(256);
-	wchar_t *intToStringBuffer = (wchar_t *)_alloca(10);
 
 	for (uint16_t i = 0; i < tokenPrivilegesPointer->PrivilegeCount; ++i)
 	{

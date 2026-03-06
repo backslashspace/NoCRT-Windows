@@ -22,9 +22,9 @@ typedef uint8_t boolean_t;
 typedef uint32_t bool_t;
 
 typedef char char_t;
-typedef unsigned __int16 wchar_t;
+typedef uint16_t wchar_t;
 
 // ░░░ Scalars ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-typedef void *Handle;
-typedef __int32 NtStatus;
+typedef uint64_t Handle;
+typedef uint32_t NtStatus;

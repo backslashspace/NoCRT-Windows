@@ -49,6 +49,9 @@
     <ClCompile Include="main.c">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="threading.c">
+      <Filter>Source Files\core\testing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.h">
@@ -72,13 +75,13 @@
     <ClInclude Include="process_information.h">
       <Filter>Header Files\base</Filter>
     </ClInclude>
-    <ClInclude Include="console.h">
-      <Filter>Header Files\core\console</Filter>
-    </ClInclude>
     <ClInclude Include="shell32.h">
       <Filter>Header Files\external</Filter>
     </ClInclude>
     <ClInclude Include="testing.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="console.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,9 +119,6 @@
     <Filter Include="Header Files\external">
       <UniqueIdentifier>{ba5d0191-3605-48e4-a8d0-82f8c6ac465c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\core\console">
-      <UniqueIdentifier>{bd3839fa-7785-4f6b-83be-703aa52ad6f5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\core\testing">
       <UniqueIdentifier>{d83ccfe8-eab6-4e2d-b087-7f1b0ec81af4}</UniqueIdentifier>
     </Filter>
@@ -135,6 +135,9 @@
     </MASM>
     <MASM Include="memory_compare.asm">
       <Filter>Source Files\utility</Filter>
+    </MASM>
+    <MASM Include="thread_entry.asm">
+      <Filter>Header Files\core</Filter>
     </MASM>
   </ItemGroup>
 </Project>

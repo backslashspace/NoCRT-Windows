@@ -5,6 +5,7 @@
 #include "resolve_symbols.h"
 #include "process_information.h"
 
+void StartThread();
 boolean_t AdjustProcessTokenPrivileges();
 
 int32_t Main()
@@ -28,6 +29,7 @@ int32_t Main()
 
 	ASLR();
 
+	StartThread();
 
 	return 0;
 }

@@ -28,10 +28,12 @@
     <ClCompile Include="shell32.c" />
     <ClCompile Include="start.c" />
     <ClCompile Include="test_console.c" />
+    <ClCompile Include="threading.c" />
     <ClCompile Include="uint_to_char.c" />
     <ClCompile Include="uint_to_wchar.c" />
     <ClCompile Include="basic_console.c" />
     <MASM Include="memory_compare.asm" />
+    <MASM Include="thread_entry.asm" />
     <MASM Include="__chkstk.asm">
       <FileType>Document</FileType>
     </MASM>
