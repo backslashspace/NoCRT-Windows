@@ -4,6 +4,7 @@
 
 boolean_t ResolveNtSymbols()
 {
+	if (!LoadNtClose()) return false;
 	if (!LoadLdrLoadDll()) return false;
 	if (!LoadNtWriteFile()) return false;
 	if (!LoadNtResumeThread()) return false;

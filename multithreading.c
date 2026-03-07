@@ -2,13 +2,13 @@
 #include "console.h"
 #include "intrinsics.h"
 
-typedef struct ThreadStartParameter
+typedef struct THREAD_START_PARAMETER
 {
 	void *StackBase; // base is bottom of buffer - stack grows down - StackBase = buffer + bufferSize - must be 16 byte aligned
 	uint64_t Argument;
-} ThreadStartParameter;
+} THREAD_START_PARAMETER;
 
-NtStatus ThreadEntry(ThreadStartParameter *threadStartParameter);
+NtStatus ThreadEntry(THREAD_START_PARAMETER *threadStartParameter);
 
 NtStatus TestThreadMain(uint64_t value)
 {
@@ -52,7 +52,7 @@ boolean_t Multithreading()
 	/* ---------------------------------------------------------------------------------- */
 
 	Handle threadHandle;
-	ThreadStartParameter threadStartParameter;
+	THREAD_START_PARAMETER threadStartParameter;
 	threadStartParameter.Argument = 0xdeadbeef;	
 	threadStartParameter.StackBase = memory + STACK_SIZE;
 	if (STATUS_SUCCESS != NtCreateThreadEx(&threadHandle, THREAD_ALL_ACCESS, null, (Handle)-1i64, &ThreadEntry, &threadStartParameter, THREAD_CREATE_FLAGS_SKIP_THREAD_ATTACH | THREAD_CREATE_FLAGS_CREATE_SUSPENDED, 0, 4096, 4096, null))
@@ -98,4 +98,5 @@ boolean_t Multithreading()
 	NtClose(threadHandle);
 
 	ConsoleWrite("Thread exited\n\n");
+	return true;
 }
