@@ -105,11 +105,11 @@
 #define CONTEXT_DEBUG_REGISTERS (CONTEXT_AMD64 | 0x00000010L)
 
 #define CONTEXT_FULL            (CONTEXT_CONTROL | CONTEXT_INTEGER | \
-                                 CONTEXT_FLOATING_POINT)
+								 CONTEXT_FLOATING_POINT)
 
 #define CONTEXT_ALL             (CONTEXT_CONTROL | CONTEXT_INTEGER | \
-                                 CONTEXT_SEGMENTS | CONTEXT_FLOATING_POINT | \
-                                 CONTEXT_DEBUG_REGISTERS)
+								 CONTEXT_SEGMENTS | CONTEXT_FLOATING_POINT | \
+								 CONTEXT_DEBUG_REGISTERS)
 
 #define CONTEXT_XSTATE          (CONTEXT_AMD64 | 0x00000040L)
 #define CONTEXT_KERNEL_CET      (CONTEXT_AMD64 | 0x00000080L)
@@ -141,24 +141,24 @@
 #define FILE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x1FF)
 
 #define FILE_GENERIC_READ         (STANDARD_RIGHTS_READ     |\
-                                   FILE_READ_DATA           |\
-                                   FILE_READ_ATTRIBUTES     |\
-                                   FILE_READ_EA             |\
-                                   SYNCHRONIZE)
+								   FILE_READ_DATA           |\
+								   FILE_READ_ATTRIBUTES     |\
+								   FILE_READ_EA             |\
+								   SYNCHRONIZE)
 
 
 #define FILE_GENERIC_WRITE        (STANDARD_RIGHTS_WRITE    |\
-                                   FILE_WRITE_DATA          |\
-                                   FILE_WRITE_ATTRIBUTES    |\
-                                   FILE_WRITE_EA            |\
-                                   FILE_APPEND_DATA         |\
-                                   SYNCHRONIZE)
+								   FILE_WRITE_DATA          |\
+								   FILE_WRITE_ATTRIBUTES    |\
+								   FILE_WRITE_EA            |\
+								   FILE_APPEND_DATA         |\
+								   SYNCHRONIZE)
 
 
 #define FILE_GENERIC_EXECUTE      (STANDARD_RIGHTS_EXECUTE  |\
-                                   FILE_READ_ATTRIBUTES     |\
-                                   FILE_EXECUTE             |\
-                                   SYNCHRONIZE)
+								   FILE_READ_ATTRIBUTES     |\
+								   FILE_EXECUTE             |\
+								   SYNCHRONIZE)
 
 #define FILE_SHARE_READ                 0x00000001  
 #define FILE_SHARE_WRITE                0x00000002  
@@ -265,9 +265,9 @@
 #define SE_PRIVILEGE_USED_FOR_ACCESS    0x80000000L
 
 #define SE_PRIVILEGE_VALID_ATTRIBUTES   (SE_PRIVILEGE_ENABLED_BY_DEFAULT | \
-                                         SE_PRIVILEGE_ENABLED            | \
-                                         SE_PRIVILEGE_REMOVED            | \
-                                         SE_PRIVILEGE_USED_FOR_ACCESS)
+										 SE_PRIVILEGE_ENABLED            | \
+										 SE_PRIVILEGE_REMOVED            | \
+										 SE_PRIVILEGE_USED_FOR_ACCESS)
 
 #define TOKEN_ASSIGN_PRIMARY    (0x0001)
 #define TOKEN_DUPLICATE         (0x0002)
@@ -283,38 +283,38 @@
 
 
 #define TOKEN_ALL_ACCESS_P (STANDARD_RIGHTS_REQUIRED  |\
-                          TOKEN_ASSIGN_PRIMARY      |\
-                          TOKEN_DUPLICATE           |\
-                          TOKEN_IMPERSONATE         |\
-                          TOKEN_QUERY               |\
-                          TOKEN_QUERY_SOURCE        |\
-                          TOKEN_ADJUST_PRIVILEGES   |\
-                          TOKEN_ADJUST_GROUPS       |\
-                          TOKEN_ADJUST_DEFAULT )
+						  TOKEN_ASSIGN_PRIMARY      |\
+						  TOKEN_DUPLICATE           |\
+						  TOKEN_IMPERSONATE         |\
+						  TOKEN_QUERY               |\
+						  TOKEN_QUERY_SOURCE        |\
+						  TOKEN_ADJUST_PRIVILEGES   |\
+						  TOKEN_ADJUST_GROUPS       |\
+						  TOKEN_ADJUST_DEFAULT )
 
 
 #define TOKEN_ALL_ACCESS  (TOKEN_ALL_ACCESS_P |\
-                          TOKEN_ADJUST_SESSIONID )
+						  TOKEN_ADJUST_SESSIONID )
 
 
 #define TOKEN_READ       (STANDARD_RIGHTS_READ      |\
-                          TOKEN_QUERY)
+						  TOKEN_QUERY)
 
 
 #define TOKEN_WRITE      (STANDARD_RIGHTS_WRITE     |\
-                          TOKEN_ADJUST_PRIVILEGES   |\
-                          TOKEN_ADJUST_GROUPS       |\
-                          TOKEN_ADJUST_DEFAULT)
+						  TOKEN_ADJUST_PRIVILEGES   |\
+						  TOKEN_ADJUST_GROUPS       |\
+						  TOKEN_ADJUST_DEFAULT)
 
 #define TOKEN_EXECUTE    (STANDARD_RIGHTS_EXECUTE)
 
 #define TOKEN_TRUST_CONSTRAINT_MASK    (STANDARD_RIGHTS_READ  | \
-                                       TOKEN_QUERY  |\
-                                       TOKEN_QUERY_SOURCE )
+									   TOKEN_QUERY  |\
+									   TOKEN_QUERY_SOURCE )
 
 #define TOKEN_TRUST_ALLOWED_MASK    (TOKEN_TRUST_CONSTRAINT_MASK |\
-                                    TOKEN_DUPLICATE              |\
-                                    TOKEN_IMPERSONATE)
+									TOKEN_DUPLICATE              |\
+									TOKEN_IMPERSONATE)
 
 
 // ░░░ Structs uses by NtXxx Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░

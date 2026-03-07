@@ -49,7 +49,7 @@
     <ClCompile Include="main.c">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="threading.c">
+    <ClCompile Include="multithreading.c">
       <Filter>Source Files\core\testing</Filter>
     </ClCompile>
   </ItemGroup>

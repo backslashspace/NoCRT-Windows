@@ -37,17 +37,19 @@ NtStatus TestThreadMain(uint64_t value)
 
 #define STACK_SIZE (2 * 1'024 * 1'024)
 
-void StartThread()
+boolean_t Multithreading()
 {
-    uint8_t *memory = null;
-    uint64_t size = STACK_SIZE;
-    if (STATUS_SUCCESS != NtAllocateVirtualMemory((Handle)-1i64, &memory, null, &size, MEM_RESERVE | MEM_COMMIT | MEM_LARGE_PAGES, PAGE_READWRITE))
-    {
-        ConsoleWrite("NtAllocateVirtualMemory failed to allocate large pages\n");
-        return;
-    }
+	ConsoleWrite("# Multithreading\n");
 
-    /* ---------------------------------------------------------------------------------- */
+	uint8_t *memory = null;
+	uint64_t size = STACK_SIZE;
+	if (STATUS_SUCCESS != NtAllocateVirtualMemory((Handle)-1i64, &memory, null, &size, MEM_RESERVE | MEM_COMMIT | MEM_LARGE_PAGES, PAGE_READWRITE))
+	{
+		ConsoleWrite("NtAllocateVirtualMemory failed to allocate large pages\n");
+		return false;
+	}
+
+	/* ---------------------------------------------------------------------------------- */
 
 	Handle threadHandle;
 	ThreadStartParameter threadStartParameter;
@@ -56,14 +58,14 @@ void StartThread()
 	if (STATUS_SUCCESS != NtCreateThreadEx(&threadHandle, THREAD_ALL_ACCESS, null, (Handle)-1i64, &ThreadEntry, &threadStartParameter, THREAD_CREATE_FLAGS_SKIP_THREAD_ATTACH | THREAD_CREATE_FLAGS_CREATE_SUSPENDED, 0, 4096, 4096, null))
 	{
 		ConsoleWrite("Failed to create thread\n");
-		return;
+		return false;
 	}
 
 	ConsoleWrite("Starting thread");
 	if (STATUS_SUCCESS != NtResumeThread(threadHandle, null))
 	{
 		ConsoleWrite("Failed to start thread\n");
-		return;
+		return false;
 	}
 	ConsoleWrite("Started thread\n");
 
@@ -91,7 +93,9 @@ void StartThread()
 	if (STATUS_SUCCESS != NtWaitForSingleObject(threadHandle, false, null))
 	{
 		ConsoleWrite("Failed to wait for thread to end\n");
-		return;
+		return false;
 	}
-	ConsoleWrite("Thread exited\n");
+	NtClose(threadHandle);
+
+	ConsoleWrite("Thread exited\n\n");
 }

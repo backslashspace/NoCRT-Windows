@@ -28,7 +28,7 @@
     <ClCompile Include="shell32.c" />
     <ClCompile Include="start.c" />
     <ClCompile Include="test_console.c" />
-    <ClCompile Include="threading.c" />
+    <ClCompile Include="multithreading.c" />
     <ClCompile Include="uint_to_char.c" />
     <ClCompile Include="uint_to_wchar.c" />
     <ClCompile Include="basic_console.c" />
