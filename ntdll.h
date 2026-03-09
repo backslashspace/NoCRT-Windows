@@ -704,7 +704,7 @@ typedef enum TOKEN_INFORMATION_CLASS
 // ░░░ Loader API ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 boolean_t InitializeNtDll();
-extern uint8_t *NtDllBaseAddress;
+extern Handle NtDllBaseAddress;
 
 boolean_t LoadNtClose();
 boolean_t LoadNtOpenFile();
@@ -724,8 +724,8 @@ boolean_t LoadNtAlertThread();
 boolean_t LoadNtResumeThread();
 boolean_t LoadNtSuspendThread();
 boolean_t LoadNtCreateThreadEx();
-boolean_t LoadNtTerminateThread();
 boolean_t LoadNtYieldExecution();
+boolean_t LoadNtTerminateThread();
 boolean_t LoadNtGetContextThread();
 boolean_t LoadNtSetContextThread();
 boolean_t LoadNtAlertResumeThread();
@@ -745,7 +745,7 @@ boolean_t LoadRtlTimeToTimeFields();
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntclose
 typedef NtStatus(*NtClose_t)(Handle Handle);
 
-// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntclose
+// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntqueryobject
 typedef NtStatus(*NtQueryObject_t)(Handle Handle, OBJECT_INFORMATION_CLASS ObjectInformationClass, void *ObjectInformation, uint32_t ObjectInformationLength, uint32_t *ReturnLength);
 
 // https://learn.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntdeviceiocontrolfile
@@ -761,7 +761,7 @@ typedef NtStatus(*NtSetInformationFile_t)(Handle FileHandle, IO_STATUS_BLOCK *Io
 typedef NtStatus(*NtOpenFile_t)(Handle *fileHandle, uint32_t desiredAccess, OBJECT_ATTRIBUTES *objectAttributes, IO_STATUS_BLOCK *IoStatusBlock, uint32_t shareAccess, uint32_t openOptions);
 
 // https://ntdoc.m417z.com/ldrloaddll
-typedef NtStatus(*LdrLoadDll_t)(wchar_t const *DllPath, uint32_t *DllCharacteristics, UNICODE_STRING const *DllName, Handle DllHandle);
+typedef NtStatus(*LdrLoadDll_t)(wchar_t const *DllPath, uint32_t *DllCharacteristics, UNICODE_STRING const *DllName, Handle *DllHandle);
 
 // https://ntdoc.m417z.com/ldrunloaddll
 typedef NtStatus(*LdrUnloadDll_t)(Handle DllHandle);
@@ -893,7 +893,7 @@ static __forceinline NtStatus NtGetContextThread(Handle *ThreadHandle, CONTEXT *
 static __forceinline NtStatus NtSetContextThread(Handle *ThreadHandle, CONTEXT *ThreadContext) { return NtDll.NtSetContextThread(ThreadHandle, ThreadContext); }
 static __forceinline NtStatus NtAlertResumeThread(Handle *ThreadHandle, uint32_t *PreviousSuspendCount) { return NtDll.NtAlertResumeThread(ThreadHandle, PreviousSuspendCount); }
 
-static __forceinline NtStatus LdrLoadDll(wchar_t const *DllPath, uint32_t *DllCharacteristics, UNICODE_STRING const *DllName, Handle DllHandle) { return NtDll.LdrLoadDll(DllPath, DllCharacteristics, DllName, DllHandle); }
+static __forceinline NtStatus LdrLoadDll(wchar_t const *DllPath, uint32_t *DllCharacteristics, UNICODE_STRING const *DllName, Handle *DllHandle) { return NtDll.LdrLoadDll(DllPath, DllCharacteristics, DllName, DllHandle); }
 static __forceinline NtStatus LdrUnloadDll(Handle DllHandle) { return NtDll.LdrUnloadDll(DllHandle); }
 static __forceinline NtStatus NtDelayExecution(boolean_t Alertable, int64_t *DelayInterval) { return NtDll.NtDelayExecution(Alertable, DelayInterval); }
 static __forceinline NtStatus NtTerminateProcess(Handle ProcessHandle, NtStatus ExitStatus) { return NtDll.NtTerminateProcess(ProcessHandle, ExitStatus); }

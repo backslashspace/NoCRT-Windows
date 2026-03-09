@@ -4,7 +4,7 @@
 
 // ░░░ Initialization + State ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-uint8_t *Advapi32BaseAddress = null;
+Handle Advapi32BaseAddress = null;
 struct Advapi32Functions Advapi32 = { 0 };
 
 boolean_t InitializeAdvapi32()

@@ -25,7 +25,7 @@ typedef struct SERVICE_STATUS
 // ░░░ Loader API ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 boolean_t InitializeAdvapi32();
-extern uint8_t *Advapi32DllBaseAddress;
+extern Handle Advapi32DllBaseAddress;
 
 boolean_t LoadLookupPrivilegeNameW();
 boolean_t LoadLookupPrivilegeValueW();

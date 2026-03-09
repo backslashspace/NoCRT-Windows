@@ -3,7 +3,7 @@
 
 // ░░░ Initialization + State ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-uint8_t* NtDllBaseAddress = null;
+Handle NtDllBaseAddress = null;
 struct NtDllFunctions NtDll = { 0 };
 uint64_t NtTerminateThreadFunctionPointer;
 
@@ -72,7 +72,7 @@ NEXT_FUNCTION:
 
 		__stosb(&NtDll, 0, sizeof(struct NtDllFunctions));
 
-		NtDllBaseAddress = dllBaseAddress;
+		NtDllBaseAddress = (Handle)dllBaseAddress;
 		NtDll.LdrGetProcedureAddressEx = (LdrGetProcedureAddressEx_t)functionAddress;
 
 		return true;
@@ -175,7 +175,7 @@ boolean_t LoadNtTerminateThread()
 	functionName.MaximumLength = 18;
 
 	NtStatus status = NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtTerminateThread, null);
-	NtTerminateThreadFunctionPointer = NtDll.NtTerminateThread;
+	NtTerminateThreadFunctionPointer = (uint64_t)NtDll.NtTerminateThread;
 
 	return !status;
 }

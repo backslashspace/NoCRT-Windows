@@ -4,7 +4,7 @@
 
 // ░░░ Initialization + State ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-uint8_t* Shell32BaseAddress = null;
+Handle Shell32BaseAddress = null;
 struct Shell32Functions Shell32 = { 0 };
 
 boolean_t InitializeShell32()

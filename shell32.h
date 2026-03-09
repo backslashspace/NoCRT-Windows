@@ -6,7 +6,7 @@
 // ░░░ Loader API ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 boolean_t InitializeShell32();
-extern uint8_t *Shell32DllBaseAddress;
+extern Handle Shell32DllBaseAddress;
 
 boolean_t LoadCommandLineToArgvW();
 
