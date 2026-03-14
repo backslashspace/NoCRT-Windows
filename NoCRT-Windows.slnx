@@ -2,6 +2,7 @@
   <Configurations>
     <BuildType Name="Debug" />
     <BuildType Name="Debug Optimized" />
+    <BuildType Name="Debug Optimized Profiler" />
     <BuildType Name="Release" />
     <Platform Name="x64" />
   </Configurations>

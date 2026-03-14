@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug Optimized Profiler|x64">
+      <Configuration>Debug Optimized Profiler</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug Optimized|x64">
       <Configuration>Debug Optimized</Configuration>
       <Platform>x64</Platform>
@@ -92,6 +96,20 @@
     <EnableASAN />
     <EnableFuzzer />
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Optimized Profiler|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries />
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet />
+    <SpectreMitigation />
+    <EnableUnitySupport />
+    <UseOfMfc />
+    <WholeProgramOptimization />
+    <UseDynamicDebugging />
+    <CLRSupport />
+    <EnableASAN />
+    <EnableFuzzer />
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries />
@@ -116,6 +134,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug Optimized|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug Optimized Profiler|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
@@ -146,6 +167,28 @@
     </LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Optimized|x64'">
+    <OutDir>$(ProjectDir)out\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)out\$(Platform)\$(Configuration)\intermediate\</IntDir>
+    <TargetName>Base-Test</TargetName>
+    <CopyLocalDeploymentContent />
+    <CopyLocalProjectReference />
+    <CopyLocalDebugSymbols />
+    <CopyCppRuntimeToOutputDir />
+    <UseStructuredOutput />
+    <EnableManagedIncrementalBuild />
+    <AllProjectIncludesArePublic />
+    <AllProjectBMIsArePublic />
+    <LibraryWPath />
+    <ReferencePath />
+    <IncludePath />
+    <ExternalIncludePath />
+    <SourcePath />
+    <ExcludePath />
+    <LibraryPath>$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IgnoreImportLibrary />
+    <LinkIncremental />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Optimized Profiler|x64'">
     <OutDir>$(ProjectDir)out\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)out\$(Platform)\$(Configuration)\intermediate\</IntDir>
     <TargetName>Base-Test</TargetName>
@@ -296,7 +339,7 @@
       <RegisterOutput />
       <PerUserRedirection />
       <AdditionalDependencies />
-      <GenerateMapFile />
+      <GenerateMapFile>true</GenerateMapFile>
       <MapExports />
       <UseDynamicDebugging />
       <SwapRunFromCD />
@@ -467,8 +510,7 @@
       </PerUserRedirection>
       <AdditionalDependencies>
       </AdditionalDependencies>
-      <GenerateMapFile>
-      </GenerateMapFile>
+      <GenerateMapFile>true</GenerateMapFile>
       <MapExports>
       </MapExports>
       <UseDynamicDebugging>
@@ -491,6 +533,191 @@
       </TurnOffAssemblyGeneration>
       <Profile>
       </Profile>
+      <CLRImageType>
+      </CLRImageType>
+      <LinkErrorReporting>
+      </LinkErrorReporting>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>
+      </LinkLibraryDependencies>
+    </ProjectReference>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>
+      </UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Optimized Profiler|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <CompileAsWinRT>
+      </CompileAsWinRT>
+      <EnableFiberSafeOptimizations>
+      </EnableFiberSafeOptimizations>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <BasicRuntimeChecks>
+      </BasicRuntimeChecks>
+      <RuntimeLibrary>
+      </RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <ControlFlowGuard>
+      </ControlFlowGuard>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointExceptions>
+      </FloatingPointExceptions>
+      <CreateHotpatchableImage>
+      </CreateHotpatchableImage>
+      <IntelJCCErratum>
+      </IntelJCCErratum>
+      <GuardEHContMetadata>
+      </GuardEHContMetadata>
+      <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
+      <CompileAsManaged>
+      </CompileAsManaged>
+      <TreatWChar_tAsBuiltInType>
+      </TreatWChar_tAsBuiltInType>
+      <AdditionalOptions>/Gs2147483647 /analyze /Gw %(AdditionalOptions)</AdditionalOptions>
+      <ScanSourceForModuleDependencies>
+      </ScanSourceForModuleDependencies>
+      <TranslateIncludes>
+      </TranslateIncludes>
+      <SupportJustMyCode>
+      </SupportJustMyCode>
+      <UseDynamicDebugging>
+      </UseDynamicDebugging>
+      <SuppressStartupBanner>
+      </SuppressStartupBanner>
+      <TreatWarningAsError>
+      </TreatWarningAsError>
+      <DiagnosticsFormat>
+      </DiagnosticsFormat>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <WholeProgramOptimization>
+      </WholeProgramOptimization>
+      <FavorSizeOrSpeed>
+      </FavorSizeOrSpeed>
+      <UndefineAllPreprocessorDefinitions>
+      </UndefineAllPreprocessorDefinitions>
+      <IgnoreStandardIncludePath>
+      </IgnoreStandardIncludePath>
+      <PreprocessToFile>
+      </PreprocessToFile>
+      <PreprocessSuppressLineNumbers>
+      </PreprocessSuppressLineNumbers>
+      <PreprocessKeepComments>
+      </PreprocessKeepComments>
+      <MinimalRebuild>
+      </MinimalRebuild>
+      <SmallerTypeCheck>
+      </SmallerTypeCheck>
+      <StructMemberAlignment>
+      </StructMemberAlignment>
+      <EnableVectorLength>
+      </EnableVectorLength>
+      <FloatingPointModel>
+      </FloatingPointModel>
+      <DisableLanguageExtensions>
+      </DisableLanguageExtensions>
+      <ForceConformanceInForLoopScope>
+      </ForceConformanceInForLoopScope>
+      <BuildStlModules>
+      </BuildStlModules>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>
+      </PrecompiledHeaderOutputFile>
+      <ExpandAttributedSource>
+      </ExpandAttributedSource>
+      <GenerateSourceDependencies>
+      </GenerateSourceDependencies>
+      <BrowseInformation>
+      </BrowseInformation>
+      <BrowseInformationFile>
+      </BrowseInformationFile>
+      <TreatAngleIncludeAsExternal>
+      </TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>
+      </ExternalWarningLevel>
+      <DisableAnalyzeExternal>
+      </DisableAnalyzeExternal>
+      <CallingConvention>
+      </CallingConvention>
+      <CompileAs>CompileAsC</CompileAs>
+      <ShowIncludes>
+      </ShowIncludes>
+      <UseFullPaths>
+      </UseFullPaths>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <ErrorReporting>
+      </ErrorReporting>
+      <OmitFramePointers>true</OmitFramePointers>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>6255</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <StackReserveSize>2097152</StackReserveSize>
+      <StackCommitSize>2097152</StackCommitSize>
+      <TerminalServerAware>true</TerminalServerAware>
+      <CLRSupportLastError>Disabled</CLRSupportLastError>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <LargeAddressAware>true</LargeAddressAware>
+      <EntryPointSymbol>Start</EntryPointSymbol>
+      <CETCompat>true</CETCompat>
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
+      <ShowProgress>
+      </ShowProgress>
+      <SuppressStartupBanner>
+      </SuppressStartupBanner>
+      <RegisterOutput>
+      </RegisterOutput>
+      <PerUserRedirection>
+      </PerUserRedirection>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapExports>
+      </MapExports>
+      <UseDynamicDebugging>
+      </UseDynamicDebugging>
+      <SwapRunFromCD>
+      </SwapRunFromCD>
+      <SwapRunFromNET>
+      </SwapRunFromNET>
+      <Driver>
+      </Driver>
+      <IgnoreEmbeddedIDL>
+      </IgnoreEmbeddedIDL>
+      <TypeLibraryResourceID>
+      </TypeLibraryResourceID>
+      <NoEntryPoint>
+      </NoEntryPoint>
+      <SetChecksum>
+      </SetChecksum>
+      <TurnOffAssemblyGeneration>
+      </TurnOffAssemblyGeneration>
+      <Profile>true</Profile>
       <CLRImageType>
       </CLRImageType>
       <LinkErrorReporting>
@@ -653,8 +880,7 @@
       </PerUserRedirection>
       <AdditionalDependencies>
       </AdditionalDependencies>
-      <GenerateMapFile>
-      </GenerateMapFile>
+      <GenerateMapFile>true</GenerateMapFile>
       <MapExports>
       </MapExports>
       <UseDynamicDebugging>
