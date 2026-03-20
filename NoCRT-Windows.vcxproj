@@ -50,7 +50,6 @@
     <ClInclude Include="process_information.h" />
     <ClInclude Include="resolve_symbols.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="resource3.h" />
     <ClInclude Include="shell32.h" />
     <ClInclude Include="testing.h" />
     <ClInclude Include="types.h" />
