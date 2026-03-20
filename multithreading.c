@@ -22,7 +22,7 @@ NtStatus TestThreadMain(uint64_t value)
 	if (STATUS_SUCCESS != NtDelayExecution(false, &delay))
 	{
 		ConsoleWrite("Failed to sleep\n");
-		return;
+		return (NtStatus)-1;
 	}
 	ConsoleWrite("Test Thread: exited sleep\n");
 
@@ -55,7 +55,7 @@ boolean_t Multithreading()
 	THREAD_START_PARAMETER threadStartParameter;
 	threadStartParameter.Argument = 0xdeadbeef;	
 	threadStartParameter.StackBase = memory + STACK_SIZE;
-	if (STATUS_SUCCESS != NtCreateThreadEx(&threadHandle, THREAD_ALL_ACCESS, null, (Handle)-1i64, &ThreadEntry, &threadStartParameter, THREAD_CREATE_FLAGS_SKIP_THREAD_ATTACH | THREAD_CREATE_FLAGS_CREATE_SUSPENDED, 0, 4096, 4096, null))
+	if (STATUS_SUCCESS != NtCreateThreadEx(&threadHandle, THREAD_ALL_ACCESS, null, (Handle*)-1i64, &ThreadEntry, &threadStartParameter, THREAD_CREATE_FLAGS_SKIP_THREAD_ATTACH | THREAD_CREATE_FLAGS_CREATE_SUSPENDED, 0, 4096, 4096, null))
 	{
 		ConsoleWrite("Failed to create thread\n");
 		return false;

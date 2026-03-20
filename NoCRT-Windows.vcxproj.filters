@@ -84,6 +84,12 @@
     <ClInclude Include="console.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -137,7 +143,12 @@
       <Filter>Source Files\utility</Filter>
     </MASM>
     <MASM Include="thread_entry.asm">
-      <Filter>Header Files\core</Filter>
+      <Filter>Source Files\core</Filter>
     </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

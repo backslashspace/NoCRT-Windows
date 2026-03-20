@@ -13,7 +13,7 @@ static boolean_t DisablePrivilege(Handle token, LUID *luid)
 	tokenPrivileges.Privileges[0].Luid = *luid;
 	tokenPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_REMOVED;
 
-	if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(tokenPrivileges), null, null))
+	if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(TOKEN_PRIVILEGES), null, null))
 	{
 		ConsoleWrite("NtAdjustPrivilegesToken() failed at step remove privilege\n");
 		return false;
@@ -36,7 +36,7 @@ static boolean_t EnableSeLockMemoryPrivilege(Handle token)
 	tokenPrivileges.Privileges[0].Luid = luid;
 	tokenPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-	if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(tokenPrivileges), null, null))
+	if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(TOKEN_PRIVILEGES), null, null))
 	{
 		ConsoleWrite("NtAdjustPrivilegesToken() failed at step enable SeLockMemoryPrivilege\n");
 		return false;
@@ -60,7 +60,7 @@ boolean_t AdjustProcessTokenPrivileges()
 	// -----------------------------------------------------------------
 
 	uint32_t length = 0;
-	if (STATUS_BUFFER_TOO_SMALL != NtQueryInformationToken(token, TokenPrivileges, null, null, &length))
+	if (STATUS_BUFFER_TOO_SMALL != NtQueryInformationToken(token, TokenPrivileges, null, 0, &length))
 	{
 		ConsoleWrite("NtQueryInformationToken() failed at step length query\n");
 		return false;

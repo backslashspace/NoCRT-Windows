@@ -6,7 +6,7 @@
 // https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-startservicectrldispatcherw
 typedef struct SERVICE_TABLE_ENTRYW
 {
-    wchar_t lpServiceName;
+    wchar_t *lpServiceName;
     const void (*lpServiceProc)(uint32_t dwNumServicesArgs, wchar_t** lpServiceArgVectors);
 } SERVICE_TABLE_ENTRYW;
 

@@ -770,22 +770,22 @@ typedef NtStatus(*LdrUnloadDll_t)(Handle DllHandle);
 typedef NtStatus(*NtCreateThreadEx_t)(Handle *ThreadHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, Handle *ProcessHandle, NtStatus(*StartRoutine)(void *), void *Argument, uint32_t CreateFlags, uint64_t ZeroSize, uint64_t StackSize, uint64_t MaximumStackSize, PS_ATTRIBUTE_LIST *AttributeList);
 
 // https://ntdoc.m417z.com/ntresumethread
-typedef NtStatus(*NtResumeThread_t)(Handle *ThreadHandle, uint32_t *PreviousSuspendCount);
+typedef NtStatus(*NtResumeThread_t)(Handle ThreadHandle, uint32_t *PreviousSuspendCount);
 
 // https://ntdoc.m417z.com/ntalertresumethread
-typedef NtStatus(*NtAlertResumeThread_t)(Handle *ThreadHandle, uint32_t *PreviousSuspendCount);
+typedef NtStatus(*NtAlertResumeThread_t)(Handle ThreadHandle, uint32_t *PreviousSuspendCount);
 
 // https://ntdoc.m417z.com/ntsetcontextthread
-typedef NtStatus(*NtSetContextThread_t)(Handle *ThreadHandle, CONTEXT *ThreadContext);
+typedef NtStatus(*NtSetContextThread_t)(Handle ThreadHandle, CONTEXT *ThreadContext);
 
 // https://ntdoc.m417z.com/ntgetcontextthread
-typedef NtStatus(*NtGetContextThread_t)(Handle *ThreadHandle, CONTEXT *ThreadContext);
+typedef NtStatus(*NtGetContextThread_t)(Handle ThreadHandle, CONTEXT *ThreadContext);
 
 // https://ntdoc.m417z.com/ntsuspendthread
-typedef NtStatus(*NtSuspendThread_t)(Handle *ThreadHandle, uint32_t *PreviousSuspendCount);
+typedef NtStatus(*NtSuspendThread_t)(Handle ThreadHandle, uint32_t *PreviousSuspendCount);
 
 // https://ntdoc.m417z.com/ntalertthread
-typedef NtStatus(*NtAlertThread_t)(Handle *ThreadHandle);
+typedef NtStatus(*NtAlertThread_t)(Handle ThreadHandle);
 
 // https://ntdoc.m417z.com/ntyieldexecution
 typedef NtStatus(*NtYieldExecution_t)();
@@ -883,15 +883,15 @@ static __forceinline NtStatus NtOpenProcessToken(Handle ProcessHandle, uint32_t 
 static __forceinline NtStatus NtAdjustPrivilegesToken(Handle ProcessHandle, boolean_t DisableAllPrivileges, TOKEN_PRIVILEGES* NewState, uint32_t BufferLength, TOKEN_PRIVILEGES* PreviousState, uint32_t* ReturnLength) { return NtDll.NtAdjustPrivilegesToken(ProcessHandle, DisableAllPrivileges, NewState, BufferLength, PreviousState, ReturnLength); }
 static __forceinline NtStatus NtQueryInformationToken(Handle TokenHandle, TOKEN_INFORMATION_CLASS TokenInformationClass, void *TokenInformation, uint32_t TokenInformationLength, uint32_t *ReturnLength) { return NtDll.NtQueryInformationToken(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength, ReturnLength); }
 
-static __forceinline NtStatus NtAlertThread(Handle *ThreadHandle) { return NtDll.NtAlertThread(ThreadHandle); }
-static __forceinline NtStatus NtResumeThread(Handle *ThreadHandle, uint32_t *PreviousSuspendCount) { return NtDll.NtResumeThread(ThreadHandle, PreviousSuspendCount); }
-static __forceinline NtStatus NtSuspendThread(Handle *ThreadHandle, uint32_t *PreviousSuspendCount) { return NtDll.NtSuspendThread(ThreadHandle, PreviousSuspendCount); }
+static __forceinline NtStatus NtAlertThread(Handle ThreadHandle) { return NtDll.NtAlertThread(ThreadHandle); }
+static __forceinline NtStatus NtResumeThread(Handle ThreadHandle, uint32_t *PreviousSuspendCount) { return NtDll.NtResumeThread(ThreadHandle, PreviousSuspendCount); }
+static __forceinline NtStatus NtSuspendThread(Handle ThreadHandle, uint32_t *PreviousSuspendCount) { return NtDll.NtSuspendThread(ThreadHandle, PreviousSuspendCount); }
 static __forceinline NtStatus NtYieldExecution() { return NtDll.NtYieldExecution(); }
 static __forceinline NtStatus NtCreateThreadEx(Handle *ThreadHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, Handle *ProcessHandle, NtStatus(*StartRoutine)(void *), void *Argument, uint32_t CreateFlags, uint64_t ZeroSize, uint64_t StackSize, uint64_t MaximumStackSize, PS_ATTRIBUTE_LIST *AttributeList) { return NtDll.NtCreateThreadEx(ThreadHandle, DesiredAccess, ObjectAttributes, ProcessHandle, StartRoutine, Argument, CreateFlags, ZeroSize, StackSize, MaximumStackSize, AttributeList); }
 static __forceinline NtStatus NtTerminateThread(Handle ThreadHandle, NtStatus ExitStatus) { return NtDll.NtTerminateThread(ThreadHandle, ExitStatus); }
-static __forceinline NtStatus NtGetContextThread(Handle *ThreadHandle, CONTEXT *ThreadContext) { return NtDll.NtGetContextThread(ThreadHandle, ThreadContext); }
-static __forceinline NtStatus NtSetContextThread(Handle *ThreadHandle, CONTEXT *ThreadContext) { return NtDll.NtSetContextThread(ThreadHandle, ThreadContext); }
-static __forceinline NtStatus NtAlertResumeThread(Handle *ThreadHandle, uint32_t *PreviousSuspendCount) { return NtDll.NtAlertResumeThread(ThreadHandle, PreviousSuspendCount); }
+static __forceinline NtStatus NtGetContextThread(Handle ThreadHandle, CONTEXT *ThreadContext) { return NtDll.NtGetContextThread(ThreadHandle, ThreadContext); }
+static __forceinline NtStatus NtSetContextThread(Handle ThreadHandle, CONTEXT *ThreadContext) { return NtDll.NtSetContextThread(ThreadHandle, ThreadContext); }
+static __forceinline NtStatus NtAlertResumeThread(Handle ThreadHandle, uint32_t *PreviousSuspendCount) { return NtDll.NtAlertResumeThread(ThreadHandle, PreviousSuspendCount); }
 
 static __forceinline NtStatus LdrLoadDll(wchar_t const *DllPath, uint32_t *DllCharacteristics, UNICODE_STRING const *DllName, Handle *DllHandle) { return NtDll.LdrLoadDll(DllPath, DllCharacteristics, DllName, DllHandle); }
 static __forceinline NtStatus LdrUnloadDll(Handle DllHandle) { return NtDll.LdrUnloadDll(DllHandle); }

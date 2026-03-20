@@ -49,6 +49,8 @@
     <ClInclude Include="ntdll.h" />
     <ClInclude Include="process_information.h" />
     <ClInclude Include="resolve_symbols.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource3.h" />
     <ClInclude Include="shell32.h" />
     <ClInclude Include="testing.h" />
     <ClInclude Include="types.h" />
@@ -56,6 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <MASM Include="get_first_mismatch_index.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
@@ -363,6 +368,10 @@
     <ProjectReference>
       <UseLibraryDependencyInputs />
     </ProjectReference>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(UM_IncludePath);$(KIT_SHARED_IncludePath)</AdditionalIncludeDirectories>
+      <Culture>0x0009</Culture>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Optimized|x64'">
     <ClCompile>
@@ -549,6 +558,10 @@
       <UseLibraryDependencyInputs>
       </UseLibraryDependencyInputs>
     </ProjectReference>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(UM_IncludePath);$(KIT_SHARED_IncludePath)</AdditionalIncludeDirectories>
+      <Culture>0x0009</Culture>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Optimized Profiler|x64'">
     <ClCompile>
@@ -734,6 +747,10 @@
       <UseLibraryDependencyInputs>
       </UseLibraryDependencyInputs>
     </ProjectReference>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(UM_IncludePath);$(KIT_SHARED_IncludePath)</AdditionalIncludeDirectories>
+      <Culture>0x0009</Culture>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -920,6 +937,10 @@
       <UseLibraryDependencyInputs>
       </UseLibraryDependencyInputs>
     </ProjectReference>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(UM_IncludePath);$(KIT_SHARED_IncludePath)</AdditionalIncludeDirectories>
+      <Culture>0x0009</Culture>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
