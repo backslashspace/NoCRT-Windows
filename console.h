@@ -12,7 +12,7 @@ typedef enum LogLevel
     Critical = 6,   // red
 } LogLevel;
 
-Handle ConsoleWriteHandle;
+extern Handle ConsoleWriteHandle;
 
 boolean_t EnableVT100(Handle consoleHandle);
 

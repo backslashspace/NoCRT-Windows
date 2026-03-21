@@ -24,7 +24,7 @@ boolean_t InitializeAdvapi32()
 boolean_t LoadLookupPrivilegeValueW()
 {
 	if (Advapi32BaseAddress == null) return false;
-	if (Advapi32.StartServiceCtrlDispatcherW != null) return true;
+	if (Advapi32.LookupPrivilegeValueW != null) return true;
 
 	STRING functionName;
 	functionName.Buffer = "LookupPrivilegeValueW";
