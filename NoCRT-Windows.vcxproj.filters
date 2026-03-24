@@ -31,9 +31,6 @@
     <ClCompile Include="resolve_symbols.c">
       <Filter>Source Files\base</Filter>
     </ClCompile>
-    <ClCompile Include="test_console.c">
-      <Filter>Source Files\core\testing</Filter>
-    </ClCompile>
     <ClCompile Include="shell32.c">
       <Filter>Source Files\external</Filter>
     </ClCompile>
@@ -51,6 +48,12 @@
     </ClCompile>
     <ClCompile Include="multithreading.c">
       <Filter>Source Files\core\testing</Filter>
+    </ClCompile>
+    <ClCompile Include="console_curser_movement.c">
+      <Filter>Source Files\core\testing</Filter>
+    </ClCompile>
+    <ClCompile Include="kernelbase.c">
+      <Filter>Source Files\external</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kernelbase.h">
+      <Filter>Header Files\external</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

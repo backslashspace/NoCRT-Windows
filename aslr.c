@@ -6,7 +6,7 @@ static uint32_t _globalVariable = 0;
 
 void ASLR()
 {
-	ConsoleWrite("# ASLR\nFunction and global data ASLR should at least change after a reboot.\n");
+	ConsoleWrite("# ASLR\n\nFunction and global data ASLR should at least change after a reboot.\n");
 
 	uint32_t stackVariable = 67;
 

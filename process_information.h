@@ -26,7 +26,7 @@ typedef struct
 
 // ░░░ Global Data ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-extern BasicProcessInformation g_BasicProcessInformation;
+extern BasicProcessInformation ProcessInformation;
 
 // ░░░ Function Definitions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 

@@ -1,6 +1,8 @@
 #pragma once
 #include "types.h"
 
-boolean_t TestConsole(Handle consoleHandle, Handle standardOutput);
-
 void ASLR();
+
+boolean_t Multithreading();
+
+boolean_t MoveConsoleCurser();

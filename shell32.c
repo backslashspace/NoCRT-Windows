@@ -28,8 +28,8 @@ boolean_t LoadCommandLineToArgvW()
 
 	STRING functionName;
 	functionName.Buffer = "CommandLineToArgvW";
-	functionName.Length = 56;
-	functionName.MaximumLength = 58;
+	functionName.Length = 18;
+	functionName.MaximumLength = 19;
 
 	return !NtDll.LdrGetProcedureAddressEx(Shell32BaseAddress, &functionName, null, &Shell32.CommandLineToArgvW, null);
 }

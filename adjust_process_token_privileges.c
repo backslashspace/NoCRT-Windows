@@ -2,6 +2,7 @@
 #include "console.h"
 #include "utility.h"
 #include "advapi32.h"
+#include "process_information.h"
 
 static wchar_t const SeLockMemoryPrivilege[] = L"SeLockMemoryPrivilege";
 static wchar_t const SeChangeNotifyPrivilege[] = L"SeChangeNotifyPrivilege";
@@ -94,19 +95,19 @@ boolean_t AdjustProcessTokenPrivileges()
 			if (DisablePrivilege(token, &entry->Luid))
 			{
 				ConsoleWrite("Removed: ");
-				NtWriteFile(ConsoleWriteHandle, null, null, null, &ioStatusBlock, name, nameLength << 1, 0, null);
-				NtWriteFile(ConsoleWriteHandle, null, null, null, &ioStatusBlock, "\n", 1, 0, null);
+				NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &ioStatusBlock, name, nameLength << 1, 0, null);
+				ConsoleWrite("\n");
 			}
 		}
 		else
 		{
 			ConsoleWrite("Keeping: ");
-			NtWriteFile(ConsoleWriteHandle, null, null, null, &ioStatusBlock, name, nameLength << 1, 0, null);
-			NtWriteFile(ConsoleWriteHandle, null, null, null, &ioStatusBlock, "\n", 1, 0, null);
+			NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &ioStatusBlock, name, nameLength << 1, 0, null);
+			ConsoleWrite("\n");
 		}
 	}
 
-	NtWriteFile(ConsoleWriteHandle, null, null, null, &ioStatusBlock, "\n", 1, 0, null);
+	ConsoleWrite("\n");
 
 	return true;
 }

@@ -22,7 +22,9 @@
     <ClCompile Include="adjust_process_token_privileges.c" />
     <ClCompile Include="advapi32.c" />
     <ClCompile Include="aslr.c" />
+    <ClCompile Include="console_curser_movement.c" />
     <ClCompile Include="enable_vt100.c" />
+    <ClCompile Include="kernelbase.c" />
     <ClCompile Include="log_a.c" />
     <ClCompile Include="log_w.c" />
     <ClCompile Include="main.c" />
@@ -31,7 +33,6 @@
     <ClCompile Include="resolve_symbols.c" />
     <ClCompile Include="shell32.c" />
     <ClCompile Include="start.c" />
-    <ClCompile Include="test_console.c" />
     <ClCompile Include="multithreading.c" />
     <ClCompile Include="uint_to_char.c" />
     <ClCompile Include="uint_to_wchar.c" />
@@ -46,6 +47,7 @@
     <ClInclude Include="advapi32.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="intrinsics.h" />
+    <ClInclude Include="kernelbase.h" />
     <ClInclude Include="ntdll.h" />
     <ClInclude Include="process_information.h" />
     <ClInclude Include="resolve_symbols.h" />

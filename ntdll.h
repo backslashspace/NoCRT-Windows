@@ -829,7 +829,7 @@ typedef NtStatus(*NtAllocateVirtualMemory_t)(Handle ProcessHandle, void *BaseAdd
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntfreevirtualmemory
 typedef NtStatus(*NtFreeVirtualMemory_t)(Handle ProcessHandle, void *BaseAddress, uint64_t *RegionSize, uint32_t FreeType);
 
-// ░░░ Callable Grouped NtXxx Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+// ░░░ Callable Grouped ntdll Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 struct NtDllFunctions
 {

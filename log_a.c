@@ -2,6 +2,7 @@
 #include "console.h"
 #include "utility.h"
 #include "intrinsics.h"
+#include "process_information.h"
 
 static const char_t* _logWords[7] =
 {
@@ -151,7 +152,7 @@ void ConsoleLog(char_t const *const message, LogLevel logLevel, char_t const *co
     uint16_t sourceLength = (uint16_t)MemoryGetFirstByteMatchIndexX86(256, null, source);
     uint16_t messageLength = (uint16_t)MemoryGetFirstByteMatchIndexX86(256, null, message);
 
-    ConsoleLogA(message, messageLength, logLevel, source, sourceLength, ConsoleWriteHandle);
+    ConsoleLogA(message, messageLength, logLevel, source, sourceLength, ProcessInformation.StandardOutput);
 }
 
 NtStatus ConsoleLogA(char_t const *const message, uint16_t messageLength, LogLevel logLevel, char_t const *const source, uint16_t sourceLength, Handle outputHandle)

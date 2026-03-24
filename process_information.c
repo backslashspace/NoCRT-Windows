@@ -2,7 +2,7 @@
 #include "intrinsics.h"
 #include "process_information.h"
 
-BasicProcessInformation g_BasicProcessInformation = { 0 };
+BasicProcessInformation ProcessInformation = { 0 };
 
 void ReadOwnProcessInformation(BasicProcessInformation *processInformation)
 {

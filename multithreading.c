@@ -39,7 +39,7 @@ NtStatus TestThreadMain(uint64_t value)
 
 boolean_t Multithreading()
 {
-	ConsoleWrite("# Multithreading\n");
+	ConsoleWrite("# Multithreading\n\n");
 
 	uint8_t *memory = null;
 	uint64_t size = STACK_SIZE;
