@@ -12,7 +12,8 @@ THREAD_START_PARAMETER ENDS
 	ThreadEntry PROC ; NtStatus (THREAD_START_PARAMETER *threadStartParameter)
 	; rcx = argument
 		
-		rdtscp
+		lfence
+		rdtsc
 		lfence
 		shl rdx, 32												; shift high bits up
 		or  rax, rdx											; combine to one register

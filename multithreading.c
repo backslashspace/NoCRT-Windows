@@ -14,7 +14,7 @@ typedef struct THREAD_START_PARAMETER
 // thread entry via asm - to set RSP
 __declspec(noreturn) NtStatus ThreadEntry(THREAD_START_PARAMETER *threadStartParameter);
 
-// called by 
+// called by ThreadEntry
 NtStatus TestThreadMain(void *argument)
 {
 	THREAD_NAME_INFORMATION nameInformation;
@@ -26,7 +26,7 @@ NtStatus TestThreadMain(void *argument)
 	char_t *string = _alloca(21);
 	string[20] = '\n';
 	uint16_t length = UInt64ToChar((uint64_t)argument, string);
-	ConsoleWrite("Message from worker thread: argument was ");
+	ConsoleWrite("[WORKER] Message from worker thread: argument was ");
 	ConsoleWrite(string + 20 - length);
 
 	return status;
@@ -56,10 +56,10 @@ boolean_t Multithreading()
 	threadStartParameter.NtTerminateThread = NtDll.NtTerminateThread;
 	if (STATUS_SUCCESS != NtCreateThreadEx(&threadHandle, THREAD_ALL_ACCESS, null, (Handle)-1i64, &ThreadEntry, &threadStartParameter, THREAD_CREATE_FLAGS_SKIP_THREAD_ATTACH | THREAD_CREATE_FLAGS_CREATE_SUSPENDED, 0, 4096, 4096, null))
 	{
-		ConsoleWrite("Failed to create thread\n");
+		ConsoleWrite("[MAIN] Failed to create thread\n");
 		return false;
 	}
-	ConsoleWrite("Starting worker thread\n");
+	ConsoleWrite("[MAIN] Starting worker thread\n");
 
 	_mm_lfence();
 	uint64_t now = __rdtsc();
@@ -67,7 +67,7 @@ boolean_t Multithreading()
 
 	if (STATUS_SUCCESS != NtResumeThread(threadHandle, null))
 	{
-		ConsoleWrite("Failed to start thread\n");
+		ConsoleWrite("[MAIN] Failed to start thread\n");
 		return false;
 	}
 
@@ -77,12 +77,12 @@ boolean_t Multithreading()
 
 	if (STATUS_SUCCESS != NtWaitForSingleObject(threadHandle, false, null))
 	{
-		ConsoleWrite("Failed to wait for thread to end\n");
+		ConsoleWrite("[MAIN] Failed to wait for thread to end\n");
 		return false;
 	}
 	NtClose(threadHandle);
 
-	ConsoleWrite("Thread exited\n\n");
+	ConsoleWrite("[MAIN] Thread exited\n\n");
 
 	size = 0;
 	return !NtFreeVirtualMemory((Handle)-1, &threadStack, &size, MEM_RELEASE);
