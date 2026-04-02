@@ -27,7 +27,9 @@ typedef struct SERVICE_STATUS
 boolean_t InitializeAdvapi32();
 extern Handle Advapi32DllBaseAddress;
 
+boolean_t LoadLookupPrivilegeNameA();
 boolean_t LoadLookupPrivilegeNameW();
+boolean_t LoadLookupPrivilegeValueA();
 boolean_t LoadLookupPrivilegeValueW();
 
 boolean_t LoadStartServiceCtrlDispatcherW();
@@ -35,8 +37,14 @@ boolean_t LoadRegisterServiceCtrlHandlerExW();
 
 // ░░░ advapi32 Function Typedefs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-// https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lookupprivilegevaluew
-typedef bool_t(*LookupPrivilegeNameW_t)(wchar_t const *lpSystemName, LUID *lpLuid, wchar_t *lpName, uint32_t *cchName);
+// https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lookupprivilegenamea
+typedef bool_t(*LookupPrivilegeNameA_t)(char_t const *lpSystemName, LUID *lpLuid, char_t *lpName, uint32_t *cchName);
+
+// https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lookupprivilegenamew
+typedef bool_t(*LookupPrivilegeNameW_t)(wchar_t const *lpSystemName, LUID * lpLuid, wchar_t *lpName, uint32_t *cchName);
+
+// https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lookupprivilegevaluea
+typedef bool_t(*LookupPrivilegeValueA_t)(char_t const *lpSystemName, char_t const *lpName, LUID *lpLuid);
 
 // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lookupprivilegevaluew
 typedef bool_t(*LookupPrivilegeValueW_t)(wchar_t const *lpSystemName, wchar_t const *lpName, LUID *lpLuid);
@@ -51,7 +59,9 @@ typedef Handle(*RegisterServiceCtrlHandlerExW_t)(wchar_t const *lpServiceName, u
 
 struct Advapi32Functions
 {
+	LookupPrivilegeNameA_t LookupPrivilegeNameA;
     LookupPrivilegeNameW_t LookupPrivilegeNameW;
+    LookupPrivilegeValueA_t LookupPrivilegeValueA;
     LookupPrivilegeValueW_t LookupPrivilegeValueW;
     StartServiceCtrlDispatcherW_t StartServiceCtrlDispatcherW;
     RegisterServiceCtrlHandlerExW_t RegisterServiceCtrlHandlerExW;
@@ -61,7 +71,9 @@ extern struct Advapi32Functions Advapi32;
 
 // ░░░ Wrap to normal Function ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
+static __forceinline bool_t LookupPrivilegeNameA(char_t const *lpSystemName, LUID *lpLuid, char_t *lpName, uint32_t *cchName) { return Advapi32.LookupPrivilegeNameA(lpSystemName, lpLuid, lpName, cchName); }
 static __forceinline bool_t LookupPrivilegeNameW(wchar_t const *lpSystemName, LUID *lpLuid, wchar_t *lpName, uint32_t *cchName) { return Advapi32.LookupPrivilegeNameW(lpSystemName, lpLuid, lpName, cchName); }
+static __forceinline bool_t LookupPrivilegeValueA(char_t const *lpSystemName, char_t const *lpName, LUID *lpLuid) { return Advapi32.LookupPrivilegeValueA(lpSystemName, lpName, lpLuid); }
 static __forceinline bool_t LookupPrivilegeValueW(wchar_t const *lpSystemName, wchar_t const *lpName, LUID *lpLuid) { return Advapi32.LookupPrivilegeValueW(lpSystemName, lpName, lpLuid); }
 
 static __forceinline bool_t StartServiceCtrlDispatcherW(SERVICE_TABLE_ENTRYW const *lpServiceStartTable) { return Advapi32.StartServiceCtrlDispatcherW(lpServiceStartTable); }

@@ -83,6 +83,10 @@
 // ░░░ Prototypes ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 #ifdef __INTELLISENSE__  // for VS editor only
+
+// https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/memcpy-wmemcpy?view=msvc-170
+void *memcpy(void *destination, const void *source, uint64_t count);
+
 // https://learn.microsoft.com/en-us/cpp/intrinsics/stosb?view=msvc-170
 void __stosb(void *Destination, uint8_t Data, uint64_t Count) {}
 
@@ -90,13 +94,16 @@ void __stosb(void *Destination, uint8_t Data, uint64_t Count) {}
 void __movsb(void *Destination, void const *Source, uint64_t Count) {}
 
 // https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/alloca?view=msvc-170
-void* _alloca(uint64_t size) {}
+void *_alloca(uint64_t size) {}
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/readgsbyte-readgsdword-readgsqword-readgsword?view=msvc-170
 uint64_t __readgsqword(uint32_t Offset) {}
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/rdtscp?view=msvc-170
 uint64_t __rdtscp(uint32_t *AUX) {}
+
+// https://learn.microsoft.com/en-us/cpp/intrinsics/rdtsc?view=msvc-170
+uint64_t __rdtsc() {}
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/fastfail?view=msvc-170
 __declspec(noreturn) void __fastfail(uint32_t code) {}
@@ -146,8 +153,23 @@ uint16_t _InterlockedIncrement16(uint16_t volatile *lpAddend) {}
 uint32_t _InterlockedIncrement(uint32_t volatile *lpAddend) {}
 uint64_t _InterlockedIncrement64(uint64_t volatile *lpAddend) {}
 
+// https://learn.microsoft.com/en-us/cpp/intrinsics/cpuid-cpuidex?view=msvc-170
+void __cpuid(uint32_t cpuInfo[4], uint32_t function_id);
+void __cpuidex(uint32_t cpuInfo[4], uint32_t function_id, uint32_t subfunction_id);
+
 // https://learn.microsoft.com/en-us/windows/win32/api/winnt/nf-winnt-yieldprocessor
 void _mm_pause() {}
+
+// https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm_lfence
+void _mm_lfence() {}
+// https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm_sfence
+void _mm_sfence() {}
+// https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm_mfence
+void _mm_mfence() {}
+
+// https://clang.llvm.org/doxygen/mwaitxintrin_8h.html
+void _mm_mwaitx(void *__extensions, uint32_t __hints, uint32_t __clock) {}
+void _mm_monitorx(void *__p, uint32_t __extensions, uint32_t __hints) {}
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/writebarrier?view=msvc-170
 void _WriteBarrier() {}
@@ -155,4 +177,5 @@ void _WriteBarrier() {}
 void _ReadWriteBarrier() {}
 // https://learn.microsoft.com/de-de/cpp/intrinsics/readbarrier?view=msvc-170
 void _ReadBarrier() {}
+
 #endif

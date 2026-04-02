@@ -1,8 +1,8 @@
 #pragma once
 #include "types.h"
 
-void ASLR();
+void ASLR(Handle const outputHandle);
+
+void PrintCPUIDInformation();
 
 boolean_t Multithreading();
-
-boolean_t MoveConsoleCurser();

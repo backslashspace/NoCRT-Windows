@@ -1,3 +1,5 @@
+#pragma message("[shell32] v1.0.0.0")
+
 #include "ntdll.h"
 #include "shell32.h"      
 #include "intrinsics.h"
@@ -31,5 +33,5 @@ boolean_t LoadCommandLineToArgvW()
 	functionName.Length = 18;
 	functionName.MaximumLength = 19;
 
-	return !NtDll.LdrGetProcedureAddressEx(Shell32BaseAddress, &functionName, null, &Shell32.CommandLineToArgvW, null);
+	return !LdrGetProcedureAddressEx(Shell32BaseAddress, &functionName, null, (void **)&Shell32.CommandLineToArgvW, null);
 }

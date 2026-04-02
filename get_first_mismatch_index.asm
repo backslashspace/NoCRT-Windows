@@ -1,6 +1,6 @@
 .code
 
-MemoryGetFirstByteMatchIndexX86 PROC ; int64_t MemoryGetFirstByteMatchIndexX86(uint64_t count, uint8_t const value, void const *buffer)
+MemoryGetFirstByteMatchIndexX86 PROC ; int64_t MemoryGetFirstByteMatchIndexX86(uint64_t count, uint8_t const value, void const *const buffer)
     ; rcx = count
     ; rdx = value
     ; r8  = buffer
@@ -26,7 +26,7 @@ MemoryGetFirstByteMatchIndexX86 PROC ; int64_t MemoryGetFirstByteMatchIndexX86(u
 
 MemoryGetFirstByteMatchIndexX86 ENDP
 
-MemoryGetFirstWordMatchIndexX86 PROC ; int64_t MemoryGetFirstWordMatchIndexX86(uint64_t count, uint16_t const value, void const *buffer)
+MemoryGetFirstWordMatchIndexX86 PROC ; int64_t MemoryGetFirstWordMatchIndexX86(uint64_t count, uint16_t const value, void const *const buffer)
     ; rcx = count
     ; rdx = value
     ; r8  = buffer

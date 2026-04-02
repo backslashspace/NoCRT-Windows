@@ -1,10 +1,10 @@
 EXTERN TestThreadMain:PROC
 
-EXTERN NtTerminateThreadFunctionPointer:QWORD	; defined in ntdll.h
-
 THREAD_START_PARAMETER STRUCT
-	StackBase QWORD ?							; // base is bottom of buffer - stack grows down - StackBase = buffer + bufferSize - must be 16 byte aligned
+	NtTerminateThread QWORD ?					
+	StackBase QWORD ?							; base is bottom of buffer - stack grows down - StackBase = buffer + bufferSize - must be 16 byte aligned
 	Argument QWORD ?
+	Flag QWORD ?								; will turn non 0 when entry is done
 THREAD_START_PARAMETER ENDS
 
 .code
@@ -12,37 +12,25 @@ THREAD_START_PARAMETER ENDS
 	ThreadEntry PROC ; NtStatus (THREAD_START_PARAMETER *threadStartParameter)
 	; rcx = argument
 		
-		mov rsp, [rcx].THREAD_START_PARAMETER.StackBase		; set new stack base
-		mov rcx, [rcx].THREAD_START_PARAMETER.Argument		; set actuall argument for callee
+		rdtscp
+		lfence
+		shl rdx, 32												; shift high bits up
+		or  rax, rdx											; combine to one register
 
-		sub rsp, 32											; shadow space for both calls
-		call TestThreadMain
+		mov rbx, rcx											; free rcx for call argument
+		mov rcx, [rbx].THREAD_START_PARAMETER.Argument			; set argument for callee
+		mov rsp, [rbx].THREAD_START_PARAMETER.StackBase			; set new stack base
+		mov rsi, [rbx].THREAD_START_PARAMETER.NtTerminateThread	; preserve NtTerminateThread in register
+		mov [rbx].THREAD_START_PARAMETER.Flag, rax				; store counter and signal done
 
-		mov rcx, -2											; -2 is thread handle
-		mov edx, eax										; NtStatus
-		call NtTerminateThreadFunctionPointer
+		sub rsp, 32												; shadow space for both calls
+		call TestThreadMain										; retuns NtStatus
+		mov rcx, -2												; -2 is current thread handle
+		mov edx, eax											; NtStatus
+		call rsi
+
 		ud2
 
 	ThreadEntry ENDP
-END
 
-; -----------------------------------------------------------------------
-; dont use own NtTerminateThread
-; -----------------------------------------------------------------------
-;
-;ThreadEntry PROC ; NtStatus (THREAD_START_PARAMETER *threadStartParameter)
-;	 ; rcx = argument
-;	 	
-;	 	 mov rdi, rsp										; preserve original stack pointer
-;	 	 
-;	 	 mov rsp, [rcx].THREAD_START_PARAMETER.StackBase	; set new stack base
-;	     mov rcx, [rcx].THREAD_START_PARAMETER.Argument		; set actuall argument for callee
-;	 	 
-;	 	 sub rsp, 32										; shadow space
-;	 	 call TestThreadMain
-;	 	 
-;	 	 mov rsp, rdi										; restore old stack
-;	 	 
-;	 	 ret												; use eax from call
-;	 
-;	 ThreadEntry ENDP
+END

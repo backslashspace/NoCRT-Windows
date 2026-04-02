@@ -37,8 +37,12 @@
 boolean_t InitializeKernelbase();
 extern Handle KernelbaseDllBaseAddress;
 
+boolean_t LoadSetConsoleCP();
+boolean_t LoadWriteConsoleA();
+boolean_t LoadWriteConsoleW();
 boolean_t LoadGetConsoleMode();
 boolean_t LoadSetConsoleMode();
+boolean_t LoadSetConsoleOutputCP();
 
 // ░░░ kernelbase Function Typedefs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
@@ -48,17 +52,39 @@ typedef bool_t(*GetConsoleMode_t)(Handle hConsoleHandle, uint32_t *lpMode);
 // https://learn.microsoft.com/en-us/windows/console/setconsolemode
 typedef bool_t(*SetConsoleMode_t)(Handle hConsoleHandle, uint32_t dwMode);
 
+// https://learn.microsoft.com/en-us/windows/console/setconsoleoutputcp
+// https://learn.microsoft.com/en-us/windows/win32/intl/code-page-identifiers
+typedef bool_t(*SetConsoleOutputCP_t)(uint32_t wCodePageID);
+
+// https://learn.microsoft.com/en-us/windows/console/setconsolecp
+// https://learn.microsoft.com/en-us/windows/win32/intl/code-page-identifiers
+typedef bool_t(*SetConsoleCP_t)(uint32_t wCodePageID);
+
+// https://learn.microsoft.com/en-us/windows/console/writeconsole
+typedef bool_t(*WriteConsoleA_t)(Handle hConsoleOutput, char_t const *lpBuffer, uint32_t nNumberOfCharsToWrite, uint32_t *lpNumberOfCharsWritten, void *lpReserved);
+
+// https://learn.microsoft.com/en-us/windows/console/writeconsole
+typedef bool_t(*WriteConsoleW_t)(Handle hConsoleOutput, wchar_t const *lpBuffer, uint32_t nNumberOfCharsToWrite, uint32_t *lpNumberOfCharsWritten, void *lpReserved);
+
 // ░░░ Callable Grouped kernelbase Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 struct KernelbaseFunctions
 {
-    GetConsoleMode_t GetConsoleMode;
-    SetConsoleMode_t SetConsoleMode;
+	SetConsoleCP_t SetConsoleCP;
+	WriteConsoleA_t WriteConsoleA;
+	WriteConsoleW_t WriteConsoleW;
+	GetConsoleMode_t GetConsoleMode;
+	SetConsoleMode_t SetConsoleMode;
+	SetConsoleOutputCP_t SetConsoleOutputCP;
 };
 
 extern struct KernelbaseFunctions Kernelbase;
 
 // ░░░ Wrap to normal Function ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
+static __forceinline bool_t SetConsoleCP(uint32_t wCodePageID) { return Kernelbase.SetConsoleCP(wCodePageID); }
+static __forceinline bool_t WriteConsoleA(Handle hConsoleOutput, char_t const *lpBuffer, uint32_t nNumberOfCharsToWrite, uint32_t *lpNumberOfCharsWritten, void *lpReserved) { return Kernelbase.WriteConsoleA(hConsoleOutput, lpBuffer, nNumberOfCharsToWrite, lpNumberOfCharsWritten, lpReserved); }
+static __forceinline bool_t WriteConsoleW(Handle hConsoleOutput, wchar_t const *lpBuffer, uint32_t nNumberOfCharsToWrite, uint32_t *lpNumberOfCharsWritten, void *lpReserved) { return Kernelbase.WriteConsoleW(hConsoleOutput, lpBuffer, nNumberOfCharsToWrite, lpNumberOfCharsWritten, lpReserved); }
 static __forceinline bool_t GetConsoleMode(Handle hConsoleHandle, uint32_t *lpMode) { return Kernelbase.GetConsoleMode(hConsoleHandle, lpMode); }
 static __forceinline bool_t SetConsoleMode(Handle hConsoleHandle, uint32_t dwMode) { return Kernelbase.SetConsoleMode(hConsoleHandle, dwMode); }
+static __forceinline bool_t SetConsoleOutputCP(uint32_t wCodePageID) { return Kernelbase.SetConsoleOutputCP(wCodePageID); }

@@ -1,3 +1,5 @@
+#pragma message("[ntdll] v1.1.0.0")
+
 #include "ntdll.h"
 #include "intrinsics.h"
 
@@ -5,7 +7,6 @@
 
 Handle NtDllBaseAddress = null;
 struct NtDllFunctions NtDll = { 0 };
-uint64_t NtTerminateThreadFunctionPointer;
 
 boolean_t InitializeNtDll()
 {
@@ -96,7 +97,7 @@ boolean_t LoadNtClose()
 	functionName.Length = 7;
 	functionName.MaximumLength = 8;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtClose, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtClose, null);
 }
 
 boolean_t LoadNtOpenFile()
@@ -109,7 +110,7 @@ boolean_t LoadNtOpenFile()
 	functionName.Length = 10;
 	functionName.MaximumLength = 11;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtOpenFile, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtOpenFile, null);
 }
 
 boolean_t LoadNtCreateThreadEx()
@@ -122,7 +123,7 @@ boolean_t LoadNtCreateThreadEx()
 	functionName.Length = 16;
 	functionName.MaximumLength = 17;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtCreateThreadEx, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtCreateThreadEx, null);
 }
 
 boolean_t LoadNtResumeThread()
@@ -135,7 +136,7 @@ boolean_t LoadNtResumeThread()
 	functionName.Length = 14;
 	functionName.MaximumLength = 15;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtResumeThread, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtResumeThread, null);
 }
 
 boolean_t LoadNtGetContextThread()
@@ -148,7 +149,20 @@ boolean_t LoadNtGetContextThread()
 	functionName.Length = 18;
 	functionName.MaximumLength = 19;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtGetContextThread, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtGetContextThread, null);
+}
+
+boolean_t LoadRtlUnicodeToUTF8N()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.RtlUnicodeToUTF8N != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "RtlUnicodeToUTF8N";
+	functionName.Length = 17;
+	functionName.MaximumLength = 18;
+
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.RtlUnicodeToUTF8N, null);
 }
 
 boolean_t LoadNtSetContextThread()
@@ -161,7 +175,7 @@ boolean_t LoadNtSetContextThread()
 	functionName.Length = 18;
 	functionName.MaximumLength = 19;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtSetContextThread, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtSetContextThread, null);
 }
 
 boolean_t LoadNtTerminateThread()
@@ -174,10 +188,7 @@ boolean_t LoadNtTerminateThread()
 	functionName.Length = 17;
 	functionName.MaximumLength = 18;
 
-	NtStatus status = NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtTerminateThread, null);
-	NtTerminateThreadFunctionPointer = (uint64_t)NtDll.NtTerminateThread;
-
-	return !status;
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtTerminateThread, null);
 }
 
 boolean_t LoadNtSuspendThread()
@@ -190,7 +201,7 @@ boolean_t LoadNtSuspendThread()
 	functionName.Length = 15;
 	functionName.MaximumLength = 16;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtSuspendThread, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtSuspendThread, null);
 }
 
 boolean_t LoadNtYieldExecution()
@@ -203,7 +214,7 @@ boolean_t LoadNtYieldExecution()
 	functionName.Length = 16;
 	functionName.MaximumLength = 17;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtYieldExecution, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtYieldExecution, null);
 }
 
 boolean_t LoadNtAlertResumeThread()
@@ -216,7 +227,7 @@ boolean_t LoadNtAlertResumeThread()
 	functionName.Length = 19;
 	functionName.MaximumLength = 20;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtAlertResumeThread, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtAlertResumeThread, null);
 }
 
 boolean_t LoadNtAlertThread()
@@ -229,7 +240,7 @@ boolean_t LoadNtAlertThread()
 	functionName.Length = 13;
 	functionName.MaximumLength = 14;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtAlertThread, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtAlertThread, null);
 }
 
 boolean_t LoadLdrLoadDll()
@@ -242,7 +253,7 @@ boolean_t LoadLdrLoadDll()
 	functionName.Length = 10;
 	functionName.MaximumLength = 11;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.LdrLoadDll, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.LdrLoadDll, null);
 }
 
 boolean_t LoadLdrUnloadDll()
@@ -255,7 +266,7 @@ boolean_t LoadLdrUnloadDll()
 	functionName.Length = 12;
 	functionName.MaximumLength = 13;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.LdrUnloadDll, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.LdrUnloadDll, null);
 }
 
 boolean_t LoadNtDelayExecution()
@@ -268,7 +279,7 @@ boolean_t LoadNtDelayExecution()
 	functionName.Length = 16;
 	functionName.MaximumLength = 17;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtDelayExecution, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtDelayExecution, null);
 }
 
 boolean_t LoadNtWriteFile()
@@ -281,7 +292,7 @@ boolean_t LoadNtWriteFile()
 	functionName.Length = 11;
 	functionName.MaximumLength = 12;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtWriteFile, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtWriteFile, null);
 }
 
 boolean_t LoadNtReadFile()
@@ -294,7 +305,7 @@ boolean_t LoadNtReadFile()
 	functionName.Length = 10;
 	functionName.MaximumLength = 11;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtReadFile, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtReadFile, null);
 }
 
 boolean_t LoadNtTerminateProcess()
@@ -307,7 +318,7 @@ boolean_t LoadNtTerminateProcess()
 	functionName.Length = 18;
 	functionName.MaximumLength = 19;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtTerminateProcess, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtTerminateProcess, null);
 }
 
 boolean_t LoadNtAllocateVirtualMemory()
@@ -320,7 +331,7 @@ boolean_t LoadNtAllocateVirtualMemory()
 	functionName.Length = 23;
 	functionName.MaximumLength = 24;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtAllocateVirtualMemory, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtAllocateVirtualMemory, null);
 }
 
 boolean_t LoadNtWaitForSingleObject()
@@ -333,7 +344,7 @@ boolean_t LoadNtWaitForSingleObject()
 	functionName.Length = 21;
 	functionName.MaximumLength = 22;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtWaitForSingleObject, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtWaitForSingleObject, null);
 }
 
 boolean_t LoadNtFreeVirtualMemory()
@@ -346,7 +357,7 @@ boolean_t LoadNtFreeVirtualMemory()
 	functionName.Length = 19;
 	functionName.MaximumLength = 20;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtFreeVirtualMemory, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtFreeVirtualMemory, null);
 }
 
 boolean_t LoadRtlTimeToTimeFields()
@@ -359,7 +370,7 @@ boolean_t LoadRtlTimeToTimeFields()
 	functionName.Length = 19;
 	functionName.MaximumLength = 20;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.RtlTimeToTimeFields, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.RtlTimeToTimeFields, null);
 }
 
 boolean_t LoadNtOpenProcessToken()
@@ -372,7 +383,7 @@ boolean_t LoadNtOpenProcessToken()
 	functionName.Length = 18;
 	functionName.MaximumLength = 19;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtOpenProcessToken, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtOpenProcessToken, null);
 }
 
 boolean_t LoadNtAdjustPrivilegesToken()
@@ -385,7 +396,7 @@ boolean_t LoadNtAdjustPrivilegesToken()
 	functionName.Length = 23;
 	functionName.MaximumLength = 24;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtAdjustPrivilegesToken, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtAdjustPrivilegesToken, null);
 }
 
 boolean_t LoadNtQueryInformationToken()
@@ -398,7 +409,20 @@ boolean_t LoadNtQueryInformationToken()
 	functionName.Length = 23;
 	functionName.MaximumLength = 24;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtQueryInformationToken, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtQueryInformationToken, null);
+}
+
+boolean_t LoadNtSetInformationThread()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtSetInformationThread != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtSetInformationThread";
+	functionName.Length = 22;
+	functionName.MaximumLength = 23;
+
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtSetInformationThread, null);
 }
 
 boolean_t LoadNtQueryObject()
@@ -411,7 +435,7 @@ boolean_t LoadNtQueryObject()
 	functionName.Length = 13;
 	functionName.MaximumLength = 14;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtQueryObject, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtQueryObject, null);
 }
 
 boolean_t LoadNtDeviceIoControlFile()
@@ -424,7 +448,7 @@ boolean_t LoadNtDeviceIoControlFile()
 	functionName.Length = 21;
 	functionName.MaximumLength = 22;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtDeviceIoControlFile, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtDeviceIoControlFile, null);
 }
 
 boolean_t LoadNtQueryInformationFile()
@@ -437,7 +461,7 @@ boolean_t LoadNtQueryInformationFile()
 	functionName.Length = 22;
 	functionName.MaximumLength = 23;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtQueryInformationFile, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtQueryInformationFile, null);
 }
 
 boolean_t LoadNtSetInformationFile()
@@ -450,5 +474,5 @@ boolean_t LoadNtSetInformationFile()
 	functionName.Length = 20;
 	functionName.MaximumLength = 21;
 
-	return !NtDll.LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, &NtDll.NtSetInformationFile, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtSetInformationFile, null);
 }

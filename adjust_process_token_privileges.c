@@ -2,10 +2,10 @@
 #include "console.h"
 #include "utility.h"
 #include "advapi32.h"
-#include "process_information.h"
+#include "kernelbase.h"
 
-static wchar_t const SeLockMemoryPrivilege[] = L"SeLockMemoryPrivilege";
-static wchar_t const SeChangeNotifyPrivilege[] = L"SeChangeNotifyPrivilege";
+static wchar_t const SeLockMemoryPrivilege[] = u"SeLockMemoryPrivilege";
+static wchar_t const SeChangeNotifyPrivilege[] = u"SeChangeNotifyPrivilege";
 
 static boolean_t DisablePrivilege(Handle token, LUID *luid)
 {
@@ -26,7 +26,7 @@ static boolean_t DisablePrivilege(Handle token, LUID *luid)
 static boolean_t EnableSeLockMemoryPrivilege(Handle token)
 {
 	LUID luid = { 0 };
-	if (!LookupPrivilegeValueW(null, L"SeLockMemoryPrivilege", &luid))
+	if (!LookupPrivilegeValueW(null, SeLockMemoryPrivilege, &luid))
 	{
 		ConsoleWrite("NtAdjustPrivilegesToken() failed at step enable SeLockMemoryPrivilege\n");
 		return false;
@@ -46,7 +46,7 @@ static boolean_t EnableSeLockMemoryPrivilege(Handle token)
 	return true;
 }
 
-boolean_t AdjustProcessTokenPrivileges()
+boolean_t AdjustProcessTokenPrivileges(Handle const outputHandle)
 {
 	Handle token = null;
 	if (STATUS_SUCCESS != NtOpenProcessToken((Handle)-1i64, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token))
@@ -76,8 +76,7 @@ boolean_t AdjustProcessTokenPrivileges()
 
 	// -----------------------------------------------------------------
 
-	IO_STATUS_BLOCK ioStatusBlock = { 0 };
-	wchar_t *name = (wchar_t *)_alloca(256);
+	wchar_t *name = _alloca(256);
 
 	for (uint16_t i = 0; i < tokenPrivilegesPointer->PrivilegeCount; ++i)
 	{
@@ -86,7 +85,7 @@ boolean_t AdjustProcessTokenPrivileges()
 
 		if (!LookupPrivilegeNameW(null, &entry->Luid, name, &nameLength))
 		{
-			ConsoleWrite("LookupPrivilegeNameW() failed\n");
+			ConsoleWrite("LookupPrivilegeNameA() failed\n");
 			return false;
 		}
 
@@ -95,19 +94,17 @@ boolean_t AdjustProcessTokenPrivileges()
 			if (DisablePrivilege(token, &entry->Luid))
 			{
 				ConsoleWrite("Removed: ");
-				NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &ioStatusBlock, name, nameLength << 1, 0, null);
+				WriteConsoleW(outputHandle ,name, nameLength, null, null);
 				ConsoleWrite("\n");
 			}
 		}
 		else
 		{
 			ConsoleWrite("Keeping: ");
-			NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &ioStatusBlock, name, nameLength << 1, 0, null);
+			WriteConsoleW(outputHandle, name, nameLength, null, null);
 			ConsoleWrite("\n");
 		}
 	}
-
-	ConsoleWrite("\n");
 
 	return true;
 }

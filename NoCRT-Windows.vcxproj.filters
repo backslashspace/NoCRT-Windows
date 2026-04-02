@@ -16,7 +16,7 @@
     <ClCompile Include="uint_to_char.c">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
-    <ClCompile Include="enable_vt100.c">
+    <ClCompile Include="enable_xterm.c">
       <Filter>Source Files\core\console</Filter>
     </ClCompile>
     <ClCompile Include="advapi32.c">
@@ -37,9 +37,6 @@
     <ClCompile Include="aslr.c">
       <Filter>Source Files\core\testing</Filter>
     </ClCompile>
-    <ClCompile Include="basic_console.c">
-      <Filter>Source Files\core\console</Filter>
-    </ClCompile>
     <ClCompile Include="adjust_process_token_privileges.c">
       <Filter>Source Files\base</Filter>
     </ClCompile>
@@ -49,11 +46,17 @@
     <ClCompile Include="multithreading.c">
       <Filter>Source Files\core\testing</Filter>
     </ClCompile>
-    <ClCompile Include="console_curser_movement.c">
-      <Filter>Source Files\core\testing</Filter>
-    </ClCompile>
     <ClCompile Include="kernelbase.c">
       <Filter>Source Files\external</Filter>
+    </ClCompile>
+    <ClCompile Include="print_arguments.c">
+      <Filter>Source Files\core\testing</Filter>
+    </ClCompile>
+    <ClCompile Include="xterm_readline.c">
+      <Filter>Source Files\core\console</Filter>
+    </ClCompile>
+    <ClCompile Include="cpuid.c">
+      <Filter>Source Files\core\testing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="kernelbase.h">
       <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="initialization.h">
+      <Filter>Header Files\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +153,12 @@
     </MASM>
     <MASM Include="thread_entry.asm">
       <Filter>Source Files\core</Filter>
+    </MASM>
+    <MASM Include="inverse_memory_copy.asm">
+      <Filter>Source Files\utility</Filter>
+    </MASM>
+    <MASM Include="test_asm.asm">
+      <Filter>Source Files\core\testing</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@
 
 // ░░░ structs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-typedef struct
+typedef struct BasicProcessInformation
 {
     void *Environment;
     void *ImageBaseAddress;
@@ -30,6 +30,4 @@ extern BasicProcessInformation ProcessInformation;
 
 // ░░░ Function Definitions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-__declspec(noreturn) void Exit(int32_t exitCode);
-
-void ReadOwnProcessInformation(BasicProcessInformation *processInfo);
+void ReadOwnProcessInformation(BasicProcessInformation *const processInformation);

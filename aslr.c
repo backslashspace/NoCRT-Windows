@@ -1,10 +1,11 @@
 #include "ntdll.h"
 #include "utility.h"
 #include "console.h"
+#include "kernelbase.h"
 
 static uint32_t _globalVariable = 0;
 
-void ASLR()
+void ASLR(Handle const outputHandle)
 {
 	ConsoleWrite("# ASLR\n\nFunction and global data ASLR should at least change after a reboot.\n");
 
@@ -42,12 +43,12 @@ void ASLR()
 	heapVariableString[20] = '\n';
 
 	ConsoleWrite("Stack Variable: ");
-	ConsoleWriteA(stackVariableString + (20 - stackVariableStringLength), stackVariableStringLength + 1);
+	WriteConsoleA(outputHandle, stackVariableString + (20 - stackVariableStringLength), stackVariableStringLength + 1, null, null);
 	ConsoleWrite("Global Variable: ");
-	ConsoleWriteA(globalVariableString + (20 - globalVariableStringLength), globalVariableStringLength + 1);
+	WriteConsoleA(outputHandle, globalVariableString + (20 - globalVariableStringLength), globalVariableStringLength + 1, null, null);
 	ConsoleWrite("Function Pointer: ");
-	ConsoleWriteA(functionVariableString + (20 - functionVariableStringLength), functionVariableStringLength + 1);
+	WriteConsoleA(outputHandle, functionVariableString + (20 - functionVariableStringLength), functionVariableStringLength + 1, null, null);
 	ConsoleWrite("Heap Memory: ");
-	ConsoleWriteA(heapVariableString + (20 - heapVariableStringLength), heapVariableStringLength + 1);
+	WriteConsoleA(outputHandle, heapVariableString + (20 - heapVariableStringLength), heapVariableStringLength + 1, null, null);
 	ConsoleWrite("\n");
 }

@@ -1,67 +1,80 @@
 #include "ntdll.h"
 #include "testing.h"
-#include "shell32.h"
 #include "console.h"
-#include "utility.h";
-#include "intrinsics.h"
+#include "utility.h"
+#include "kernelbase.h"
+#include "initialization.h"
 #include "resolve_symbols.h"
 #include "process_information.h"
 
-boolean_t AdjustProcessTokenPrivileges();
-
-boolean_t Init()
+struct test
 {
-	if (!ResolveNtSymbols()) return false;
-	if (!ResolveShell32Symbols()) return false;
-	if (!LoadAndResolveAdvapi32Symbols()) return false;
-	if (!LoadAndResolveKernelbaseSymbols()) return false;
+	uint64_t gurt[8];
+} gurtinger;
 
-	ReadOwnProcessInformation(&ProcessInformation);
 
-	if (!AdjustProcessTokenPrivileges()) return false;
-}
+void TestASM(void *cacheLine);
 
-void PrintArguments()
+static void Test()
 {
-	ConsoleWrite("# Start arguments:\n\n");
-
-	uint32_t argc;
-	wchar_t **argv = CommandLineToArgvW(ProcessInformation.CommandLineBuffer, &argc);
-
-	for (uint16_t i = 0; i < argc; ++i)
-	{
-		ConsoleWriteW(argv[i], (uint32_t)MemoryGetFirstWordMatchIndexX86(512, null, argv[i]) << 1);
-		ConsoleWrite("\n");
-	}
+	//_mm_monitorx(&gurtinger, 0, 0);
+	//TestASM(&gurtinger);
 }
 
 int32_t Main()
 {
-	if (!Init()) return false;
+	if (!ResolveSymbols()) return false;
+	ReadOwnProcessInformation(&ProcessInformation);
+	Test();
 
-	ConsoleWrite("--------------------------------------\n\n");
+	ConsoleWrite("----------------------------------------------------------------\n\n");
 
-	PrintArguments();
+	if (!EnableXTerm(ProcessInformation.StandardOutput, ProcessInformation.StandardInput)) return -1;
+	ConsoleLog("Enabled XTerm!", Info, "Main");
+	ConsoleLogW(u"UTF-16 WriteConsoleW test message: 𐍈 öüäß", 42, Alert, u"Main", 4, ProcessInformation.StandardOutput);
+	ConsoleLogA(u8"UTF-8 WriteConsoleA test message: 𐍈 öüäß", 47, Alert, "Main", 4, ProcessInformation.StandardOutput);
 
-	ConsoleWrite("\n--------------------------------------\n\n");
+	SetConsoleCP(65001);
+	SetConsoleOutputCP(65001);
+	ConsoleLogA("Set console in- and output to UTF-8 (CP65001)", 45, Verbose, "Main", 4, ProcessInformation.StandardOutput);
 
-	if (!EnableVT100(ProcessInformation.StandardOutput, ProcessInformation.StandardInput)) return -1;
-	ConsoleWrite("# Enabled VT100!\n\n");
-	ConsoleLog("VT100 Test Message\n", Info, "Main");
+	ConsoleLogW(u"UTF-16 WriteConsoleW test message: 𐍈 öüäß", 42, Alert, u"Main", 4, ProcessInformation.StandardOutput);
+	ConsoleLogA(u8"UTF-8 WriteConsoleA test message: 𐍈 öüäß", 47, Alert, "Main", 4, ProcessInformation.StandardOutput);
 
-	ConsoleWrite("--------------------------------------\n\n");
+	ConsoleWrite("\n----------------------------------------------------------------\n\n");
 
-	ASLR();
+	if (!AdjustProcessTokenPrivileges(ProcessInformation.StandardOutput)) return false;
 
-	ConsoleWrite("--------------------------------------\n\n");
+	ConsoleWrite("\n----------------------------------------------------------------\n\n");
 
-	if (!MoveConsoleCurser()) return -1;
+	PrintArguments(ProcessInformation.CommandLineBuffer, ProcessInformation.StandardOutput);
 
-	ConsoleWrite("--------------------------------------\n\n");
+	ConsoleWrite("----------------------------------------------------------------\n\n");
+
+	ASLR(ProcessInformation.StandardOutput);
+
+	ConsoleWrite("----------------------------------------------------------------\n\n");
+
+	PrintCPUIDInformation();
+
+	ConsoleWrite("----------------------------------------------------------------\n\n");
+
+//	uint8_t *buffer = _alloca(258);
+//AHH:
+//	uint16_t writtenBytes;
+//	__stosb(buffer, 0, 257);
+//	ReadLine(buffer, 256, &writtenBytes);
+//
+//	buffer[writtenBytes] = '\n';
+//	buffer[writtenBytes + 1] = 0;
+//	ConsoleWrite((char_t *)buffer);
+//	goto AHH;
+
+	ConsoleWrite("----------------------------------------------------------------\n\n");
 
 	if (!Multithreading()) return -1;
 
-	ConsoleWrite("--------------------------------------\n\n");
+	ConsoleWrite("----------------------------------------------------------------\n\n");
 
 	return 0;
 }

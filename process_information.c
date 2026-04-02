@@ -4,7 +4,7 @@
 
 BasicProcessInformation ProcessInformation = { 0 };
 
-void ReadOwnProcessInformation(BasicProcessInformation *processInformation)
+void ReadOwnProcessInformation(BasicProcessInformation *const processInformation)
 {
 	uint8_t *processEnvironmentBlock = (uint8_t *)__readgsqword(0x60);
 	uint8_t *processParameters = *(uint8_t **)(processEnvironmentBlock + 0x20);

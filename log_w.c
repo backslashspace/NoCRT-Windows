@@ -2,6 +2,7 @@
 #include "console.h"
 #include "utility.h"
 #include "intrinsics.h"
+#include "kernelbase.h"
 
 static const wchar_t* _logWords[7] =
 {
@@ -25,8 +26,8 @@ static const uint16_t _logWordLengthMap[7] =
     17	// L"\x1B[31mCritical\x1B[0m"
 };
 
-#define TIME *(uint64_t*)(0x7FFE0000 +0x14)
-#define LOCAL_OFFSET *(uint64_t*)(0x7FFE0000 +0x20)
+#define TIME *(uint64_t*)(0x7FFE0000 + 0x14)
+#define LOCAL_OFFSET *(uint64_t*)(0x7FFE0000 + 0x20)
 
 #define DATE_LENGTH 21
 #define PADDING_TARGET (52 + 9) // 52 is effective padding, plus 9 for ANSI codes (5 color, 4 reset)
@@ -36,7 +37,7 @@ static __forceinline void SetTime(wchar_t *const restrict buffer, uint64_t const
 {
     TIME_FIELDS timeFields;
     wchar_t *timeStringBuffer = _alloca(10);
-    RtlTimeToTimeFields(localNow, &timeFields);
+    RtlTimeToTimeFields((uint64_t *)localNow, &timeFields);
 
     buffer[0] = '[';
     buffer[5] = '.';
@@ -146,7 +147,7 @@ static __forceinline void SetTime(wchar_t *const restrict buffer, uint64_t const
     }
 }
 
-NtStatus ConsoleLogW(wchar_t const *const message, uint16_t messageLength, LogLevel logLevel, wchar_t const *const source, uint16_t sourceLength, Handle outputHandle)
+bool_t ConsoleLogW(wchar_t const *const message, uint16_t const messageLength, LogLevel const logLevel, wchar_t const *const source, uint16_t const sourceLength, Handle const outputHandle)
 {
     uint32_t bufferOffset = DATE_LENGTH;
     uint64_t localNow = TIME - LOCAL_OFFSET;
@@ -183,6 +184,5 @@ MESSAGE_PADDING:
 
     /* - - - - - - Print Console - - - - - - */
 
-    IO_STATUS_BLOCK ioStatusBlock;
-    return NtWriteFile(outputHandle, 0, null, null, &ioStatusBlock, logLineBuffer, logLineLength << 1, 0, null);
+    return WriteConsoleW(outputHandle, logLineBuffer, logLineLength, null, null);
 }

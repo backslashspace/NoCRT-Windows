@@ -1,6 +1,6 @@
 .code
 
-MemoryCompareX86 PROC ; boolean_t MemoryCompareX86(uint64_t count, void const *buffer, void const *compare)
+MemoryCompareX86 PROC ; boolean_t MemoryCompareX86(uint64_t count, void const *const buffer, void const *const compare)
     ; rcx = count
     ; rdx = buffer
     ; r8  = compare

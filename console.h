@@ -1,5 +1,8 @@
 #pragma once
 #include "types.h"
+#include "utility.h"
+#include "kernelbase.h"
+#include "process_information.h"
 
 typedef enum LogLevel
 {
@@ -12,13 +15,17 @@ typedef enum LogLevel
     Critical = 6,   // red
 } LogLevel;
 
-boolean_t EnableVT100(Handle consoleHandle, Handle standardInput);
+boolean_t EnableXTerm(Handle const standardOutput, Handle const standardInput);
 
-void ConsoleWrite(char_t const *const message);
-void ConsoleWriteA(char_t const *const message, uint32_t length);
-void ConsoleWriteW(wchar_t const *const message, uint32_t length);
+boolean_t ReadLine(uint8_t *const restrict buffer, uint16_t const length, uint16_t *const restrict writtenBytes);
 
-void ConsoleLog(char_t const *const message, LogLevel logLevel, char_t const *const source);
+bool_t ConsoleLog(char_t const *const message, LogLevel logLevel, char_t const *const source);
 
-NtStatus ConsoleLogA(char_t const *const message, uint16_t messageLength, LogLevel logLevel, char_t const *const source, uint16_t sourceLength, Handle outputHandle);
-NtStatus ConsoleLogW(wchar_t const *const message, uint16_t messageLength, LogLevel logLevel, wchar_t const *const source, uint16_t sourceLength, Handle outputHandle);
+bool_t ConsoleLogA(char_t const *const message, uint16_t const messageLength, LogLevel const logLevel, char_t const *const source, uint16_t const sourceLength, Handle const outputHandle);
+bool_t ConsoleLogW(wchar_t const *const message, uint16_t const messageLength, LogLevel const logLevel, wchar_t const *const source, uint16_t const sourceLength, Handle const outputHandle);
+
+static __forceinline bool_t ConsoleWrite(char_t const *const message)
+{
+	uint32_t length = (uint32_t)MemoryGetFirstByteMatchIndexX86(256, null, message);
+	return WriteConsoleA(ProcessInformation.StandardOutput, message, length, null, null);
+}

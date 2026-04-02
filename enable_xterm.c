@@ -1,9 +1,8 @@
 #include "kernelbase.h"
 
-boolean_t EnableVT100(Handle standardOutput, Handle standardInput)
+boolean_t EnableXTerm(Handle const standardOutput, Handle const standardInput)
 {
-	// rest in piss to everyone that does not use the "Windows Terminal"
-	// https://learn.microsoft.com/en-us/windows/console/setconsolecursorposition
+	// https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences
 	// TL;DR: use "Virtual Terminal" - old is deprecated - "support will continue for indefinite future"
 
 	uint32_t modeInfo = 0;
@@ -14,7 +13,7 @@ boolean_t EnableVT100(Handle standardOutput, Handle standardInput)
 	modeInfo = 0;
 	if (!GetConsoleMode(standardInput, &modeInfo)) return false;
 	modeInfo |= ENABLE_VIRTUAL_TERMINAL_INPUT;
-	modeInfo &= ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT);
+	modeInfo &= ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT);
 	if (!SetConsoleMode(standardInput, modeInfo)) return false;
 
 	return true;

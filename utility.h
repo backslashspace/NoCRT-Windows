@@ -84,7 +84,7 @@ typedef struct
 	uint32_t volatile Serving;
 } TicketLock;
 
-static __forceinline uint32_t TicketLock_Acquire(TicketLock *lock)
+static __forceinline uint32_t TicketLock_Acquire(TicketLock *const lock)
 {
 	uint32_t ticket = _InterlockedExchangeAdd(&lock->Next, 1);
 
@@ -93,7 +93,7 @@ static __forceinline uint32_t TicketLock_Acquire(TicketLock *lock)
 	return ticket;
 }
 
-static __forceinline void TicketLock_Unlock(TicketLock *lock)
+static __forceinline void TicketLock_Unlock(TicketLock *const lock)
 {
 	_ReadWriteBarrier();
 	++lock->Serving;
@@ -103,9 +103,12 @@ static __forceinline void TicketLock_Unlock(TicketLock *lock)
 // ░░░ X86 String Helper ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 // returns -1 if no match is found, otherwise the index
-int64_t MemoryGetFirstByteMatchIndexX86(uint64_t count, uint8_t const value, void const *buffer);
+int64_t MemoryGetFirstByteMatchIndexX86(uint64_t count, uint8_t const value, void const *const buffer);
 
 // returns -1 if no match is found, otherwise the index
-int64_t MemoryGetFirstWordMatchIndexX86(uint64_t count, uint16_t const value, void const *buffer);
+int64_t MemoryGetFirstWordMatchIndexX86(uint64_t count, uint16_t const value, void const *const buffer);
 
-boolean_t MemoryCompareX86(uint64_t count, void const *buffer, void const *compare);
+boolean_t MemoryCompareX86(uint64_t count, void const *buffer, void const *const compare);
+
+// use when destination > source
+void MemoryInverseCopyX86(uint64_t count, void *source, void *destination);

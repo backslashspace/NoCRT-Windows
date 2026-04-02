@@ -237,17 +237,36 @@
 #define FILE_DAX_VOLUME                     0x20000000  
 #define FILE_SUPPORTS_GHOSTING              0x40000000
 
-#define PAGE_NOACCESS					0x01    
-#define PAGE_READONLY					0x02    
-#define PAGE_READWRITE					0x04    
-#define PAGE_WRITECOPY					0x08    
-#define PAGE_EXECUTE					0x10    
-#define PAGE_EXECUTE_READ				0x20    
-#define PAGE_EXECUTE_READWRITE			0x40    
-#define PAGE_EXECUTE_WRITECOPY			0x80    
-#define PAGE_GUARD						0x100    
-#define PAGE_NOCACHE					0x200    
-#define PAGE_WRITECOMBINE				0x400   
+#define PAGE_NOACCESS			0x01
+#define PAGE_READONLY			0x02
+#define PAGE_READWRITE			0x04
+#define PAGE_WRITECOPY			0x08
+#define PAGE_EXECUTE			0x10
+#define PAGE_EXECUTE_READ		0x20
+#define PAGE_EXECUTE_READWRITE	0x40
+#define PAGE_EXECUTE_WRITECOPY	0x80
+#define PAGE_GUARD			   0x100
+#define PAGE_NOCACHE		   0x200
+#define PAGE_WRITECOMBINE	   0x400  
+
+#define PAGE_GRAPHICS_NOACCESS			 0x0800
+#define PAGE_GRAPHICS_READONLY			 0x1000
+#define PAGE_GRAPHICS_READWRITE			 0x2000
+#define PAGE_GRAPHICS_EXECUTE			 0x4000
+#define PAGE_GRAPHICS_EXECUTE_READ		 0x8000
+#define PAGE_GRAPHICS_EXECUTE_READWRITE 0x10000
+#define PAGE_GRAPHICS_COHERENT			0x20000
+#define PAGE_GRAPHICS_NOCACHE			0x40000
+#define PAGE_ENCLAVE_THREAD_CONTROL 0x80000000
+#define PAGE_REVERT_TO_FILE_MAP		0x80000000
+#define PAGE_TARGETS_NO_UPDATE		0x40000000
+#define PAGE_TARGETS_INVALID		0x40000000
+#define PAGE_ENCLAVE_UNVALIDATED	0x20000000
+#define PAGE_ENCLAVE_NO_CHANGE		0x20000000
+#define PAGE_ENCLAVE_MASK			0x10000000
+#define PAGE_ENCLAVE_DECOMMIT		(PAGE_ENCLAVE_MASK | 0)
+#define PAGE_ENCLAVE_SS_FIRST		(PAGE_ENCLAVE_MASK | 1)
+#define PAGE_ENCLAVE_SS_REST		(PAGE_ENCLAVE_MASK | 2)
 
 #define MEM_COMMIT                      0x00001000  
 #define MEM_RESERVE                     0x00002000
@@ -258,6 +277,12 @@
 #define MEM_RESET_UNDO                  0x01000000  
 
 #define MEM_LARGE_PAGES                 0x20000000 
+
+#define MEM_4MB_PAGES					0x80000000
+#define MEM_64K_PAGES					(MEM_LARGE_PAGES | MEM_PHYSICAL)
+#define MEM_DECOMMIT					0x00004000
+#define MEM_RELEASE						0x00008000
+#define MEM_FREE						0x00010000
 
 #define SE_PRIVILEGE_ENABLED_BY_DEFAULT 0x00000001L
 #define SE_PRIVILEGE_ENABLED            0x00000002L
@@ -315,6 +340,7 @@
 #define TOKEN_TRUST_ALLOWED_MASK    (TOKEN_TRUST_CONSTRAINT_MASK |\
 									TOKEN_DUPLICATE              |\
 									TOKEN_IMPERSONATE)
+
 
 
 // ░░░ Structs uses by NtXxx Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -549,6 +575,100 @@ __declspec(align(16)) typedef struct CONTEXT
 	uint64_t LastExceptionFromRip;
 } CONTEXT;
 
+// https://ntdoc.m417z.com/thread_name_information
+typedef struct THREAD_NAME_INFORMATION
+{
+	UNICODE_STRING ThreadName;
+} THREAD_NAME_INFORMATION;
+
+// https://ntdoc.m417z.com/client_id
+typedef struct CLIENT_ID
+{
+	Handle UniqueProcess;
+	Handle UniqueThread;
+} CLIENT_ID;
+
+// https://ntdoc.m417z.com/kthread_state
+typedef enum KTHREAD_STATE
+{
+	Initialized,
+	Ready,
+	Running,
+	Standby,
+	Terminated,
+	Waiting,
+	Transition,
+	DeferredReady,
+	GateWaitObsolete,
+	WaitingForProcessInSwap,
+	MaximumThreadState
+} KTHREAD_STATE;
+
+// https://ntdoc.m417z.com/kwait_reason
+typedef enum KWAIT_REASON
+{
+	Executive,               // Waiting for an executive event.
+	FreePage,                // Waiting for a free page.
+	PageIn,                  // Waiting for a page to be read in.
+	PoolAllocation,          // Waiting for a pool allocation.
+	DelayExecution,          // Waiting due to a delay execution.           // NtDelayExecution
+	Suspended,               // Waiting because the thread is suspended.    // NtSuspendThread
+	UserRequest,             // Waiting due to a user request.              // NtWaitForSingleObject
+	WrExecutive,             // Waiting for an executive event.
+	WrFreePage,              // Waiting for a free page.
+	WrPageIn,                // Waiting for a page to be read in.
+	WrPoolAllocation,        // Waiting for a pool allocation.              // 10
+	WrDelayExecution,        // Waiting due to a delay execution.
+	WrSuspended,             // Waiting because the thread is suspended.
+	WrUserRequest,           // Waiting due to a user request.
+	WrEventPair,             // Waiting for an event pair.                  // NtCreateEventPair
+	WrQueue,                 // Waiting for a queue.                        // NtRemoveIoCompletion
+	WrLpcReceive,            // Waiting for an LPC receive.                 // NtReplyWaitReceivePort
+	WrLpcReply,              // Waiting for an LPC reply.                   // NtRequestWaitReplyPort
+	WrVirtualMemory,         // Waiting for virtual memory.
+	WrPageOut,               // Waiting for a page to be written out.       // NtFlushVirtualMemory
+	WrRendezvous,            // Waiting for a rendezvous.                   // 20
+	WrKeyedEvent,            // Waiting for a keyed event.                  // NtCreateKeyedEvent
+	WrTerminated,            // Waiting for thread termination.
+	WrProcessInSwap,         // Waiting for a process to be swapped in.
+	WrCpuRateControl,        // Waiting for CPU rate control.
+	WrCalloutStack,          // Waiting for a callout stack.
+	WrKernel,                // Waiting for a kernel event.
+	WrResource,              // Waiting for a resource.
+	WrPushLock,              // Waiting for a push lock.
+	WrMutex,                 // Waiting for a mutex.
+	WrQuantumEnd,            // Waiting for the end of a quantum.           // 30
+	WrDispatchInt,           // Waiting for a dispatch interrupt.
+	WrPreempted,             // Waiting because the thread was preempted.
+	WrYieldExecution,        // Waiting to yield execution.
+	WrFastMutex,             // Waiting for a fast mutex.
+	WrGuardedMutex,          // Waiting for a guarded mutex.
+	WrRundown,               // Waiting for a rundown.
+	WrAlertByThreadId,       // Waiting for an alert by thread ID.
+	WrDeferredPreempt,       // Waiting for a deferred preemption.
+	WrPhysicalFault,         // Waiting for a physical fault.
+	WrIoRing,                // Waiting for an I/O ring.                    // 40
+	WrMdlCache,              // Waiting for an MDL cache.
+	WrRcu,                   // Waiting for read-copy-update (RCU) synchronization.
+	MaximumWaitReason
+} KWAIT_REASON;
+
+// https://ntdoc.m417z.com/system_thread_information
+typedef struct SYSTEM_THREAD_INFORMATION
+{
+	uint64_t KernelTime;                   // Number of 100-nanosecond intervals spent executing kernel code.
+	uint64_t UserTime;                     // Number of 100-nanosecond intervals spent executing user code.
+	uint64_t CreateTime;                   // The date and time when the thread was created.
+	uint32_t WaitTime;                             // The current time spent in ready queue or waiting (depending on the thread state).
+	void *StartAddress;                         // The initial start address of the thread.
+	CLIENT_ID ClientId;                         // The identifier of the thread and the process owning the thread.
+	uint32_t Priority;                         // The dynamic priority of the thread.
+	uint32_t BasePriority;                     // The starting priority of the thread.
+	uint32_t ContextSwitches;                      // The total number of context switches performed.
+	KTHREAD_STATE ThreadState;                  // The current state of the thread.
+	KWAIT_REASON WaitReason;                    // The current reason the thread is waiting.
+} SYSTEM_THREAD_INFORMATION;
+
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ne-ntifs-_object_information_class
 typedef enum OBJECT_INFORMATION_CLASS
 {
@@ -701,6 +821,72 @@ typedef enum TOKEN_INFORMATION_CLASS
 	MaxTokenInfoClass  // MaxTokenInfoClass should always be the last enum
 } TOKEN_INFORMATION_CLASS;
 
+// https://ntdoc.m417z.com/threadinfoclass
+typedef enum THREADINFOCLASS
+{
+	ThreadBasicInformation,                         // q: THREAD_BASIC_INFORMATION
+	ThreadTimes,                                    // q: KERNEL_USER_TIMES
+	ThreadPriority,                                 // s: KPRIORITY (requires SeIncreaseBasePriorityPrivilege)
+	ThreadBasePriority,                             // s: KPRIORITY
+	ThreadAffinityMask,                             // s: KAFFINITY
+	ThreadImpersonationToken,                       // s: HANDLE
+	ThreadDescriptorTableEntry,                     // q: DESCRIPTOR_TABLE_ENTRY (or WOW64_DESCRIPTOR_TABLE_ENTRY)
+	ThreadEnableAlignmentFaultFixup,                // s: BOOLEAN
+	ThreadEventPair,                                // q: Obsolete
+	ThreadQuerySetWin32StartAddress,                // q: PVOID
+	ThreadZeroTlsCell,                              // s: ULONG // TlsIndex // 10
+	ThreadPerformanceCount,                         // q: LARGE_INTEGER
+	ThreadAmILastThread,                            // q: ULONG
+	ThreadIdealProcessor,                           // s: ULONG
+	ThreadPriorityBoost,                            // qs: ULONG
+	ThreadSetTlsArrayAddress,                       // s: ULONG_PTR
+	ThreadIsIoPending,                              // q: ULONG
+	ThreadHideFromDebugger,                         // q: BOOLEAN; s: void
+	ThreadBreakOnTermination,                       // qs: ULONG
+	ThreadSwitchLegacyState,                        // s: void // NtCurrentThread // NPX/FPU
+	ThreadIsTerminated,                             // q: ULONG // 20
+	ThreadLastSystemCall,                           // q: THREAD_LAST_SYSCALL_INFORMATION
+	ThreadIoPriority,                               // qs: IO_PRIORITY_HINT (requires SeIncreaseBasePriorityPrivilege)
+	ThreadCycleTime,                                // q: THREAD_CYCLE_TIME_INFORMATION (requires THREAD_QUERY_LIMITED_INFORMATION)
+	ThreadPagePriority,                             // qs: PAGE_PRIORITY_INFORMATION
+	ThreadActualBasePriority,                       // s: LONG (requires SeIncreaseBasePriorityPrivilege)
+	ThreadTebInformation,                           // q: THREAD_TEB_INFORMATION (requires THREAD_GET_CONTEXT + THREAD_SET_CONTEXT)
+	ThreadCSwitchMon,                               // q: Obsolete
+	ThreadCSwitchPmu,                               // q: Obsolete
+	ThreadWow64Context,                             // qs: WOW64_CONTEXT, ARM_NT_CONTEXT since 20H1
+	ThreadGroupInformation,                         // qs: GROUP_AFFINITY // 30
+	ThreadUmsInformation,                           // q: THREAD_UMS_INFORMATION // Obsolete
+	ThreadCounterProfiling,                         // q: BOOLEAN; s: THREAD_PROFILING_INFORMATION?
+	ThreadIdealProcessorEx,                         // qs: PROCESSOR_NUMBER; s: previous PROCESSOR_NUMBER on return
+	ThreadCpuAccountingInformation,                 // q: BOOLEAN; s: HANDLE (NtOpenSession) // NtCurrentThread // since WIN8
+	ThreadSuspendCount,                             // q: ULONG // since WINBLUE
+	ThreadHeterogeneousCpuPolicy,                   // q: KHETERO_CPU_POLICY // since THRESHOLD
+	ThreadContainerId,                              // q: GUID
+	ThreadNameInformation,                          // qs: THREAD_NAME_INFORMATION (requires THREAD_SET_LIMITED_INFORMATION)
+	ThreadSelectedCpuSets,                          // q: ULONG[]
+	ThreadSystemThreadInformation,                  // q: SYSTEM_THREAD_INFORMATION // 40
+	ThreadActualGroupAffinity,                      // q: GROUP_AFFINITY // since THRESHOLD2
+	ThreadDynamicCodePolicyInfo,                    // q: ULONG; s: ULONG (NtCurrentThread)
+	ThreadExplicitCaseSensitivity,                  // qs: ULONG; s: 0 disables, otherwise enables // (requires SeDebugPrivilege and PsProtectedSignerAntimalware)
+	ThreadWorkOnBehalfTicket,                       // q: ALPC_WORK_ON_BEHALF_TICKET // RTL_WORK_ON_BEHALF_TICKET_EX // NtCurrentThread
+	ThreadSubsystemInformation,                     // q: SUBSYSTEM_INFORMATION_TYPE // since REDSTONE2
+	ThreadDbgkWerReportActive,                      // s: ULONG; s: 0 disables, otherwise enables
+	ThreadAttachContainer,                          // s: HANDLE (job object) // NtCurrentThread
+	ThreadManageWritesToExecutableMemory,           // s: MANAGE_WRITES_TO_EXECUTABLE_MEMORY // since REDSTONE3
+	ThreadPowerThrottlingState,                     // qs: POWER_THROTTLING_THREAD_STATE // since REDSTONE3 (set), WIN11 22H2 (query)
+	ThreadWorkloadClass,                            // q: THREAD_WORKLOAD_CLASS // since REDSTONE5 // 50
+	ThreadCreateStateChange,                        // s: Obsolete // since WIN11
+	ThreadApplyStateChange,                         // s: Obsolete
+	ThreadStrongerBadHandleChecks,                  // s: ULONG // NtCurrentThread // since 22H1
+	ThreadEffectiveIoPriority,                      // q: IO_PRIORITY_HINT
+	ThreadEffectivePagePriority,                    // q: ULONG
+	ThreadUpdateLockOwnership,                      // s: THREAD_LOCK_OWNERSHIP // since 24H2
+	ThreadSchedulerSharedDataSlot,                  // q: SCHEDULER_SHARED_DATA_SLOT_INFORMATION
+	ThreadTebInformationAtomic,                     // q: THREAD_TEB_INFORMATION (requires THREAD_GET_CONTEXT + THREAD_QUERY_INFORMATION)
+	ThreadIndexInformation,                         // q: THREAD_INDEX_INFORMATION
+	MaxThreadInfoClass
+} THREADINFOCLASS;
+
 // ░░░ Loader API ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 boolean_t InitializeNtDll();
@@ -729,6 +915,7 @@ boolean_t LoadNtTerminateThread();
 boolean_t LoadNtGetContextThread();
 boolean_t LoadNtSetContextThread();
 boolean_t LoadNtAlertResumeThread();
+boolean_t LoadNtSetInformationThread();
 
 boolean_t LoadLdrLoadDll();
 boolean_t LoadLdrUnloadDll();
@@ -738,7 +925,13 @@ boolean_t LoadNtFreeVirtualMemory();
 boolean_t LoadNtWaitForSingleObject();
 boolean_t LoadNtAllocateVirtualMemory();
 
+boolean_t LoadRtlUnicodeToUTF8N();
 boolean_t LoadRtlTimeToTimeFields();
+
+// ░░░ Callbacks ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+// https://ntdoc.m417z.com/io_apc_routine
+typedef void (*IO_APC_ROUTINE_t) (void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t Reserved);
 
 // ░░░ NtXxx Function Typedefs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
@@ -749,7 +942,7 @@ typedef NtStatus(*NtClose_t)(Handle Handle);
 typedef NtStatus(*NtQueryObject_t)(Handle Handle, OBJECT_INFORMATION_CLASS ObjectInformationClass, void *ObjectInformation, uint32_t ObjectInformationLength, uint32_t *ReturnLength);
 
 // https://learn.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntdeviceiocontrolfile
-typedef NtStatus(*NtDeviceIoControlFile_t)(Handle FileHandle, Handle Event, void *ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t IoControlCode, void *InputBuffer, uint32_t InputBufferLength, void *OutputBuffer, uint32_t OutputBufferLength);
+typedef NtStatus(*NtDeviceIoControlFile_t)(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t IoControlCode, void *InputBuffer, uint32_t InputBufferLength, void *OutputBuffer, uint32_t OutputBufferLength);
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntqueryinformationfile
 typedef NtStatus(*NtQueryInformationFile_t)(Handle FileHandle, IO_STATUS_BLOCK *IoStatusBlock, void *FileInformation, uint32_t Length, FILE_INFORMATION_CLASS FileInformationClass);
@@ -758,7 +951,7 @@ typedef NtStatus(*NtQueryInformationFile_t)(Handle FileHandle, IO_STATUS_BLOCK *
 typedef NtStatus(*NtSetInformationFile_t)(Handle FileHandle, IO_STATUS_BLOCK *IoStatusBlock, void *FileInformation, uint32_t Length, FILE_INFORMATION_CLASS FileInformationClass);
 
 // https://learn.microsoft.com/de-de/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntopenfile
-typedef NtStatus(*NtOpenFile_t)(Handle *fileHandle, uint32_t desiredAccess, OBJECT_ATTRIBUTES *objectAttributes, IO_STATUS_BLOCK *IoStatusBlock, uint32_t shareAccess, uint32_t openOptions);
+typedef NtStatus(*NtOpenFile_t)(Handle *FileHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, IO_STATUS_BLOCK *IoStatusBlock, uint32_t ShareAccess, uint32_t OpenOptions);
 
 // https://ntdoc.m417z.com/ldrloaddll
 typedef NtStatus(*LdrLoadDll_t)(wchar_t const *DllPath, uint32_t *DllCharacteristics, UNICODE_STRING const *DllName, Handle *DllHandle);
@@ -767,7 +960,7 @@ typedef NtStatus(*LdrLoadDll_t)(wchar_t const *DllPath, uint32_t *DllCharacteris
 typedef NtStatus(*LdrUnloadDll_t)(Handle DllHandle);
 
 // https://ntdoc.m417z.com/ntcreatethreadex
-typedef NtStatus(*NtCreateThreadEx_t)(Handle *ThreadHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, Handle *ProcessHandle, NtStatus(*StartRoutine)(void *), void *Argument, uint32_t CreateFlags, uint64_t ZeroSize, uint64_t StackSize, uint64_t MaximumStackSize, PS_ATTRIBUTE_LIST *AttributeList);
+typedef NtStatus(*NtCreateThreadEx_t)(Handle *ThreadHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, Handle ProcessHandle, NtStatus(*StartRoutine)(void *), void *Argument, uint32_t CreateFlags, uint64_t ZeroSize, uint64_t StackSize, uint64_t MaximumStackSize, PS_ATTRIBUTE_LIST *AttributeList);
 
 // https://ntdoc.m417z.com/ntresumethread
 typedef NtStatus(*NtResumeThread_t)(Handle ThreadHandle, uint32_t *PreviousSuspendCount);
@@ -775,11 +968,11 @@ typedef NtStatus(*NtResumeThread_t)(Handle ThreadHandle, uint32_t *PreviousSuspe
 // https://ntdoc.m417z.com/ntalertresumethread
 typedef NtStatus(*NtAlertResumeThread_t)(Handle ThreadHandle, uint32_t *PreviousSuspendCount);
 
-// https://ntdoc.m417z.com/ntsetcontextthread
-typedef NtStatus(*NtSetContextThread_t)(Handle ThreadHandle, CONTEXT *ThreadContext);
-
 // https://ntdoc.m417z.com/ntgetcontextthread
 typedef NtStatus(*NtGetContextThread_t)(Handle ThreadHandle, CONTEXT *ThreadContext);
+
+// https://ntdoc.m417z.com/ntsetcontextthread
+typedef NtStatus(*NtSetContextThread_t)(Handle ThreadHandle, CONTEXT *ThreadContext);
 
 // https://ntdoc.m417z.com/ntsuspendthread
 typedef NtStatus(*NtSuspendThread_t)(Handle ThreadHandle, uint32_t *PreviousSuspendCount);
@@ -797,13 +990,16 @@ typedef NtStatus(*NtWaitForSingleObject_t)(Handle Handle, boolean_t Alertable, u
 typedef NtStatus(*NtDelayExecution_t)(boolean_t Alertable, int64_t *DelayInterval);
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtltimetotimefields
-typedef void(*RtlTimeToTimeFields_t)(uint64_t const *const Time, TIME_FIELDS *TimeFields);
+typedef void(*RtlTimeToTimeFields_t)(uint64_t *Time, TIME_FIELDS *TimeFields);
+
+// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlunicodetoutf8n
+typedef NtStatus(*RtlUnicodeToUTF8N_t)(char_t *UTF8StringDestination, uint32_t UTF8StringMaxByteCount, uint32_t *UTF8StringActualByteCount, wchar_t const *UnicodeStringSource, uint32_t UnicodeStringByteCount);
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntwritefile
-typedef NtStatus(*NtWriteFile_t)(Handle FileHandle, Handle Event, void *ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void const *const Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key);
+typedef NtStatus(*NtWriteFile_t)(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key);
 
 // https://learn.microsoft.com/en-us/windows/win32/devnotes/ntreadfile
-typedef NtStatus(*NtReadFile_t)(Handle FileHandle, Handle Event, void *ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key);
+typedef NtStatus(*NtReadFile_t)(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key);
 
 // https://ntdoc.m417z.com/ntterminateprocess
 typedef NtStatus(*NtTerminateProcess_t)(Handle ProcessHandle, NtStatus ExitStatus);
@@ -811,23 +1007,26 @@ typedef NtStatus(*NtTerminateProcess_t)(Handle ProcessHandle, NtStatus ExitStatu
 // https://ntdoc.m417z.com/ntterminatethread
 typedef NtStatus(*NtTerminateThread_t)(Handle ThreadHandle, NtStatus ExitStatus);
 
+// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntsetinformationthread
+typedef NtStatus(*NtSetInformationThread_t)(Handle ThreadHandle, THREADINFOCLASS ThreadInformationClass, void *ThreadInformation, uint32_t ThreadInformationLength);
+
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntqueryinformationtoken
 typedef NtStatus(*NtQueryInformationToken_t)(Handle TokenHandle, TOKEN_INFORMATION_CLASS TokenInformationClass, void *TokenInformation, uint32_t TokenInformationLength, uint32_t *ReturnLength);
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntopenprocesstoken
-typedef NtStatus(*NtOpenProcessToken_t)(Handle ProcessHandle, uint32_t DesiredAccess, Handle* TokenHandle);
+typedef NtStatus(*NtOpenProcessToken_t)(Handle ProcessHandle, uint32_t DesiredAccess, Handle *TokenHandle);
 
 // https://ntdoc.m417z.com/ntadjustprivilegestoken
 typedef NtStatus(*NtAdjustPrivilegesToken_t)(Handle ProcessHandle, boolean_t DisableAllPrivileges, TOKEN_PRIVILEGES *NewState, uint32_t BufferLength, TOKEN_PRIVILEGES *PreviousState, uint32_t *ReturnLength);
 
 // https://ntdoc.m417z.com/ldrgetprocedureaddressex
-typedef NtStatus(*LdrGetProcedureAddressEx_t)(Handle DllHandle, STRING *ProcedureName, uint32_t ProcedureNumber, void *ProcedureAddress, uint32_t Flags);
+typedef NtStatus(*LdrGetProcedureAddressEx_t)(Handle DllHandle, STRING const *ProcedureName, uint32_t ProcedureNumber, void **ProcedureAddress, uint32_t Flags);
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntallocatevirtualmemory
-typedef NtStatus(*NtAllocateVirtualMemory_t)(Handle ProcessHandle, void *BaseAddress, uint64_t ZeroBits, uint64_t *RegionSize, uint32_t AllocationType, uint32_t Protect);
+typedef NtStatus(*NtAllocateVirtualMemory_t)(Handle ProcessHandle, void **BaseAddress, uint64_t ZeroBits, uint64_t *RegionSize, uint32_t AllocationType, uint32_t Protect);
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntfreevirtualmemory
-typedef NtStatus(*NtFreeVirtualMemory_t)(Handle ProcessHandle, void *BaseAddress, uint64_t *RegionSize, uint32_t FreeType);
+typedef NtStatus(*NtFreeVirtualMemory_t)(Handle ProcessHandle, void **BaseAddress, uint64_t *RegionSize, uint32_t FreeType);
 
 // ░░░ Callable Grouped ntdll Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
@@ -847,6 +1046,7 @@ struct NtDllFunctions
 	NtCreateThreadEx_t NtCreateThreadEx;
 	NtDelayExecution_t NtDelayExecution;
 	NtTerminateThread_t NtTerminateThread;
+	RtlUnicodeToUTF8N_t RtlUnicodeToUTF8N;
 	NtGetContextThread_t NtGetContextThread;
 	NtSetContextThread_t NtSetContextThread;
 	NtTerminateProcess_t NtTerminateProcess;
@@ -858,6 +1058,7 @@ struct NtDllFunctions
 	NtDeviceIoControlFile_t NtDeviceIoControlFile;
 	NtWaitForSingleObject_t NtWaitForSingleObject;
 	NtQueryInformationFile_t NtQueryInformationFile;
+	NtSetInformationThread_t NtSetInformationThread;
 	NtAdjustPrivilegesToken_t NtAdjustPrivilegesToken;
 	NtAllocateVirtualMemory_t NtAllocateVirtualMemory;
 	NtQueryInformationToken_t NtQueryInformationToken;
@@ -865,17 +1066,16 @@ struct NtDllFunctions
 };
 
 extern struct NtDllFunctions NtDll;
-extern uint64_t NtTerminateThreadFunctionPointer;
 
 // ░░░ Wrap to normal Function ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 static __forceinline NtStatus NtClose(Handle Handle) { return NtDll.NtClose(Handle); }
-static __forceinline NtStatus NtOpenFile(Handle *fileHandle, uint32_t desiredAccess, OBJECT_ATTRIBUTES *objectAttributes, IO_STATUS_BLOCK *IoStatusBlock, uint32_t shareAccess, uint32_t openOptions) { return NtDll.NtOpenFile(fileHandle, desiredAccess, objectAttributes, IoStatusBlock, shareAccess, openOptions); }
-static __forceinline NtStatus NtReadFile(Handle FileHandle, Handle Event, void *ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key) { return NtDll.NtReadFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key); }
-static __forceinline NtStatus NtWriteFile(Handle FileHandle, Handle Event, void *ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void const *const Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key) { return NtDll.NtWriteFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key); }
+static __forceinline NtStatus NtOpenFile(Handle *FileHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, IO_STATUS_BLOCK *IoStatusBlock, uint32_t ShareAccess, uint32_t OpenOptions) { return NtDll.NtOpenFile(FileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, ShareAccess, OpenOptions); }
+static __forceinline NtStatus NtReadFile(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key) { return NtDll.NtReadFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key); }
+static __forceinline NtStatus NtWriteFile(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key) { return NtDll.NtWriteFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key); }
 
 static __forceinline NtStatus NtQueryObject(Handle Handle, OBJECT_INFORMATION_CLASS ObjectInformationClass, void *ObjectInformation, uint32_t ObjectInformationLength, uint32_t *ReturnLength) { return NtDll.NtQueryObject(Handle, ObjectInformationClass, ObjectInformation, ObjectInformationLength, ReturnLength); }
-static __forceinline NtStatus NtDeviceIoControlFile(Handle FileHandle, Handle Event, void *ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t IoControlCode, void *InputBuffer, uint32_t InputBufferLength, void *OutputBuffer, uint32_t OutputBufferLength) { return NtDll.NtDeviceIoControlFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, IoControlCode, InputBuffer, InputBufferLength, OutputBuffer, OutputBufferLength); }
+static __forceinline NtStatus NtDeviceIoControlFile(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t IoControlCode, void *InputBuffer, uint32_t InputBufferLength, void *OutputBuffer, uint32_t OutputBufferLength) { return NtDll.NtDeviceIoControlFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, IoControlCode, InputBuffer, InputBufferLength, OutputBuffer, OutputBufferLength); }
 static __forceinline NtStatus NtSetInformationFile(Handle FileHandle, IO_STATUS_BLOCK *IoStatusBlock, void *FileInformation, uint32_t Length, FILE_INFORMATION_CLASS FileInformationClass) { return NtDll.NtSetInformationFile(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass); }
 static __forceinline NtStatus NtQueryInformationFile(Handle FileHandle, IO_STATUS_BLOCK *IoStatusBlock, void *FileInformation, uint32_t Length, FILE_INFORMATION_CLASS FileInformationClass) { return NtDll.NtQueryInformationFile(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass); }
 
@@ -887,19 +1087,21 @@ static __forceinline NtStatus NtAlertThread(Handle ThreadHandle) { return NtDll.
 static __forceinline NtStatus NtResumeThread(Handle ThreadHandle, uint32_t *PreviousSuspendCount) { return NtDll.NtResumeThread(ThreadHandle, PreviousSuspendCount); }
 static __forceinline NtStatus NtSuspendThread(Handle ThreadHandle, uint32_t *PreviousSuspendCount) { return NtDll.NtSuspendThread(ThreadHandle, PreviousSuspendCount); }
 static __forceinline NtStatus NtYieldExecution() { return NtDll.NtYieldExecution(); }
-static __forceinline NtStatus NtCreateThreadEx(Handle *ThreadHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, Handle *ProcessHandle, NtStatus(*StartRoutine)(void *), void *Argument, uint32_t CreateFlags, uint64_t ZeroSize, uint64_t StackSize, uint64_t MaximumStackSize, PS_ATTRIBUTE_LIST *AttributeList) { return NtDll.NtCreateThreadEx(ThreadHandle, DesiredAccess, ObjectAttributes, ProcessHandle, StartRoutine, Argument, CreateFlags, ZeroSize, StackSize, MaximumStackSize, AttributeList); }
+static __forceinline NtStatus NtCreateThreadEx(Handle *ThreadHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, Handle ProcessHandle, NtStatus(*StartRoutine)(void *), void *Argument, uint32_t CreateFlags, uint64_t ZeroSize, uint64_t StackSize, uint64_t MaximumStackSize, PS_ATTRIBUTE_LIST *AttributeList) { return NtDll.NtCreateThreadEx(ThreadHandle, DesiredAccess, ObjectAttributes, ProcessHandle, StartRoutine, Argument, CreateFlags, ZeroSize, StackSize, MaximumStackSize, AttributeList); }
 static __forceinline NtStatus NtTerminateThread(Handle ThreadHandle, NtStatus ExitStatus) { return NtDll.NtTerminateThread(ThreadHandle, ExitStatus); }
 static __forceinline NtStatus NtGetContextThread(Handle ThreadHandle, CONTEXT *ThreadContext) { return NtDll.NtGetContextThread(ThreadHandle, ThreadContext); }
 static __forceinline NtStatus NtSetContextThread(Handle ThreadHandle, CONTEXT *ThreadContext) { return NtDll.NtSetContextThread(ThreadHandle, ThreadContext); }
 static __forceinline NtStatus NtAlertResumeThread(Handle ThreadHandle, uint32_t *PreviousSuspendCount) { return NtDll.NtAlertResumeThread(ThreadHandle, PreviousSuspendCount); }
+static __forceinline NtStatus NtSetInformationThread(Handle ThreadHandle, THREADINFOCLASS ThreadInformationClass, void *ThreadInformation, uint32_t ThreadInformationLength) { return NtDll.NtSetInformationThread(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength); }
 
 static __forceinline NtStatus LdrLoadDll(wchar_t const *DllPath, uint32_t *DllCharacteristics, UNICODE_STRING const *DllName, Handle *DllHandle) { return NtDll.LdrLoadDll(DllPath, DllCharacteristics, DllName, DllHandle); }
 static __forceinline NtStatus LdrUnloadDll(Handle DllHandle) { return NtDll.LdrUnloadDll(DllHandle); }
 static __forceinline NtStatus NtDelayExecution(boolean_t Alertable, int64_t *DelayInterval) { return NtDll.NtDelayExecution(Alertable, DelayInterval); }
 static __forceinline NtStatus NtTerminateProcess(Handle ProcessHandle, NtStatus ExitStatus) { return NtDll.NtTerminateProcess(ProcessHandle, ExitStatus); }
-static __forceinline NtStatus NtFreeVirtualMemory(Handle ProcessHandle, void *BaseAddress, uint64_t *RegionSize, uint32_t FreeType) { return NtDll.NtFreeVirtualMemory(ProcessHandle, BaseAddress, RegionSize, FreeType); }
+static __forceinline NtStatus NtFreeVirtualMemory(Handle ProcessHandle, void **BaseAddress, uint64_t *RegionSize, uint32_t FreeType) { return NtDll.NtFreeVirtualMemory(ProcessHandle, BaseAddress, RegionSize, FreeType); }
 static __forceinline NtStatus NtWaitForSingleObject(Handle Handle, boolean_t Alertable, uint64_t *Timeout) { return NtDll.NtWaitForSingleObject(Handle, Alertable, Timeout); }
-static __forceinline NtStatus NtAllocateVirtualMemory(Handle ProcessHandle, void *BaseAddress, uint64_t ZeroBits, uint64_t *RegionSize, uint32_t AllocationType, uint32_t Protect) { return NtDll.NtAllocateVirtualMemory(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect); }
-static __forceinline NtStatus LdrGetProcedureAddressEx(Handle DllHandle, STRING *ProcedureName, uint32_t ProcedureNumber, void *ProcedureAddress, uint32_t Flags) { return NtDll.LdrGetProcedureAddressEx(DllHandle, ProcedureName, ProcedureNumber, ProcedureAddress, Flags); }
+static __forceinline NtStatus NtAllocateVirtualMemory(Handle ProcessHandle, void **BaseAddress, uint64_t ZeroBits, uint64_t *RegionSize, uint32_t AllocationType, uint32_t Protect) { return NtDll.NtAllocateVirtualMemory(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect); }
+static __forceinline NtStatus LdrGetProcedureAddressEx(Handle DllHandle, STRING *ProcedureName, uint32_t ProcedureNumber, void **ProcedureAddress, uint32_t Flags) { return NtDll.LdrGetProcedureAddressEx(DllHandle, ProcedureName, ProcedureNumber, ProcedureAddress, Flags); }
 
-static __forceinline void RtlTimeToTimeFields(uint64_t const *const Time, TIME_FIELDS *TimeFields) { NtDll.RtlTimeToTimeFields(Time, TimeFields); }
+static __forceinline void RtlTimeToTimeFields(uint64_t *Time, TIME_FIELDS *TimeFields) { NtDll.RtlTimeToTimeFields(Time, TimeFields); }
+static __forceinline NtStatus RtlUnicodeToUTF8N(char_t *UTF8StringDestination, uint32_t UTF8StringMaxByteCount, uint32_t * UTF8StringActualByteCount, wchar_t const *UnicodeStringSource, uint32_t UnicodeStringByteCount) { return NtDll.RtlUnicodeToUTF8N(UTF8StringDestination, UTF8StringMaxByteCount, UTF8StringActualByteCount, UnicodeStringSource, UnicodeStringByteCount); }

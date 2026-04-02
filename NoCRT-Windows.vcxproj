@@ -22,13 +22,15 @@
     <ClCompile Include="adjust_process_token_privileges.c" />
     <ClCompile Include="advapi32.c" />
     <ClCompile Include="aslr.c" />
-    <ClCompile Include="console_curser_movement.c" />
-    <ClCompile Include="enable_vt100.c" />
+    <ClCompile Include="cpuid.c" />
+    <ClCompile Include="xterm_readline.c" />
+    <ClCompile Include="enable_xterm.c" />
     <ClCompile Include="kernelbase.c" />
     <ClCompile Include="log_a.c" />
     <ClCompile Include="log_w.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="ntdll.c" />
+    <ClCompile Include="print_arguments.c" />
     <ClCompile Include="process_information.c" />
     <ClCompile Include="resolve_symbols.c" />
     <ClCompile Include="shell32.c" />
@@ -36,14 +38,16 @@
     <ClCompile Include="multithreading.c" />
     <ClCompile Include="uint_to_char.c" />
     <ClCompile Include="uint_to_wchar.c" />
-    <ClCompile Include="basic_console.c" />
     <MASM Include="memory_compare.asm" />
+    <MASM Include="inverse_memory_copy.asm" />
+    <MASM Include="test_asm.asm" />
     <MASM Include="thread_entry.asm" />
     <MASM Include="__chkstk.asm">
       <FileType>Document</FileType>
     </MASM>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="initialization.h" />
     <ClInclude Include="advapi32.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="intrinsics.h" />
@@ -275,7 +279,7 @@
       </CompileAsManaged>
       <TreatWChar_tAsBuiltInType>
       </TreatWChar_tAsBuiltInType>
-      <AdditionalOptions>/Gs2147483647 /analyze /Gw %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /J /Gs2147483647 /analyze /Gw %(AdditionalOptions)</AdditionalOptions>
       <ScanSourceForModuleDependencies />
       <TranslateIncludes />
       <SupportJustMyCode />
@@ -323,7 +327,8 @@
       <OmitFramePointers>true</OmitFramePointers>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>
+      </RemoveUnreferencedCodeData>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <DisableSpecificWarnings>6255</DisableSpecificWarnings>
     </ClCompile>
@@ -411,7 +416,7 @@
       </CompileAsManaged>
       <TreatWChar_tAsBuiltInType>
       </TreatWChar_tAsBuiltInType>
-      <AdditionalOptions>/Gs2147483647 /analyze /Gw %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /J /Gs2147483647 /analyze /Gw %(AdditionalOptions)</AdditionalOptions>
       <ScanSourceForModuleDependencies>
       </ScanSourceForModuleDependencies>
       <TranslateIncludes>
@@ -493,7 +498,8 @@
       <OmitFramePointers>true</OmitFramePointers>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>
+      </RemoveUnreferencedCodeData>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <DisableSpecificWarnings>6255</DisableSpecificWarnings>
     </ClCompile>
@@ -601,7 +607,7 @@
       </CompileAsManaged>
       <TreatWChar_tAsBuiltInType>
       </TreatWChar_tAsBuiltInType>
-      <AdditionalOptions>/Gs2147483647 /analyze /Gw %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /J /Gs2147483647 /analyze /Gw %(AdditionalOptions)</AdditionalOptions>
       <ScanSourceForModuleDependencies>
       </ScanSourceForModuleDependencies>
       <TranslateIncludes>
@@ -683,7 +689,8 @@
       <OmitFramePointers>true</OmitFramePointers>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>
+      </RemoveUnreferencedCodeData>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>6255</DisableSpecificWarnings>
     </ClCompile>
@@ -790,7 +797,7 @@
       </CompileAsManaged>
       <TreatWChar_tAsBuiltInType>
       </TreatWChar_tAsBuiltInType>
-      <AdditionalOptions>/Gs2147483647 /Gw %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /J /Gs2147483647 /Gw %(AdditionalOptions)</AdditionalOptions>
       <ScanSourceForModuleDependencies>
       </ScanSourceForModuleDependencies>
       <TranslateIncludes>

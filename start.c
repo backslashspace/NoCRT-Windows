@@ -1,6 +1,8 @@
 #include "ntdll.h"
 #include "intrinsics.h"
 
+_Static_assert(_MSVC_EXECUTION_CHARACTER_SET == 65001, "Execution charset was not UTF-8");
+
 // ░░░ Forward Declarations ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 int32_t Main();
