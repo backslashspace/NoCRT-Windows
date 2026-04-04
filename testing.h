@@ -6,3 +6,5 @@ void ASLR(Handle const outputHandle);
 void PrintCPUIDInformation();
 
 boolean_t Multithreading();
+
+void MWaitX();

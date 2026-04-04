@@ -7,29 +7,26 @@
 #include "resolve_symbols.h"
 #include "process_information.h"
 
-struct test
-{
-	uint64_t gurt[8];
-} gurtinger;
-
-
-void TestASM(void *cacheLine);
-
 static void Test()
 {
-	//_mm_monitorx(&gurtinger, 0, 0);
-	//TestASM(&gurtinger);
+
 }
 
 int32_t Main()
 {
-	if (!ResolveSymbols()) return false;
+	if (!ResolveSymbols()) return -1;
 	ReadOwnProcessInformation(&ProcessInformation);
 	Test();
 
+	THREAD_NAME_INFORMATION nameInformation;
+	nameInformation.ThreadName.Buffer = u"Main Thread";
+	nameInformation.ThreadName.Length = 22;
+	nameInformation.ThreadName.MaximumLength = 24;
+	if (NtSetInformationThread((Handle)-2, ThreadNameInformation, &nameInformation, sizeof(THREAD_NAME_INFORMATION))) return -2;
+
 	ConsoleWrite("----------------------------------------------------------------\n\n");
 
-	if (!EnableXTerm(ProcessInformation.StandardOutput, ProcessInformation.StandardInput)) return -1;
+	if (!EnableXTerm(ProcessInformation.StandardOutput, ProcessInformation.StandardInput)) return -3;
 	ConsoleLog("Enabled XTerm!", Info, "Main");
 	ConsoleLogW(u"UTF-16 WriteConsoleW test message: 𐍈 öüäß", 42, Alert, u"Main", 4, ProcessInformation.StandardOutput);
 	ConsoleLogA(u8"UTF-8 WriteConsoleA test message: 𐍈 öüäß", 47, Alert, "Main", 4, ProcessInformation.StandardOutput);
@@ -43,7 +40,7 @@ int32_t Main()
 
 	ConsoleWrite("\n----------------------------------------------------------------\n\n");
 
-	if (!AdjustProcessTokenPrivileges(ProcessInformation.StandardOutput)) return false;
+	if (!AdjustProcessTokenPrivileges(ProcessInformation.StandardOutput)) return -4;
 
 	ConsoleWrite("\n----------------------------------------------------------------\n\n");
 
@@ -59,7 +56,11 @@ int32_t Main()
 
 	ConsoleWrite("----------------------------------------------------------------\n\n");
 
-	if (!Multithreading()) return -1;
+	MWaitX();
+
+	ConsoleWrite("----------------------------------------------------------------\n\n");
+
+	if (!Multithreading()) return -5;
 
 	ConsoleWrite("----------------------------------------------------------------\n\n");
 

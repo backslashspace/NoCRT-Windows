@@ -14,7 +14,7 @@ boolean_t InitializeKernelbase()
 	if (NtDll.LdrLoadDll == null || NtDll.LdrGetProcedureAddressEx == null) return false;
 
 	UNICODE_STRING moduleName;
-	moduleName.Buffer = L"kernelbase";
+	moduleName.Buffer = u"kernelbase";
 	moduleName.Length = 20;
 	moduleName.MaximumLength = 22;
 

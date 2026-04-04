@@ -6,24 +6,24 @@
 
 static const wchar_t* _logWords[7] =
 {
-    L"\x1B[92mDebug\x1B[0m",
-    L"\x1B[95mVerbose\x1B[0m",
-    L"\x1B[96mInfo\x1B[0m",
-    L"\x1B[33mWarning\x1B[0m",
-    L"\x1B[93mAlert\x1B[0m",
-    L"\x1B[91mError\x1B[0m",
-    L"\x1B[31mCritical\x1B[0m"
+    u"\x1B[92mDebug\x1B[0m",
+    u"\x1B[95mVerbose\x1B[0m",
+    u"\x1B[96mInfo\x1B[0m",
+    u"\x1B[33mWarning\x1B[0m",
+    u"\x1B[93mAlert\x1B[0m",
+    u"\x1B[91mError\x1B[0m",
+    u"\x1B[31mCritical\x1B[0m"
 };
 
 static const uint16_t _logWordLengthMap[7] =
 {
-    14, // L"\x1B[92mDebug\x1B[0m",
-    16,	// L"\x1B[95mVerbose\x1B[0m",
-    13,	// L"\x1B[96mInfo\x1B[0m",
-    16,	// L"\x1B[33mWarning\x1B[0m",
-    14,	// L"\x1B[93mAlert\x1B[0m",
-    14,	// L"\x1B[91mError\x1B[0m",
-    17	// L"\x1B[31mCritical\x1B[0m"
+    14, // u"\x1B[92mDebug\x1B[0m",
+    16,	// u"\x1B[95mVerbose\x1B[0m",
+    13,	// u"\x1B[96mInfo\x1B[0m",
+    16,	// u"\x1B[33mWarning\x1B[0m",
+    14,	// u"\x1B[93mAlert\x1B[0m",
+    14,	// u"\x1B[91mError\x1B[0m",
+    17	// u"\x1B[31mCritical\x1B[0m"
 };
 
 #define TIME *(uint64_t*)(0x7FFE0000 + 0x14)

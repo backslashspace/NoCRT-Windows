@@ -22,7 +22,8 @@
     <ClCompile Include="adjust_process_token_privileges.c" />
     <ClCompile Include="advapi32.c" />
     <ClCompile Include="aslr.c" />
-    <ClCompile Include="cpuid.c" />
+    <ClCompile Include="mwaitx.c" />
+    <ClCompile Include="print_cpuid.c" />
     <ClCompile Include="xterm_readline.c" />
     <ClCompile Include="enable_xterm.c" />
     <ClCompile Include="kernelbase.c" />

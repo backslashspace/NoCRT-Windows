@@ -14,7 +14,7 @@ boolean_t InitializeAdvapi32()
 	if (NtDll.LdrLoadDll == null || NtDll.LdrGetProcedureAddressEx == null) return false;
 
 	UNICODE_STRING moduleName;
-	moduleName.Buffer = L"advapi32";
+	moduleName.Buffer = u"advapi32";
 	moduleName.Length = 16;
 	moduleName.MaximumLength = 18;
 

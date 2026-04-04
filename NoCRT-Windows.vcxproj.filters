@@ -55,7 +55,10 @@
     <ClCompile Include="xterm_readline.c">
       <Filter>Source Files\core\console</Filter>
     </ClCompile>
-    <ClCompile Include="cpuid.c">
+    <ClCompile Include="print_cpuid.c">
+      <Filter>Source Files\core\testing</Filter>
+    </ClCompile>
+    <ClCompile Include="mwaitx.c">
       <Filter>Source Files\core\testing</Filter>
     </ClCompile>
   </ItemGroup>

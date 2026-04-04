@@ -14,7 +14,7 @@ boolean_t InitializeShell32()
 	if (NtDll.LdrLoadDll == null || NtDll.LdrGetProcedureAddressEx == null) return false;
 
 	UNICODE_STRING moduleName;
-	moduleName.Buffer = L"shell32";
+	moduleName.Buffer = u"shell32";
 	moduleName.Length = 14;
 	moduleName.MaximumLength = 16;
 

@@ -6,6 +6,8 @@
 	;monitor 
 	;monitorx rax
 
+	ret
+
 	TestASM ENDP
 
 END
