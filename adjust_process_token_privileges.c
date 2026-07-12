@@ -1,8 +1,71 @@
-#include "ntdll.h"
+﻿#include "ntdll.h"
 #include "console.h"
-#include "utility.h"
+
+boolean_t AdjustProcessTokenPrivileges()
+{
+	ConsoleWrite("Adjusting token privileges\n → Enabling SeLockMemoryPrivilege\n → Keeping SeChangeNotifyPrivilege\n");
+
+	Handle token = null;
+	if (STATUS_SUCCESS != NtOpenProcessToken((Handle)-1i64, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token))
+	{
+		ConsoleWrite("NtOpenProcessToken() failed.\n");
+		return false;
+	}
+
+	/* ------------------------------------------------------------------------------------- */
+
+	TOKEN_PRIVILEGES tokenPrivileges;
+	tokenPrivileges.PrivilegeCount = 1;
+	tokenPrivileges.Privileges[0].Luid = (LUID) { 4, 0 }; // SE_LOCK_MEMORY_PRIVILEGE
+	tokenPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+
+	if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(TOKEN_PRIVILEGES), null, null))
+	{
+		ConsoleWrite("NtAdjustPrivilegesToken() failed at step enable SeLockMemoryPrivilege\n");
+		return false;
+	}
+
+	/* ------------------------------------------------------------------------------------- */
+
+	uint32_t length = 0;
+	if (STATUS_BUFFER_TOO_SMALL != NtQueryInformationToken(token, TokenPrivileges, null, 0, &length))
+	{
+		ConsoleWrite("NtQueryInformationToken() failed at step length query\n");
+		return false;
+	}
+
+	TOKEN_PRIVILEGES *tokenPrivilegesPointer = (TOKEN_PRIVILEGES *)_alloca(length);
+	if (STATUS_SUCCESS != NtQueryInformationToken(token, TokenPrivileges, tokenPrivilegesPointer, length, &length))
+	{
+		ConsoleWrite("NtQueryInformationToken() failed at step query data\n");
+		return false;
+	}
+
+	/* ------------------------------------------------------------------------------------- */
+
+	for (uint16_t i = 0; i < tokenPrivilegesPointer->PrivilegeCount; ++i)
+	{
+		LUID_AND_ATTRIBUTES *entry = &tokenPrivilegesPointer->Privileges[i];
+
+		// chek if SeChangeNotifyPrivilege or SeLockMemoryPrivilege
+		if ((entry->Luid.LowPart == 4 || entry->Luid.LowPart == 23) && entry->Luid.HighPart == 0) continue;
+
+		tokenPrivileges.Privileges[0].Luid = entry->Luid;
+		tokenPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_REMOVED;
+
+		if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(TOKEN_PRIVILEGES), null, null))
+		{
+			ConsoleWrite("NtAdjustPrivilegesToken() failed at step remove privilege\n");
+			return false;
+		}
+	}
+
+	return true;
+}
+
+// ░░░ verbose advapi32 version  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
 #include "advapi32.h"
-#include "kernelbase.h"
 
 static wchar_t const SeLockMemoryPrivilege[] = u"SeLockMemoryPrivilege";
 static wchar_t const SeChangeNotifyPrivilege[] = u"SeChangeNotifyPrivilege";
@@ -46,7 +109,7 @@ static boolean_t EnableSeLockMemoryPrivilege(Handle token)
 	return true;
 }
 
-boolean_t AdjustProcessTokenPrivileges(Handle const outputHandle)
+boolean_t AdjustProcessTokenPrivilegesVerbose(Handle const outputHandle)
 {
 	Handle token = null;
 	if (STATUS_SUCCESS != NtOpenProcessToken((Handle)-1i64, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token))

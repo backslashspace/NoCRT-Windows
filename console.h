@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "types.h"
 #include "utility.h"
 #include "kernelbase.h"
@@ -15,7 +15,9 @@ typedef enum LogLevel
     Critical = 6,   // red
 } LogLevel;
 
-boolean_t EnableXTerm(Handle const standardOutput, Handle const standardInput);
+void RestoreConsoleMode();
+
+boolean_t EnableXTerm();
 
 boolean_t ReadLine(uint8_t *const restrict buffer, uint16_t const length, uint16_t *const restrict writtenBytes);
 

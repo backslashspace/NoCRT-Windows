@@ -1,4 +1,4 @@
-#pragma message("[ntdll] v1.1.0.0")
+﻿#pragma message("[ntdll] v1.2.0.0")
 
 #include "ntdll.h"
 #include "intrinsics.h"
@@ -87,6 +87,71 @@ NEXT_FUNCTION:
 
 // ░░░ Runtime Loaders ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
+boolean_t LoadNtOpenSection()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtOpenSection != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtOpenSection";
+	functionName.Length = 13;
+	functionName.MaximumLength = 14;
+
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtOpenSection, null);
+}
+
+boolean_t LoadNtCreateSection()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtCreateSection != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtCreateSection";
+	functionName.Length = 15;
+	functionName.MaximumLength = 16;
+
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtCreateSection, null);
+}
+
+boolean_t LoadNtMapViewOfSection()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtMapViewOfSection != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtMapViewOfSection";
+	functionName.Length = 18;
+	functionName.MaximumLength = 19;
+
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtMapViewOfSection, null);
+}
+
+boolean_t LoadNtUnmapViewOfSection()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtUnmapViewOfSection != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtUnmapViewOfSection";
+	functionName.Length = 20;
+	functionName.MaximumLength = 21;
+
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtUnmapViewOfSection, null);
+}
+
+boolean_t LoadNtProtectVirtualMemory()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtProtectVirtualMemory != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtProtectVirtualMemory";
+	functionName.Length = 22;
+	functionName.MaximumLength = 23;
+
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtProtectVirtualMemory, null);
+}
+
 boolean_t LoadNtClose()
 {
 	if (NtDllBaseAddress == null) return false;
@@ -100,17 +165,17 @@ boolean_t LoadNtClose()
 	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtClose, null);
 }
 
-boolean_t LoadNtOpenFile()
+boolean_t LoadLdrGetDllHandleEx()
 {
 	if (NtDllBaseAddress == null) return false;
-	if (NtDll.NtOpenFile != null) return true;
+	if (NtDll.LdrGetDllHandleEx != null) return true;
 
 	STRING functionName;
-	functionName.Buffer = "NtOpenFile";
-	functionName.Length = 10;
-	functionName.MaximumLength = 11;
+	functionName.Buffer = "LdrGetDllHandleEx";
+	functionName.Length = 17;
+	functionName.MaximumLength = 18;
 
-	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtOpenFile, null);
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.LdrGetDllHandleEx, null);
 }
 
 boolean_t LoadNtCreateThreadEx()
@@ -425,6 +490,19 @@ boolean_t LoadNtSetInformationThread()
 	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtSetInformationThread, null);
 }
 
+boolean_t LoadNtSetInformationProcess()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtSetInformationProcess != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtSetInformationProcess";
+	functionName.Length = 23;
+	functionName.MaximumLength = 24;
+
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtSetInformationProcess, null);
+}
+
 boolean_t LoadNtQueryObject()
 {
 	if (NtDllBaseAddress == null) return false;
@@ -462,6 +540,19 @@ boolean_t LoadNtQueryInformationFile()
 	functionName.MaximumLength = 23;
 
 	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtQueryInformationFile, null);
+}
+
+boolean_t LoadNtCreateFile()
+{
+	if (NtDllBaseAddress == null) return false;
+	if (NtDll.NtCreateFile != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "NtCreateFile";
+	functionName.Length = 12;
+	functionName.MaximumLength = 13;
+
+	return !LdrGetProcedureAddressEx(NtDllBaseAddress, &functionName, null, (void **)&NtDll.NtCreateFile, null);
 }
 
 boolean_t LoadNtSetInformationFile()

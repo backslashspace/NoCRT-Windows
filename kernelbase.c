@@ -1,4 +1,4 @@
-#pragma message("[kernelbase] v1.1.0.0")
+﻿#pragma message("[kernelbase] v1.3.1.0")
 
 #include "ntdll.h"
 #include "kernelbase.h"      
@@ -18,7 +18,7 @@ boolean_t InitializeKernelbase()
 	moduleName.Length = 20;
 	moduleName.MaximumLength = 22;
 
-	return !LdrLoadDll(null, null, &moduleName, &KernelbaseBaseAddress);
+	return !LdrGetDllHandleEx(0, null, null, &moduleName, &KernelbaseBaseAddress);
 }
 
 // ░░░ Runtime Loaders ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -99,4 +99,43 @@ boolean_t LoadWriteConsoleW()
 	functionName.MaximumLength = 14;
 
 	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.WriteConsoleW, null);
+}
+
+boolean_t LoadSetConsoleCtrlHandler()
+{
+	if (KernelbaseBaseAddress == null) return false;
+	if (Kernelbase.SetConsoleCtrlHandler != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "SetConsoleCtrlHandler";
+	functionName.Length = 21;
+	functionName.MaximumLength = 22;
+
+	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.SetConsoleCtrlHandler, null);
+}
+
+boolean_t LoadGetConsoleCP()
+{
+	if (KernelbaseBaseAddress == null) return false;
+	if (Kernelbase.GetConsoleCP != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "GetConsoleCP";
+	functionName.Length = 12;
+	functionName.MaximumLength = 13;
+
+	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.GetConsoleCP, null);
+}
+
+boolean_t LoadGetConsoleOutputCP()
+{
+	if (KernelbaseBaseAddress == null) return false;
+	if (Kernelbase.GetConsoleOutputCP != null) return true;
+
+	STRING functionName;
+	functionName.Buffer = "GetConsoleOutputCP";
+	functionName.Length = 18;
+	functionName.MaximumLength = 19;
+
+	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.GetConsoleOutputCP, null);
 }

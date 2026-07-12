@@ -1,6 +1,8 @@
-#pragma once
+﻿#pragma once
+_Static_assert(sizeof(void *) == 8, "void * is NOT 64-Bit");
+_Static_assert(_MSVC_EXECUTION_CHARACTER_SET == 65001, "Execution charset was not UTF-8");
 _Static_assert((char)255 > (char)0, "/J must be specified to compile - Default char Type Is unsigned");
-_Static_assert(sizeof(void *) == 8, "void * is NOT 8 64-Bit");
+
 
 // ░░░ Visuals ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
@@ -30,3 +32,4 @@ typedef unsigned __int16 wchar_t;
 
 typedef uint64_t Handle;
 typedef uint32_t NtStatus;
+typedef uint32_t HResult;

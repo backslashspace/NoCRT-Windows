@@ -1,4 +1,4 @@
-// Microsoft Visual C++ generated resource script.
+﻿// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -71,7 +71,7 @@ BEGIN
             VALUE "FileDescription", "Freestanding Windows Baseline "
             VALUE "FileVersion", "1.0.0.0"
             VALUE "InternalName", "Base-Test.exe"
-            VALUE "LegalCopyright", "GPL-2.0 License"
+            VALUE "LegalCopyright", "GNU GENERAL PUBLIC LICENSE Version 2, June 1991"
             VALUE "OriginalFilename", "Base-Test.exe"
             VALUE "ProductName", "NoCRT Windows Test App"
             VALUE "ProductVersion", "1.0.0.0"

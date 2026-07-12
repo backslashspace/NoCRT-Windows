@@ -1,4 +1,4 @@
-#pragma message("[advapi32] v1.1.0.0")
+﻿#pragma message("[advapi32] v1.1.1.0")
 
 #include "ntdll.h"
 #include "advapi32.h"      
@@ -6,7 +6,7 @@
 
 // ░░░ Initialization + State ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-Handle Advapi32BaseAddress = null;
+Handle Advapi32DllBaseAddress = null;
 struct Advapi32Functions Advapi32 = { 0 };
 
 boolean_t InitializeAdvapi32()
@@ -18,14 +18,14 @@ boolean_t InitializeAdvapi32()
 	moduleName.Length = 16;
 	moduleName.MaximumLength = 18;
 
-	return !LdrLoadDll(null, null, &moduleName, &Advapi32BaseAddress);
+	return !LdrLoadDll(null, null, &moduleName, &Advapi32DllBaseAddress);
 }
 
 // ░░░ Runtime Loaders ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 boolean_t LoadLookupPrivilegeValueW()
 {
-	if (Advapi32BaseAddress == null) return false;
+	if (Advapi32DllBaseAddress == null) return false;
 	if (Advapi32.LookupPrivilegeValueW != null) return true;
 
 	STRING functionName;
@@ -33,12 +33,12 @@ boolean_t LoadLookupPrivilegeValueW()
 	functionName.Length = 21;
 	functionName.MaximumLength = 22;
 
-	return !LdrGetProcedureAddressEx(Advapi32BaseAddress, &functionName, null, (void **)&Advapi32.LookupPrivilegeValueW, null);
+	return !LdrGetProcedureAddressEx(Advapi32DllBaseAddress, &functionName, null, (void **)&Advapi32.LookupPrivilegeValueW, null);
 }
 
 boolean_t LoadLookupPrivilegeValueA()
 {
-	if (Advapi32BaseAddress == null) return false;
+	if (Advapi32DllBaseAddress == null) return false;
 	if (Advapi32.LookupPrivilegeValueA != null) return true;
 
 	STRING functionName;
@@ -46,12 +46,12 @@ boolean_t LoadLookupPrivilegeValueA()
 	functionName.Length = 21;
 	functionName.MaximumLength = 22;
 
-	return !LdrGetProcedureAddressEx(Advapi32BaseAddress, &functionName, null, (void **)&Advapi32.LookupPrivilegeValueA, null);
+	return !LdrGetProcedureAddressEx(Advapi32DllBaseAddress, &functionName, null, (void **)&Advapi32.LookupPrivilegeValueA, null);
 }
 
 boolean_t LoadLookupPrivilegeNameA()
 {
-	if (Advapi32BaseAddress == null) return false;
+	if (Advapi32DllBaseAddress == null) return false;
 	if (Advapi32.LookupPrivilegeNameA != null) return true;
 
 	STRING functionName;
@@ -59,12 +59,12 @@ boolean_t LoadLookupPrivilegeNameA()
 	functionName.Length = 20;
 	functionName.MaximumLength = 21;
 
-	return !LdrGetProcedureAddressEx(Advapi32BaseAddress, &functionName, null, (void **)&Advapi32.LookupPrivilegeNameA, null);
+	return !LdrGetProcedureAddressEx(Advapi32DllBaseAddress, &functionName, null, (void **)&Advapi32.LookupPrivilegeNameA, null);
 }
 
 boolean_t LoadLookupPrivilegeNameW()
 {
-	if (Advapi32BaseAddress == null) return false;
+	if (Advapi32DllBaseAddress == null) return false;
 	if (Advapi32.LookupPrivilegeNameW != null) return true;
 
 	STRING functionName;
@@ -72,12 +72,12 @@ boolean_t LoadLookupPrivilegeNameW()
 	functionName.Length = 20;
 	functionName.MaximumLength = 21;
 
-	return !LdrGetProcedureAddressEx(Advapi32BaseAddress, &functionName, null, (void **)&Advapi32.LookupPrivilegeNameW, null);
+	return !LdrGetProcedureAddressEx(Advapi32DllBaseAddress, &functionName, null, (void **)&Advapi32.LookupPrivilegeNameW, null);
 }
 
 boolean_t LoadStartServiceCtrlDispatcherW()
 {
-	if (Advapi32BaseAddress == null) return false;
+	if (Advapi32DllBaseAddress == null) return false;
 	if (Advapi32.StartServiceCtrlDispatcherW != null) return true;
 
 	STRING functionName;
@@ -85,12 +85,12 @@ boolean_t LoadStartServiceCtrlDispatcherW()
 	functionName.Length = 27;
 	functionName.MaximumLength = 28;
 
-	return !LdrGetProcedureAddressEx(Advapi32BaseAddress, &functionName, null, (void **)&Advapi32.StartServiceCtrlDispatcherW, null);
+	return !LdrGetProcedureAddressEx(Advapi32DllBaseAddress, &functionName, null, (void **)&Advapi32.StartServiceCtrlDispatcherW, null);
 }
 
 boolean_t LoadRegisterServiceCtrlHandlerExW()
 {
-	if (Advapi32BaseAddress == null) return false;
+	if (Advapi32DllBaseAddress == null) return false;
 	if (Advapi32.RegisterServiceCtrlHandlerExW != null) return true;
 
 	STRING functionName;
@@ -98,5 +98,5 @@ boolean_t LoadRegisterServiceCtrlHandlerExW()
 	functionName.Length = 29;
 	functionName.MaximumLength = 30;
 
-	return !LdrGetProcedureAddressEx(Advapi32BaseAddress, &functionName, null, (void **)&Advapi32.RegisterServiceCtrlHandlerExW, null);
+	return !LdrGetProcedureAddressEx(Advapi32DllBaseAddress, &functionName, null, (void **)&Advapi32.RegisterServiceCtrlHandlerExW, null);
 }

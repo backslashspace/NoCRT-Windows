@@ -138,6 +138,7 @@ boolean_t ReadLine(uint8_t *const restrict buffer, uint16_t const length, uint16
 	context.WrittenBytes = 0;
 
 	uint8_t character;
+	boolean_t printPlaceholder;
 
 READ_NEXT:
 	if (NtReadFile(ProcessInformation.StandardInput, null, null, null, &context.IoStatusBlock, &character, 1, null, null)) return false;
@@ -188,7 +189,16 @@ READ_NEXT:
 
 	// ----------------------------------
 
-	if (character < ' ') goto READ_NEXT;
+	switch (character)
+	{
+	case 0x00: case 0x01: case 0x02: case 0x03: case 0x09: case 0x17: case 0x1C: case 0x1D: case 0x1E: case 0x1F:
+		printPlaceholder = true;
+		break;
+
+	default:
+		if (character < ' ') goto READ_NEXT;
+		printPlaceholder = false;
+	}
 
 	// ----------------------------------
 
@@ -212,7 +222,12 @@ READ_NEXT:
 	context.Buffer[context.Position] = character;
 	++context.Position;
 
-	if (NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, &character, 1, null, null)) return false;
-
+	if (!context.HideOutput)
+	{
+		// red space or actual char
+		if (printPlaceholder) { if (NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\x1B[41m \x1B[0m", 10, null, null)) return false; }
+		else { if (NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, &character, 1, null, null)) return false; }
+	}
+	
 	goto READ_NEXT;
 }

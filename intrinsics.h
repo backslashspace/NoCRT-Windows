@@ -98,6 +98,7 @@ void *_alloca(uint64_t size) {}
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/readgsbyte-readgsdword-readgsqword-readgsword?view=msvc-170
 uint64_t __readgsqword(uint32_t Offset) {}
+uint32_t __readgsdword(uint32_t Offset) {}
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/rdtscp?view=msvc-170
 uint64_t __rdtscp(uint32_t *AUX) {}

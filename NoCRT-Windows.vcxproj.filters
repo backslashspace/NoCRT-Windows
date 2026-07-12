@@ -61,6 +61,12 @@
     <ClCompile Include="mwaitx.c">
       <Filter>Source Files\core\testing</Filter>
     </ClCompile>
+    <ClCompile Include="xterm_status_bar.c">
+      <Filter>Source Files\core\testing</Filter>
+    </ClCompile>
+    <ClCompile Include="ole32.c">
+      <Filter>Source Files\external</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.h">
@@ -101,6 +107,9 @@
     </ClInclude>
     <ClInclude Include="initialization.h">
       <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ole32.h">
+      <Filter>Header Files\external</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

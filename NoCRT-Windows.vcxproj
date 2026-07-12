@@ -23,6 +23,7 @@
     <ClCompile Include="advapi32.c" />
     <ClCompile Include="aslr.c" />
     <ClCompile Include="mwaitx.c" />
+    <ClCompile Include="ole32.c" />
     <ClCompile Include="print_cpuid.c" />
     <ClCompile Include="xterm_readline.c" />
     <ClCompile Include="enable_xterm.c" />
@@ -39,6 +40,7 @@
     <ClCompile Include="multithreading.c" />
     <ClCompile Include="uint_to_char.c" />
     <ClCompile Include="uint_to_wchar.c" />
+    <ClCompile Include="xterm_status_bar.c" />
     <MASM Include="memory_compare.asm" />
     <MASM Include="inverse_memory_copy.asm" />
     <MASM Include="test_asm.asm" />
@@ -54,6 +56,7 @@
     <ClInclude Include="intrinsics.h" />
     <ClInclude Include="kernelbase.h" />
     <ClInclude Include="ntdll.h" />
+    <ClInclude Include="ole32.h" />
     <ClInclude Include="process_information.h" />
     <ClInclude Include="resolve_symbols.h" />
     <ClInclude Include="resource.h" />
@@ -115,7 +118,7 @@
     <SpectreMitigation />
     <EnableUnitySupport />
     <UseOfMfc />
-    <WholeProgramOptimization />
+    <WholeProgramOptimization>true</WholeProgramOptimization>
     <UseDynamicDebugging />
     <CLRSupport />
     <EnableASAN />
@@ -129,7 +132,7 @@
     <SpectreMitigation />
     <EnableUnitySupport />
     <UseOfMfc />
-    <WholeProgramOptimization />
+    <WholeProgramOptimization>true</WholeProgramOptimization>
     <UseDynamicDebugging />
     <CLRSupport />
     <EnableASAN />
@@ -248,8 +251,7 @@
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>
       </SDLCheck>
-      <PreprocessorDefinitions>
-      </PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -385,8 +387,7 @@
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>
       </SDLCheck>
-      <PreprocessorDefinitions>
-      </PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -499,8 +500,7 @@
       <OmitFramePointers>true</OmitFramePointers>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <RemoveUnreferencedCodeData>
-      </RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <DisableSpecificWarnings>6255</DisableSpecificWarnings>
     </ClCompile>
@@ -576,8 +576,7 @@
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>
       </SDLCheck>
-      <PreprocessorDefinitions>
-      </PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -690,8 +689,7 @@
       <OmitFramePointers>true</OmitFramePointers>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <RemoveUnreferencedCodeData>
-      </RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>6255</DisableSpecificWarnings>
     </ClCompile>
@@ -766,8 +764,7 @@
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>
       </SDLCheck>
-      <PreprocessorDefinitions>
-      </PreprocessorDefinitions>
+      <PreprocessorDefinitions>RELEASE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>

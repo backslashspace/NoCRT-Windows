@@ -1,4 +1,4 @@
-#include "ntdll.h"
+﻿#include "ntdll.h"
 #include "shell32.h"
 #include "advapi32.h"
 #include "kernelbase.h"
@@ -11,11 +11,14 @@ static boolean_t ResolveNtSymbols()
 	if (!LoadLdrLoadDll()) return false;
 	if (!LoadNtReadFile()) return false;
 	if (!LoadNtWriteFile()) return false;
+	if (!LoadNtCreateFile()) return false;
+	if (!LoadLdrUnloadDll()) return false;
 	if (!LoadNtResumeThread()) return false;
 	if (!LoadNtSuspendThread()) return false;
 	if (!LoadNtCreateThreadEx()) return false;
 	if (!LoadNtDelayExecution()) return false;
 	if (!LoadNtYieldExecution()) return false;
+	if (!LoadLdrGetDllHandleEx()) return false;
 	if (!LoadNtTerminateThread()) return false;
 	if (!LoadRtlUnicodeToUTF8N()) return false;
 	if (!LoadNtOpenProcessToken()) return false;
@@ -57,12 +60,15 @@ static boolean_t LoadAndResolveKernelbaseSymbols()
 {
 	if (!InitializeKernelbase()) return false;
 
+	if (!LoadGetConsoleCP()) return false;
 	if (!LoadSetConsoleCP()) return false;
 	if (!LoadWriteConsoleA()) return false;
 	if (!LoadWriteConsoleW()) return false;
 	if (!LoadGetConsoleMode()) return false;
 	if (!LoadSetConsoleMode()) return false;
+	if (!LoadGetConsoleOutputCP()) return false;
 	if (!LoadSetConsoleOutputCP()) return false;
+	if (!LoadSetConsoleCtrlHandler()) return false;
 
 	return true;
 }
@@ -72,8 +78,8 @@ static boolean_t LoadAndResolveKernelbaseSymbols()
 boolean_t ResolveSymbols()
 {
 	if (!ResolveNtSymbols()) return false;
-	if (!ResolveShell32Symbols()) return false;
-	if (!LoadAndResolveAdvapi32Symbols()) return false;
+	//if (!ResolveShell32Symbols()) return false;
+	//if (!LoadAndResolveAdvapi32Symbols()) return false;
 	if (!LoadAndResolveKernelbaseSymbols()) return false;
 
 	return true;

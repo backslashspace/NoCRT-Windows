@@ -1,7 +1,5 @@
-#include "ntdll.h"
+﻿#include "ntdll.h"
 #include "intrinsics.h"
-
-_Static_assert(_MSVC_EXECUTION_CHARACTER_SET == 65001, "Execution charset was not UTF-8");
 
 // ░░░ Forward Declarations ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
@@ -16,5 +14,5 @@ __declspec(noreturn) void Start()
 
 	int32_t exitCode = Main();
 
-	NtTerminateProcess((Handle)-1i64, exitCode);
+	NtTerminateProcess((Handle)-1, exitCode);
 }

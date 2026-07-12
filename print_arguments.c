@@ -1,21 +1,25 @@
-#include "shell32.h"
-#include "console.h"
-#include "utility.h"
-#include "kernelbase.h"
+﻿#include "console.h"
+#include "process_information.h"
 
-void PrintArguments(wchar_t const *const commandLine, Handle const outputHandle)
+void PrintArguments()
 {
 	ConsoleWrite("# Start arguments:\n\n");
 
-	uint32_t argc;
-	wchar_t **argv = CommandLineToArgvW(commandLine, &argc);
-
-	for (uint16_t i = 0; i < argc; ++i)
+	if (ProcessInformation.CommandLineBuffer == null || ProcessInformation.CommandLineBuffer[0] == null)
 	{
-		uint32_t length = (uint32_t)MemoryGetFirstWordMatchIndexX86(512, null, argv[i]);
-		argv[i][length] = L'\n';
-		WriteConsoleW(outputHandle, argv[i], length + 1, null, null);
-		argv[i][length] = 0;
+		ConsoleWrite("CommandLine was null or empty\n");
+		return true;
+	}
+
+	COMMAND_LINE_STRING *arguments = _alloca(sizeof(COMMAND_LINE_STRING) * 8);
+
+	uint64_t argumentCount = ParseCommandLine(ProcessInformation.CommandLineBuffer, ProcessInformation.CommandLineLength >> 1, &arguments, 10);
+
+	for (uint16_t i = 0; i < argumentCount; ++i)
+	{
+		WriteConsoleW(ProcessInformation.StandardOutput, u" → ", 3, null, null);
+		WriteConsoleW(ProcessInformation.StandardOutput, arguments[i].Buffer, arguments[i].Length, null, null);
+		WriteConsoleW(ProcessInformation.StandardOutput, u"\n", 1, null, null);
 	}
 
 	ConsoleWrite("\n");
