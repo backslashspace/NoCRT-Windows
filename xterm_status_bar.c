@@ -46,14 +46,14 @@ AGAIN:
 	NtWriteFile(outputHandle, null, null, null, &ioStatusBlock, string + 16, 4, null, null);
 
 	// set visual bar
-	pos = (29 * progresss) / 100;
+	pos = (uint16_t)((29 * progresss) / 100);
 	if (pos != lastPos)
 	{
 		lastPos = pos;
 		string[18] = '0';
 		string[19] = '0';
 		stringLength = UInt64ToChar(pos + 1, string);
-		char barMod[] = "\x1B[1B\r\x1B[##C";
+		char_t barMod[] = "\x1B[1B\r\x1B[##C";
 		barMod[7] = string[18];
 		barMod[8] = string[19];
 		NtWriteFile(outputHandle, null, null, null, &ioStatusBlock, barMod, 10, null, null);
@@ -76,6 +76,6 @@ AGAIN:
 		goto AGAIN;
 	}
 
-	// showm curser
+	// show curser
 	NtWriteFile(outputHandle, null, null, null, &ioStatusBlock, "\x1B[?25h", 6, null, null);
 }

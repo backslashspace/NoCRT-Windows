@@ -1,4 +1,4 @@
-﻿#pragma message("[ole32] v1.0.0.0")
+﻿#pragma message("[ole32] v1.0.1")
 
 #include "ntdll.h"
 #include "ole32.h"      
@@ -23,54 +23,21 @@ boolean_t InitializeOle32(boolean_t skipLoad)
 
 // ░░░ Runtime Loaders ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-boolean_t LoadCoTaskMemFree()
-{
-	if (Ole32DllBaseAddress == null) return false;
-	if (Ole32.CoTaskMemFree != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "CoTaskMemFree";
-	functionName.Length = 13;
-	functionName.MaximumLength = 14;
-
-	return !LdrGetProcedureAddressEx(Ole32DllBaseAddress, &functionName, null, (void **)&Ole32.CoTaskMemFree, null);
+#define LOAD(functionName) \
+boolean_t Load##functionName() \
+{ \
+	if (Ole32DllBaseAddress == null) return false; \
+	if (Ole32.functionName != null) return true; \
+	 \
+	STRING procedureName; \
+	procedureName.Buffer = #functionName; \
+	procedureName.Length = sizeof(#functionName) - 1; \
+	procedureName.MaximumLength = sizeof(#functionName); \
+	 \
+	return !LdrGetProcedureAddressEx(Ole32DllBaseAddress, &procedureName, 0, (void **)&Ole32.functionName, 0); \
 }
 
-boolean_t LoadCoUninitialize()
-{
-	if (Ole32DllBaseAddress == null) return false;
-	if (Ole32.CoUninitialize != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "CoUninitialize";
-	functionName.Length = 15;
-	functionName.MaximumLength = 15;
-
-	return !LdrGetProcedureAddressEx(Ole32DllBaseAddress, &functionName, null, (void **)&Ole32.CoUninitialize, null);
-}
-
-boolean_t LoadCoInitializeEx()
-{
-	if (Ole32DllBaseAddress == null) return false;
-	if (Ole32.CoInitializeEx != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "CoInitializeEx";
-	functionName.Length = 14;
-	functionName.MaximumLength = 15;
-
-	return !LdrGetProcedureAddressEx(Ole32DllBaseAddress, &functionName, null, (void **)&Ole32.CoInitializeEx, null);
-}
-
-boolean_t LoadCoCreateInstance()
-{
-	if (Ole32DllBaseAddress == null) return false;
-	if (Ole32.CoCreateInstance != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "CoCreateInstance";
-	functionName.Length = 16;
-	functionName.MaximumLength = 17;
-
-	return !LdrGetProcedureAddressEx(Ole32DllBaseAddress, &functionName, null, (void **)&Ole32.CoCreateInstance, null);
-}
+LOAD(CoTaskMemFree)
+LOAD(CoInitializeEx)
+LOAD(CoUninitialize)
+LOAD(CoCreateInstance)

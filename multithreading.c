@@ -1,4 +1,4 @@
-#include "ntdll.h"
+﻿#include "ntdll.h"
 #include "console.h"
 #include "intrinsics.h"
 
@@ -61,9 +61,9 @@ boolean_t Multithreading()
 	}
 	ConsoleWrite("[MAIN] Starting worker thread\n");
 
-	_mm_lfence();
-	uint64_t now = __rdtsc();
-	_mm_lfence();
+	//_mm_lfence();
+	//uint64_t now = __rdtsc();
+	//_mm_lfence();
 
 	if (STATUS_SUCCESS != NtResumeThread(threadHandle, null))
 	{

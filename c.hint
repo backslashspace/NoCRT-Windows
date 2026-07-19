@@ -1,0 +1,5 @@
+﻿#define LOAD(functionName) \
+boolean_t Load##functionName() \
+{ \
+    return true; \
+}

@@ -8,7 +8,7 @@ void PrintArguments()
 	if (ProcessInformation.CommandLineBuffer == null || ProcessInformation.CommandLineBuffer[0] == null)
 	{
 		ConsoleWrite("CommandLine was null or empty\n");
-		return true;
+		return;
 	}
 
 	COMMAND_LINE_STRING *arguments = _alloca(sizeof(COMMAND_LINE_STRING) * 8);
@@ -18,7 +18,7 @@ void PrintArguments()
 	for (uint16_t i = 0; i < argumentCount; ++i)
 	{
 		WriteConsoleW(ProcessInformation.StandardOutput, u" → ", 3, null, null);
-		WriteConsoleW(ProcessInformation.StandardOutput, arguments[i].Buffer, arguments[i].Length, null, null);
+		WriteConsoleW(ProcessInformation.StandardOutput, arguments[i].Buffer, (uint32_t)arguments[i].Length, null, null);
 		WriteConsoleW(ProcessInformation.StandardOutput, u"\n", 1, null, null);
 	}
 

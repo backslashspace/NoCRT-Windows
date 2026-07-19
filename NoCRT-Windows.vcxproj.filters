@@ -178,4 +178,9 @@
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="c.hint">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

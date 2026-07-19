@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "types.h"
 
 // ░░░ Structs uses by advapi32 Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░

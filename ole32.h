@@ -66,7 +66,7 @@ extern struct Ole32Functions Ole32;
 
 // ░░░ Wrap to normal Function ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-static __forceinline void CoTaskMemFree(void *pv) { return Ole32.CoTaskMemFree(pv); }
+static __forceinline void CoTaskMemFree(void *pv) { Ole32.CoTaskMemFree(pv); }
 static __forceinline void CoUninitialize() { Ole32.CoUninitialize(); }
 static __forceinline HResult CoInitializeEx(void *pvReserved, uint32_t dwCoInit) { return Ole32.CoInitializeEx(pvReserved, dwCoInit); }
 static __forceinline HResult CoCreateInstance(const GUID *rclsid, void *pUnkOuter, uint32_t dwClsContext, const GUID *riid, void **ppv) { return Ole32.CoCreateInstance(rclsid, pUnkOuter, dwClsContext, riid, ppv); }

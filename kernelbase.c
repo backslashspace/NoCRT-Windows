@@ -1,4 +1,4 @@
-﻿#pragma message("[kernelbase] v1.3.1.0")
+﻿#pragma message("[kernelbase] v1.3.1")
 
 #include "ntdll.h"
 #include "kernelbase.h"      
@@ -23,119 +23,26 @@ boolean_t InitializeKernelbase()
 
 // ░░░ Runtime Loaders ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-boolean_t LoadGetConsoleMode()
-{
-	if (KernelbaseBaseAddress == null) return false;
-	if (Kernelbase.GetConsoleMode != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "GetConsoleMode";
-	functionName.Length = 14;
-	functionName.MaximumLength = 15;
-
-	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.GetConsoleMode, null);
+#define LOAD(functionName) \
+boolean_t Load##functionName() \
+{ \
+	if (KernelbaseBaseAddress == null) return false; \
+	if (Kernelbase.functionName != null) return true; \
+	 \
+	STRING procedureName; \
+	procedureName.Buffer = #functionName; \
+	procedureName.Length = sizeof(#functionName) - 1; \
+	procedureName.MaximumLength = sizeof(#functionName); \
+	 \
+	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &procedureName, 0, (void **)&Kernelbase.functionName, 0); \
 }
 
-boolean_t LoadSetConsoleMode()
-{
-	if (KernelbaseBaseAddress == null) return false;
-	if (Kernelbase.SetConsoleMode != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "SetConsoleMode";
-	functionName.Length = 14;
-	functionName.MaximumLength = 15;
-
-	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.SetConsoleMode, null);
-}
-
-boolean_t LoadSetConsoleOutputCP()
-{
-	if (KernelbaseBaseAddress == null) return false;
-	if (Kernelbase.SetConsoleOutputCP != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "SetConsoleOutputCP";
-	functionName.Length = 18;
-	functionName.MaximumLength = 19;
-
-	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.SetConsoleOutputCP, null);
-}
-
-boolean_t LoadSetConsoleCP()
-{
-	if (KernelbaseBaseAddress == null) return false;
-	if (Kernelbase.SetConsoleOutputCP != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "SetConsoleCP";
-	functionName.Length = 12;
-	functionName.MaximumLength = 13;
-
-	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.SetConsoleCP, null);
-}
-
-boolean_t LoadWriteConsoleA()
-{
-	if (KernelbaseBaseAddress == null) return false;
-	if (Kernelbase.WriteConsoleA != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "WriteConsoleA";
-	functionName.Length = 13;
-	functionName.MaximumLength = 14;
-
-	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.WriteConsoleA, null);
-}
-
-boolean_t LoadWriteConsoleW()
-{
-	if (KernelbaseBaseAddress == null) return false;
-	if (Kernelbase.WriteConsoleW != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "WriteConsoleW";
-	functionName.Length = 13;
-	functionName.MaximumLength = 14;
-
-	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.WriteConsoleW, null);
-}
-
-boolean_t LoadSetConsoleCtrlHandler()
-{
-	if (KernelbaseBaseAddress == null) return false;
-	if (Kernelbase.SetConsoleCtrlHandler != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "SetConsoleCtrlHandler";
-	functionName.Length = 21;
-	functionName.MaximumLength = 22;
-
-	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.SetConsoleCtrlHandler, null);
-}
-
-boolean_t LoadGetConsoleCP()
-{
-	if (KernelbaseBaseAddress == null) return false;
-	if (Kernelbase.GetConsoleCP != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "GetConsoleCP";
-	functionName.Length = 12;
-	functionName.MaximumLength = 13;
-
-	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.GetConsoleCP, null);
-}
-
-boolean_t LoadGetConsoleOutputCP()
-{
-	if (KernelbaseBaseAddress == null) return false;
-	if (Kernelbase.GetConsoleOutputCP != null) return true;
-
-	STRING functionName;
-	functionName.Buffer = "GetConsoleOutputCP";
-	functionName.Length = 18;
-	functionName.MaximumLength = 19;
-
-	return !LdrGetProcedureAddressEx(KernelbaseBaseAddress, &functionName, null, (void **)&Kernelbase.GetConsoleOutputCP, null);
-}
+LOAD(GetConsoleCP)
+LOAD(SetConsoleCP)
+LOAD(WriteConsoleA)
+LOAD(WriteConsoleW)
+LOAD(GetConsoleMode)
+LOAD(SetConsoleMode)
+LOAD(GetConsoleOutputCP)
+LOAD(SetConsoleOutputCP)
+LOAD(SetConsoleCtrlHandler)

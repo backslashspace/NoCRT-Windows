@@ -463,7 +463,7 @@ typedef struct PS_ATTRIBUTE
 } PS_ATTRIBUTE;
 
 // https://ntdoc.m417z.com/ps_attribute_list
-typedef struct _PS_ATTRIBUTE_LIST
+typedef struct PS_ATTRIBUTE_LIST
 {
 	uint64_t TotalLength;
 	PS_ATTRIBUTE Attributes[1];
@@ -1324,6 +1324,7 @@ static __forceinline NtStatus NtWaitForSingleObject(Handle Handle, boolean_t Ale
 static __forceinline NtStatus NtProtectVirtualMemory(Handle ProcessHandle, void **BaseAddress, uint64_t *RegionSize, uint32_t NewProtection, uint32_t *OldProtection) { return NtDll.NtProtectVirtualMemory(ProcessHandle, BaseAddress, RegionSize, NewProtection, OldProtection); }
 static __forceinline NtStatus NtAllocateVirtualMemory(Handle ProcessHandle, void **BaseAddress, uint64_t ZeroBits, uint64_t *RegionSize, uint32_t AllocationType, uint32_t Protect) { return NtDll.NtAllocateVirtualMemory(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect); }
 static __forceinline NtStatus LdrGetProcedureAddressEx(Handle DllHandle, STRING const *ProcedureName, uint32_t ProcedureNumber, void **ProcedureAddress, uint32_t Flags) { return NtDll.LdrGetProcedureAddressEx(DllHandle, ProcedureName, ProcedureNumber, ProcedureAddress, Flags); }
+
 
 static __forceinline void RtlTimeToTimeFields(uint64_t *Time, TIME_FIELDS *TimeFields) { NtDll.RtlTimeToTimeFields(Time, TimeFields); }
 static __forceinline NtStatus RtlUnicodeToUTF8N(char_t *UTF8StringDestination, uint32_t UTF8StringMaxByteCount, uint32_t * UTF8StringActualByteCount, wchar_t const *UnicodeStringSource, uint32_t UnicodeStringByteCount) { return NtDll.RtlUnicodeToUTF8N(UTF8StringDestination, UTF8StringMaxByteCount, UTF8StringActualByteCount, UnicodeStringSource, UnicodeStringByteCount); }
