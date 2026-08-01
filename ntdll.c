@@ -1,4 +1,4 @@
-﻿#pragma message("[ntdll] v1.2.1")
+#pragma message("[ntdll] v1.3.1")
 
 #include "ntdll.h"
 #include "intrinsics.h"
@@ -139,3 +139,4 @@ LOAD(NtAdjustPrivilegesToken)
 LOAD(NtQueryInformationToken)
 LOAD(NtAllocateVirtualMemory)
 LOAD(NtSetInformationProcess)
+LOAD(NtQuerySystemInformation)
