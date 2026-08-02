@@ -1,4 +1,4 @@
-#pragma message("[ntdll] v1.3.1")
+﻿#pragma message("[ntdll] v1.3.1")
 
 #include "ntdll.h"
 #include "intrinsics.h"
@@ -16,28 +16,21 @@ boolean_t InitializeNtDll()
 
 	uint8_t *processEnvironmentBlock = (uint8_t *)__readgsqword(0x60);
 	uint8_t *loaderData = *(uint8_t **)(processEnvironmentBlock + 0x18);
-	uint8_t *inMemoryOrderModuleList = loaderData + 0x20;
+	uint8_t *inLoadOrderModuleList = loaderData + 0x10;
 
-	uint8_t *headNode = (*(uint8_t **)inMemoryOrderModuleList) - 0x10;
-	uint8_t *node = headNode;
+	uint8_t *node = *(uint8_t **)inLoadOrderModuleList;
 
 NEXT_MODULE:
-	uint8_t *dllBaseAddress = *(void **)(node + 0x30);
-	uint16_t *nameLengthBytes = (uint16_t *)(node + 0x58);
+	if (node == inLoadOrderModuleList) return false;
+
+	uint8_t *dllBaseAddress = *(uint8_t **)(node + 0x30);
+	uint16_t nameLengthBytes = *(uint16_t *)(node + 0x58);
 	wchar_t *baseDllName = *(wchar_t **)(node + 0x60);
 
-	if (*nameLengthBytes != 18)
-	{
-		node = (*(uint8_t **)(node));
-
-		if (node == headNode) return false;
-		else goto NEXT_MODULE;
-	}
-
 	// if string is ntdll.dll | little endian | they said msvc has no alias rule when optimizing
-	if (*((uint64_t *)baseDllName) != 30399726989082734 || *((uint64_t *)(baseDllName + 4)) != 30399726984495212 || baseDllName[8] != L'l')
+	if (nameLengthBytes != 18 || *((uint64_t *)baseDllName) != 0x6C00640074006E || *((uint64_t *)(baseDllName + 4)) != 0x6C0064002E006C || *(baseDllName + 8) != u'l')
 	{
-		node = (*(uint8_t **)(node));
+		node = *(uint8_t **)node;
 		goto NEXT_MODULE;
 	}
 
@@ -56,17 +49,19 @@ NEXT_MODULE:
 	uint32_t numberOfNames = *(uint32_t *)(exportDirectory + 0x18);
 	uint32_t *names = (uint32_t *)(dllBaseAddress + *(uint32_t *)(exportDirectory + 0x20));
 	uint16_t *ordinals = (uint16_t *)(dllBaseAddress + *(uint32_t *)(exportDirectory + 0x24));
-	uint32_t *functions = (uint32_t *)(dllBaseAddress + *(uint32_t *)(exportDirectory + 0x1c));
+	uint32_t *functions = (uint32_t *)(dllBaseAddress + *(uint32_t *)(exportDirectory + 0x1C));
+
+	if (numberOfNames == 0) return false;
 
 	/* - - - - - - - - - - - - - - - - - - - */
 
 	uint32_t index = 0;
 
-NEXT_FUNCTION:
-	uint8_t* moduleName = dllBaseAddress + names[index];
+NEXT_FUNCTION:;
+	uint8_t *functionName = dllBaseAddress + names[index];
 
 	// if string is LdrGetProcedureAddressEx | little endian | they said msvc has no alias rule when optimizing
-	if (*(uint64_t *)moduleName == 8237211696799835212 && *(uint64_t *)(moduleName + 8) == 4712298433634198383 && *(uint64_t *)(moduleName + 16) == 8666459997404816484 && moduleName[24] == '\0')
+	if (*(uint64_t *)functionName == 0x725074654772644C && *(uint64_t *)(functionName + 8) == 0x416572756465636F && *(uint64_t *)(functionName + 16) == 0x7845737365726464 && functionName[24] == '\0')
 	{
 		uint16_t ordinal = ordinals[index];
 		uint8_t *functionAddress = dllBaseAddress + functions[ordinal];
@@ -79,9 +74,7 @@ NEXT_FUNCTION:
 		return true;
 	}
 
-	++index;
-
-	if (index < numberOfNames) goto NEXT_FUNCTION;
+	if (++index < numberOfNames) goto NEXT_FUNCTION;
 	else return false;
 }
 
