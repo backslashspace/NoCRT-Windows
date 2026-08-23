@@ -26,6 +26,7 @@ static boolean_t ResolveNtSymbols()
 	if (!LoadNtSetContextThread()) return false;
 	if (!LoadNtFreeVirtualMemory()) return false;
 	if (!LoadRtlTimeToTimeFields()) return false;
+	if (!Load__C_specific_handler()) return false;
 	if (!LoadNtSetInformationFile()) return false;
 	if (!LoadNtWaitForSingleObject()) return false;
 	if (!LoadNtQueryInformationFile()) return false;

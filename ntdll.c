@@ -1,4 +1,4 @@
-﻿#pragma message("[ntdll] v1.3.1")
+﻿#pragma message("[ntdll] v1.4.0")
 
 #include "ntdll.h"
 #include "intrinsics.h"
@@ -78,6 +78,13 @@ NEXT_FUNCTION:;
 	else return false;
 }
 
+// ░░░ Function implementations ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+EXCEPTION_DISPOSITION __C_specific_handler(EXCEPTION_RECORD *ExceptionRecord, void *EstablisherFrame, CONTEXT *ContextRecord, DISPATCHER_CONTEXT *DispatcherContext)
+{
+	return NtDll.__C_specific_handler(ExceptionRecord, EstablisherFrame, ContextRecord, DispatcherContext);
+}
+
 // ░░░ Runtime Loaders ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 #define LOAD(functionName) \
@@ -121,6 +128,7 @@ LOAD(NtOpenProcessToken)
 LOAD(NtAlertResumeThread)
 LOAD(NtFreeVirtualMemory)
 LOAD(RtlTimeToTimeFields)
+LOAD(__C_specific_handler)
 LOAD(NtUnmapViewOfSection)
 LOAD(NtSetInformationFile)
 LOAD(NtDeviceIoControlFile)

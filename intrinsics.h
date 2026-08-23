@@ -1,5 +1,5 @@
-#pragma once
-#include "types.h"
+﻿#pragma once
+#include "ntdll.h"
 
 // ░░░ Constants ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
@@ -158,7 +158,7 @@ uint64_t _InterlockedIncrement64(uint64_t volatile *lpAddend) {}
 void __cpuid(uint32_t cpuInfo[4], uint32_t function_id);
 void __cpuidex(uint32_t cpuInfo[4], uint32_t function_id, uint32_t subfunction_id);
 
-// https://learn.microsoft.com/en-us/windows/win32/api/winnt/nf-winnt-yieldprocessor
+// https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm_pause
 void _mm_pause() {}
 
 // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm_lfence
@@ -178,5 +178,15 @@ void _WriteBarrier() {}
 void _ReadWriteBarrier() {}
 // https://learn.microsoft.com/de-de/cpp/intrinsics/readbarrier?view=msvc-170
 void _ReadBarrier() {}
+
+// filter and __except
+// https://learn.microsoft.com/en-us/windows/win32/debug/getexceptioncode
+uint32_t _exception_code() {};
+// can only be used in filter
+// https://learn.microsoft.com/en-us/windows/win32/debug/getexceptioninformation
+EXCEPTION_POINTERS *_exception_info() {};
+// https://learn.microsoft.com/en-us/windows/win32/debug/abnormaltermination
+// was __finally entered by normal execution (0) or by unwinding or jumping out (1)
+bool_t _abnormal_termination() {};
 
 #endif

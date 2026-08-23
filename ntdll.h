@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "types.h"
 
 // ░░░ Definitions uses by NtXxx Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -80,21 +80,65 @@
 
 // ################# ntstatus.h #################
 
-#define STATUS_SUCCESS                   0x00000000L
-#define STATUS_UNSUCCESSFUL              0xC0000001L
-#define STATUS_INVALID_HANDLE            0xC0000008L
-#define STATUS_ACCESS_DENIED             0xC0000022L
-#define STATUS_BUFFER_TOO_SMALL          0xC0000023L
-#define STATUS_INVALID_PARAMETER         0xC000000DL
-#define STATUS_PENDING                   0x00000103L
-#define STATUS_REPARSE                   0x00000104L
-#define STATUS_TIMEOUT                   0x00000102L
-#define STATUS_MORE_ENTRIES              0x00000105L
-#define STATUS_ACCESS_VIOLATION          0xC0000005L
-#define STATUS_ALERTED                   0x00000101L
-#define STATUS_ALREADY_COMPLETE          0x000000FFL
-#define STATUS_KERNEL_APC                0x00000100L
-#define STATUS_USER_APC                  0x000000C0L
+#define STATUS_SUCCESS                    0x00000000L
+#define STATUS_UNSUCCESSFUL               0xC0000001L
+#define STATUS_INVALID_HANDLE             0xC0000008L
+#define STATUS_ACCESS_DENIED              0xC0000022L
+#define STATUS_BUFFER_TOO_SMALL           0xC0000023L
+#define STATUS_INVALID_PARAMETER          0xC000000DL
+#define STATUS_PENDING                    0x00000103L
+#define STATUS_REPARSE                    0x00000104L
+#define STATUS_TIMEOUT                    0x00000102L
+#define STATUS_MORE_ENTRIES               0x00000105L
+#define STATUS_ACCESS_VIOLATION           0xC0000005L
+#define STATUS_ALERTED                    0x00000101L
+#define STATUS_ALREADY_COMPLETE           0x000000FFL
+#define STATUS_KERNEL_APC                 0x00000100L
+#define STATUS_USER_APC                   0x000000C0L
+#define STATUS_WAIT_0                     0x00000000L 
+#define STATUS_ABANDONED_WAIT_0           0x00000080L    
+#define STATUS_SEGMENT_NOTIFICATION       0x40000005L    
+#define STATUS_FATAL_APP_EXIT             0x40000015L
+#define STATUS_GUARD_PAGE_VIOLATION       0x80000001L    
+#define STATUS_DATATYPE_MISALIGNMENT      0x80000002L    
+#define STATUS_BREAKPOINT                 0x80000003L    
+#define STATUS_SINGLE_STEP                0x80000004L    
+#define STATUS_LONGJUMP                   0x80000026L    
+#define STATUS_UNWIND_CONSOLIDATE         0x80000029L    
+#define STATUS_IN_PAGE_ERROR              0xC0000006L    
+#define STATUS_NO_MEMORY                  0xC0000017L    
+#define STATUS_ILLEGAL_INSTRUCTION        0xC000001DL    
+#define STATUS_NONCONTINUABLE_EXCEPTION   0xC0000025L    
+#define STATUS_INVALID_DISPOSITION        0xC0000026L    
+#define STATUS_ARRAY_BOUNDS_EXCEEDED      0xC000008CL    
+#define STATUS_FLOAT_DENORMAL_OPERAND     0xC000008DL    
+#define STATUS_FLOAT_DIVIDE_BY_ZERO       0xC000008EL    
+#define STATUS_FLOAT_INEXACT_RESULT       0xC000008FL    
+#define STATUS_FLOAT_INVALID_OPERATION    0xC0000090L    
+#define STATUS_FLOAT_OVERFLOW             0xC0000091L    
+#define STATUS_FLOAT_STACK_CHECK          0xC0000092L    
+#define STATUS_FLOAT_UNDERFLOW            0xC0000093L    
+#define STATUS_INTEGER_DIVIDE_BY_ZERO     0xC0000094L    
+#define STATUS_INTEGER_OVERFLOW           0xC0000095L    
+#define STATUS_PRIVILEGED_INSTRUCTION     0xC0000096L    
+#define STATUS_STACK_OVERFLOW             0xC00000FDL    
+#define STATUS_DLL_NOT_FOUND              0xC0000135L    
+#define STATUS_ORDINAL_NOT_FOUND          0xC0000138L    
+#define STATUS_ENTRYPOINT_NOT_FOUND       0xC0000139L    
+#define STATUS_CONTROL_C_EXIT             0xC000013AL    
+#define STATUS_DLL_INIT_FAILED            0xC0000142L    
+#define STATUS_CONTROL_STACK_VIOLATION    0xC00001B2L    
+#define STATUS_FLOAT_MULTIPLE_FAULTS      0xC00002B4L    
+#define STATUS_FLOAT_MULTIPLE_TRAPS       0xC00002B5L    
+#define STATUS_REG_NAT_CONSUMPTION        0xC00002C9L    
+#define STATUS_HEAP_CORRUPTION            0xC0000374L    
+#define STATUS_STACK_BUFFER_OVERRUN       0xC0000409L    
+#define STATUS_INVALID_CRUNTIME_PARAMETER 0xC0000417L    
+#define STATUS_ASSERTION_FAILURE          0xC0000420L    
+#define STATUS_ENCLAVE_VIOLATION          0xC00004A2L    
+#define STATUS_INTERRUPTED                0xC0000515L    
+#define STATUS_THREAD_NOT_RUNNING         0xC0000516L    
+#define STATUS_ALREADY_REGISTERED         0xC0000718L   
 
 // ################# ntdef.h #################
 
@@ -320,8 +364,7 @@
 #define TOKEN_ADJUST_DEFAULT    (0x0080)
 #define TOKEN_ADJUST_SESSIONID  (0x0100)
 
-
-
+#define UNWIND_HISTORY_TABLE_SIZE 12
 
 #define TOKEN_ALL_ACCESS_P (STANDARD_RIGHTS_REQUIRED  |\
 						  TOKEN_ASSIGN_PRIMARY      |\
@@ -357,9 +400,93 @@
 									TOKEN_DUPLICATE              |\
 									TOKEN_IMPERSONATE)
 
+// Defined values for the exception filter expression
+#define EXCEPTION_EXECUTE_HANDLER      1
+#define EXCEPTION_CONTINUE_SEARCH      0
+#define EXCEPTION_CONTINUE_EXECUTION (-1)
 
+#define EXCEPTION_MAXIMUM_PARAMETERS 15 // maximum number of exception parameters
+
+/*lint -save -e767 */  
+#define DBG_EXCEPTION_HANDLED            ((uint32_t)0x00010001L)    
+#define DBG_CONTINUE                     ((uint32_t)0x00010002L)    
+#define DBG_REPLY_LATER                  ((uint32_t)0x40010001L)    
+#define DBG_TERMINATE_THREAD             ((uint32_t)0x40010003L)    
+#define DBG_TERMINATE_PROCESS            ((uint32_t)0x40010004L)    
+#define DBG_CONTROL_C                    ((uint32_t)0x40010005L)    
+#define DBG_PRINTEXCEPTION_C             ((uint32_t)0x40010006L)    
+#define DBG_RIPEXCEPTION                 ((uint32_t)0x40010007L)    
+#define DBG_CONTROL_BREAK                ((uint32_t)0x40010008L)    
+#define DBG_COMMAND_EXCEPTION            ((uint32_t)0x40010009L)    
+#define DBG_PRINTEXCEPTION_WIDE_C        ((uint32_t)0x4001000AL)    
+#define DBG_EXCEPTION_NOT_HANDLED        ((uint32_t)0x80010001L)    
+
+/* compatibility macros */
+#define STILL_ACTIVE                        STATUS_PENDING
+#define EXCEPTION_ACCESS_VIOLATION          STATUS_ACCESS_VIOLATION
+#define EXCEPTION_DATATYPE_MISALIGNMENT     STATUS_DATATYPE_MISALIGNMENT
+#define EXCEPTION_BREAKPOINT                STATUS_BREAKPOINT
+#define EXCEPTION_SINGLE_STEP               STATUS_SINGLE_STEP
+#define EXCEPTION_ARRAY_BOUNDS_EXCEEDED     STATUS_ARRAY_BOUNDS_EXCEEDED
+#define EXCEPTION_FLT_DENORMAL_OPERAND      STATUS_FLOAT_DENORMAL_OPERAND
+#define EXCEPTION_FLT_DIVIDE_BY_ZERO        STATUS_FLOAT_DIVIDE_BY_ZERO
+#define EXCEPTION_FLT_INEXACT_RESULT        STATUS_FLOAT_INEXACT_RESULT
+#define EXCEPTION_FLT_INVALID_OPERATION     STATUS_FLOAT_INVALID_OPERATION
+#define EXCEPTION_FLT_OVERFLOW              STATUS_FLOAT_OVERFLOW
+#define EXCEPTION_FLT_STACK_CHECK           STATUS_FLOAT_STACK_CHECK
+#define EXCEPTION_FLT_UNDERFLOW             STATUS_FLOAT_UNDERFLOW
+#define EXCEPTION_INT_DIVIDE_BY_ZERO        STATUS_INTEGER_DIVIDE_BY_ZERO
+#define EXCEPTION_INT_OVERFLOW              STATUS_INTEGER_OVERFLOW
+#define EXCEPTION_PRIV_INSTRUCTION          STATUS_PRIVILEGED_INSTRUCTION
+#define EXCEPTION_IN_PAGE_ERROR             STATUS_IN_PAGE_ERROR
+#define EXCEPTION_ILLEGAL_INSTRUCTION       STATUS_ILLEGAL_INSTRUCTION
+#define EXCEPTION_NONCONTINUABLE_EXCEPTION  STATUS_NONCONTINUABLE_EXCEPTION
+#define EXCEPTION_STACK_OVERFLOW            STATUS_STACK_OVERFLOW
+#define EXCEPTION_INVALID_DISPOSITION       STATUS_INVALID_DISPOSITION
+#define EXCEPTION_GUARD_PAGE                STATUS_GUARD_PAGE_VIOLATION
+#define EXCEPTION_INVALID_HANDLE            STATUS_INVALID_HANDLE
+#define CONTROL_C_EXIT                      STATUS_CONTROL_C_EXIT
 
 // ░░░ Structs uses by NtXxx Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+typedef struct EXCEPTION_RECORD
+{
+	uint32_t ExceptionCode;
+	uint32_t ExceptionFlags;
+	struct EXCEPTION_RECORD *ExceptionRecord;
+	void *ExceptionAddress;
+	uint32_t NumberParameters;
+	uint64_t ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
+} EXCEPTION_RECORD;
+
+typedef struct IMAGE_RUNTIME_FUNCTION_ENTRY
+{
+	uint32_t BeginAddress;
+	uint32_t EndAddress;
+	union
+	{
+		uint32_t UnwindInfoAddress;
+		uint32_t UnwindData;
+	} DUMMYUNIONNAME;
+} IMAGE_RUNTIME_FUNCTION_ENTRY;
+
+typedef struct UNWIND_HISTORY_TABLE_ENTRY
+{
+	uint64_t ImageBase;
+	IMAGE_RUNTIME_FUNCTION_ENTRY *FunctionEntry;
+} UNWIND_HISTORY_TABLE_ENTRY;
+
+typedef struct UNWIND_HISTORY_TABLE
+{
+	uint32_t Count;
+	uint8_t  LocalHint;
+	uint8_t  GlobalHint;
+	uint8_t  Search;
+	uint8_t  Once;
+	uint64_t LowAddress;
+	uint64_t HighAddress;
+	UNWIND_HISTORY_TABLE_ENTRY Entry[UNWIND_HISTORY_TABLE_SIZE];
+} UNWIND_HISTORY_TABLE;
 
 // https://learn.microsoft.com/en-us/windows/win32/api/subauth/ns-subauth-unicode_string
 typedef struct UNICODE_STRING
@@ -590,6 +717,36 @@ __declspec(align(16)) typedef struct CONTEXT
 	uint64_t LastExceptionToRip;
 	uint64_t LastExceptionFromRip;
 } CONTEXT;
+
+typedef struct EXCEPTION_POINTERS
+{
+	EXCEPTION_RECORD *ExceptionRecord;
+	CONTEXT *ContextRecord;
+} EXCEPTION_POINTERS;
+
+// excpt.h
+typedef enum EXCEPTION_DISPOSITION
+{
+	ExceptionContinueExecution,
+	ExceptionContinueSearch,
+	ExceptionNestedException,
+	ExceptionCollidedUnwind
+} EXCEPTION_DISPOSITION;
+
+typedef struct DISPATCHER_CONTEXT
+{
+	uint64_t ControlPc;
+	uint64_t ImageBase;
+	IMAGE_RUNTIME_FUNCTION_ENTRY *FunctionEntry;
+	uint64_t EstablisherFrame;
+	uint64_t TargetIp;
+	CONTEXT *ContextRecord;
+	EXCEPTION_DISPOSITION(*LanguageHandler)(EXCEPTION_RECORD *ExceptionRecord, void *EstablisherFrame, CONTEXT *ContextRecord, void *DispatcherContext);
+	void *HandlerData;
+	UNWIND_HISTORY_TABLE *HistoryTable;
+	uint32_t ScopeIndex;
+	uint32_t Fill0;
+} DISPATCHER_CONTEXT;
 
 // https://ntdoc.m417z.com/thread_name_information
 typedef struct THREAD_NAME_INFORMATION
@@ -1404,12 +1561,20 @@ boolean_t LoadNtAllocateVirtualMemory();
 boolean_t LoadRtlUnicodeToUTF8N();
 boolean_t LoadRtlTimeToTimeFields();
 
+boolean_t Load__C_specific_handler();
+
 // ░░░ Callbacks ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 // https://ntdoc.m417z.com/io_apc_routine
-typedef void (*IO_APC_ROUTINE_t) (void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t Reserved);
+typedef void (*io_apc_routine_t)(void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t Reserved);
+
+// https://ntdoc.m417z.com/io_apc_routine
+typedef EXCEPTION_DISPOSITION(*exception_routine_t)(EXCEPTION_RECORD *ExceptionRecord, void *EstablisherFrame, CONTEXT *ContextRecord, void *DispatcherContext);
 
 // ░░░ NtXxx Function Typedefs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+// https://learn.microsoft.com/en-us/windows/win32/devnotes/--c-specific-handler2
+typedef EXCEPTION_DISPOSITION(*__C_specific_handler_t)(EXCEPTION_RECORD *ExceptionRecord, void *EstablisherFrame, CONTEXT *ContextRecord, DISPATCHER_CONTEXT *DispatcherContext);
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntcreatesection
 typedef NtStatus(*NtCreateSection_t)(Handle *SectionHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, uint64_t *MaximumSize, uint32_t SectionPageProtection, uint32_t AllocationAttributes, Handle FileHandle);
@@ -1442,7 +1607,7 @@ typedef NtStatus(*LdrGetDllHandleEx_t)(uint32_t Flags, wchar_t *DllPath, uint32_
 typedef NtStatus(*NtQueryObject_t)(Handle Handle, OBJECT_INFORMATION_CLASS ObjectInformationClass, void *ObjectInformation, uint32_t ObjectInformationLength, uint32_t *ReturnLength);
 
 // https://learn.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntdeviceiocontrolfile
-typedef NtStatus(*NtDeviceIoControlFile_t)(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t IoControlCode, void *InputBuffer, uint32_t InputBufferLength, void *OutputBuffer, uint32_t OutputBufferLength);
+typedef NtStatus(*NtDeviceIoControlFile_t)(Handle FileHandle, Handle Event, io_apc_routine_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t IoControlCode, void *InputBuffer, uint32_t InputBufferLength, void *OutputBuffer, uint32_t OutputBufferLength);
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntqueryinformationfile
 typedef NtStatus(*NtQueryInformationFile_t)(Handle FileHandle, IO_STATUS_BLOCK *IoStatusBlock, void *FileInformation, uint32_t Length, FILE_INFORMATION_CLASS FileInformationClass);
@@ -1496,10 +1661,10 @@ typedef void(*RtlTimeToTimeFields_t)(uint64_t *Time, TIME_FIELDS *TimeFields);
 typedef NtStatus(*RtlUnicodeToUTF8N_t)(char_t *UTF8StringDestination, uint32_t UTF8StringMaxByteCount, uint32_t *UTF8StringActualByteCount, wchar_t const *UnicodeStringSource, uint32_t UnicodeStringByteCount);
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntwritefile
-typedef NtStatus(*NtWriteFile_t)(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key);
+typedef NtStatus(*NtWriteFile_t)(Handle FileHandle, Handle Event, io_apc_routine_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key);
 
 // https://learn.microsoft.com/en-us/windows/win32/devnotes/ntreadfile
-typedef NtStatus(*NtReadFile_t)(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key);
+typedef NtStatus(*NtReadFile_t)(Handle FileHandle, Handle Event, io_apc_routine_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key);
 
 // https://ntdoc.m417z.com/ntterminateprocess
 typedef NtStatus(*NtTerminateProcess_t)(Handle ProcessHandle, NtStatus ExitStatus);
@@ -1562,6 +1727,7 @@ struct NtDllFunctions
 	NtAlertResumeThread_t NtAlertResumeThread;
 	NtFreeVirtualMemory_t NtFreeVirtualMemory;
 	RtlTimeToTimeFields_t RtlTimeToTimeFields;
+	__C_specific_handler_t __C_specific_handler;
 	NtSetInformationFile_t NtSetInformationFile;
 	NtUnmapViewOfSection_t NtUnmapViewOfSection;
 	NtDeviceIoControlFile_t NtDeviceIoControlFile;
@@ -1583,12 +1749,12 @@ extern struct NtDllFunctions NtDll;
 
 static __forceinline NtStatus NtClose(Handle Handle) { return NtDll.NtClose(Handle); }
 static __forceinline NtStatus NtOpenFile(Handle *FileHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, IO_STATUS_BLOCK *IoStatusBlock, uint32_t ShareAccess, uint32_t OpenOptions) { return NtDll.NtOpenFile(FileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, ShareAccess, OpenOptions); }
-static __forceinline NtStatus NtReadFile(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key) { return NtDll.NtReadFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key); }
-static __forceinline NtStatus NtWriteFile(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key) { return NtDll.NtWriteFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key); }
+static __forceinline NtStatus NtReadFile(Handle FileHandle, Handle Event, io_apc_routine_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key) { return NtDll.NtReadFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key); }
+static __forceinline NtStatus NtWriteFile(Handle FileHandle, Handle Event, io_apc_routine_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, void *Buffer, uint32_t Length, uint64_t *ByteOffset, uint32_t *Key) { return NtDll.NtWriteFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, Buffer, Length, ByteOffset, Key); }
 static __forceinline NtStatus NtCreateFile(Handle *FileHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, IO_STATUS_BLOCK *IoStatusBlock, uint64_t *AllocationSize, uint32_t FileAttributes, uint32_t ShareAccess, uint32_t CreateDisposition, uint32_t CreateOptions, void *EaBuffer, uint32_t EaLength) { return NtDll.NtCreateFile(FileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, AllocationSize, FileAttributes, ShareAccess, CreateDisposition, CreateOptions, EaBuffer, EaLength); }
 
 static __forceinline NtStatus NtQueryObject(Handle Handle, OBJECT_INFORMATION_CLASS ObjectInformationClass, void *ObjectInformation, uint32_t ObjectInformationLength, uint32_t *ReturnLength) { return NtDll.NtQueryObject(Handle, ObjectInformationClass, ObjectInformation, ObjectInformationLength, ReturnLength); }
-static __forceinline NtStatus NtDeviceIoControlFile(Handle FileHandle, Handle Event, IO_APC_ROUTINE_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t IoControlCode, void *InputBuffer, uint32_t InputBufferLength, void *OutputBuffer, uint32_t OutputBufferLength) { return NtDll.NtDeviceIoControlFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, IoControlCode, InputBuffer, InputBufferLength, OutputBuffer, OutputBufferLength); }
+static __forceinline NtStatus NtDeviceIoControlFile(Handle FileHandle, Handle Event, io_apc_routine_t ApcRoutine, void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t IoControlCode, void *InputBuffer, uint32_t InputBufferLength, void *OutputBuffer, uint32_t OutputBufferLength) { return NtDll.NtDeviceIoControlFile(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, IoControlCode, InputBuffer, InputBufferLength, OutputBuffer, OutputBufferLength); }
 static __forceinline NtStatus NtSetInformationFile(Handle FileHandle, IO_STATUS_BLOCK *IoStatusBlock, void *FileInformation, uint32_t Length, FILE_INFORMATION_CLASS FileInformationClass) { return NtDll.NtSetInformationFile(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass); }
 static __forceinline NtStatus NtQueryInformationFile(Handle FileHandle, IO_STATUS_BLOCK *IoStatusBlock, void *FileInformation, uint32_t Length, FILE_INFORMATION_CLASS FileInformationClass) { return NtDll.NtQueryInformationFile(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass); }
 
@@ -1625,6 +1791,9 @@ static __forceinline NtStatus NtProtectVirtualMemory(Handle ProcessHandle, void 
 static __forceinline NtStatus NtAllocateVirtualMemory(Handle ProcessHandle, void **BaseAddress, uint64_t ZeroBits, uint64_t *RegionSize, uint32_t AllocationType, uint32_t Protect) { return NtDll.NtAllocateVirtualMemory(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect); }
 static __forceinline NtStatus LdrGetProcedureAddressEx(Handle DllHandle, STRING const *ProcedureName, uint32_t ProcedureNumber, void **ProcedureAddress, uint32_t Flags) { return NtDll.LdrGetProcedureAddressEx(DllHandle, ProcedureName, ProcedureNumber, ProcedureAddress, Flags); }
 
-
 static __forceinline void RtlTimeToTimeFields(uint64_t *Time, TIME_FIELDS *TimeFields) { NtDll.RtlTimeToTimeFields(Time, TimeFields); }
 static __forceinline NtStatus RtlUnicodeToUTF8N(char_t *UTF8StringDestination, uint32_t UTF8StringMaxByteCount, uint32_t * UTF8StringActualByteCount, wchar_t const *UnicodeStringSource, uint32_t UnicodeStringByteCount) { return NtDll.RtlUnicodeToUTF8N(UTF8StringDestination, UTF8StringMaxByteCount, UTF8StringActualByteCount, UnicodeStringSource, UnicodeStringByteCount); }
+
+// ░░░ Normal implementations ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+EXCEPTION_DISPOSITION __C_specific_handler(EXCEPTION_RECORD *ExceptionRecord, void *EstablisherFrame, CONTEXT *ContextRecord, DISPATCHER_CONTEXT *DispatcherContext);

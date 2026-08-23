@@ -10,8 +10,43 @@
 
 /* ------------------------------------------------------------------------------------- */
 
+int32_t Filter(EXCEPTION_POINTERS *ep)
+{
+	//ep->ExceptionRecord->ExceptionFlags
+
+	_mm_pause();
+	//*(uint32_t *)(ep->ContextRecord->Rbp) = 4;
+	return 1;
+}
+
 static void Test()
 {
+
+	__try
+	{
+		__try
+		{
+			int ddd = 2 - 2;
+
+			int a = 44 / ddd;
+
+			int sd = a + 4;
+		}
+		__finally
+		{
+			unsigned int test = _abnormal_termination();
+			test = +2;
+		}
+	}
+	__except (Filter(_exception_info()))
+	{
+		_mm_pause();
+	}
+
+
+
+
+
 	//UNICODE_STRING unicodeString;
 	//unicodeString.Length = 53 << 1;
 	//unicodeString.MaximumLength = 54 << 1;
