@@ -1,5 +1,7 @@
-﻿// Microsoft Visual C++ generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
+#pragma code_page(65001)
+
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
@@ -17,7 +19,6 @@
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
-#pragma code_page(1252)
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -71,7 +72,7 @@ BEGIN
             VALUE "FileDescription", "Freestanding Windows Baseline "
             VALUE "FileVersion", "1.0.0.0"
             VALUE "InternalName", "Base-Test.exe"
-            VALUE "LegalCopyright", "GNU GENERAL PUBLIC LICENSE Version 2, June 1991"
+            VALUE "LegalCopyright", "Copyright © 2026 backslashspace. All rights reserved."
             VALUE "OriginalFilename", "Base-Test.exe"
             VALUE "ProductName", "NoCRT Windows Test App"
             VALUE "ProductVersion", "1.0.0.0"
