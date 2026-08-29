@@ -1,4 +1,4 @@
-﻿#pragma message("[ntdll] v1.4.0")
+﻿#pragma message("[ntdll] v1.5.0")
 
 #include "ntdll.h"
 #include "intrinsics.h"
@@ -27,7 +27,7 @@ NEXT_MODULE:
 	uint16_t nameLengthBytes = *(uint16_t *)(node + 0x58);
 	wchar_t *baseDllName = *(wchar_t **)(node + 0x60);
 
-	// if string is ntdll.dll | little endian | they said msvc has no alias rule when optimizing
+	// if string is ntdll.dll | little endian | don't use strict aliasing
 	if (nameLengthBytes != 18 || *((uint64_t *)baseDllName) != 0x6C00640074006E || *((uint64_t *)(baseDllName + 4)) != 0x6C0064002E006C || *(baseDllName + 8) != u'l')
 	{
 		node = *(uint8_t **)node;
@@ -60,7 +60,7 @@ NEXT_MODULE:
 NEXT_FUNCTION:;
 	uint8_t *functionName = dllBaseAddress + names[index];
 
-	// if string is LdrGetProcedureAddressEx | little endian | they said msvc has no alias rule when optimizing
+	// if string is LdrGetProcedureAddressEx | little endian | don't use strict aliasing
 	if (*(uint64_t *)functionName == 0x725074654772644C && *(uint64_t *)(functionName + 8) == 0x416572756465636F && *(uint64_t *)(functionName + 16) == 0x7845737365726464 && functionName[24] == '\0')
 	{
 		uint16_t ordinal = ordinals[index];
@@ -141,3 +141,8 @@ LOAD(NtQueryInformationToken)
 LOAD(NtAllocateVirtualMemory)
 LOAD(NtSetInformationProcess)
 LOAD(NtQuerySystemInformation)
+LOAD(RtlAddVectoredContinueHandler)
+LOAD(RtlAddVectoredExceptionHandler)
+LOAD(RtlSetUnhandledExceptionFilter)
+LOAD(RtlRemoveVectoredContinueHandler)
+LOAD(RtlRemoveVectoredExceptionHandler)

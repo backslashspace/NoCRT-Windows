@@ -1562,8 +1562,13 @@ boolean_t LoadRtlUnicodeToUTF8N();
 boolean_t LoadRtlTimeToTimeFields();
 
 boolean_t Load__C_specific_handler();
+boolean_t LoadRtlAddVectoredContinueHandler();
+boolean_t LoadRtlSetUnhandledExceptionFilter();
+boolean_t LoadRtlAddVectoredExceptionHandler();
+boolean_t LoadRtlRemoveVectoredContinueHandler();
+boolean_t LoadRtlRemoveVectoredExceptionHandler();
 
-// ░░░ Callbacks ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+// ░░░ Callbacks / Parameter Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 // https://ntdoc.m417z.com/io_apc_routine
 typedef void (*io_apc_routine_t)(void *ApcContext, IO_STATUS_BLOCK *IoStatusBlock, uint32_t Reserved);
@@ -1571,10 +1576,29 @@ typedef void (*io_apc_routine_t)(void *ApcContext, IO_STATUS_BLOCK *IoStatusBloc
 // https://ntdoc.m417z.com/io_apc_routine
 typedef EXCEPTION_DISPOSITION(*exception_routine_t)(EXCEPTION_RECORD *ExceptionRecord, void *EstablisherFrame, CONTEXT *ContextRecord, void *DispatcherContext);
 
+// https://ntdoc.m417z.com/rtlp_unhandled_exception_filter
+// https://learn.microsoft.com/en-us/windows/win32/api/winnt/nc-winnt-pvectored_exception_handler
+typedef int32_t(*exception_handler_t)(EXCEPTION_POINTERS *ExceptionInfo);
+
 // ░░░ NtXxx Function Typedefs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 // https://learn.microsoft.com/en-us/windows/win32/devnotes/--c-specific-handler2
 typedef EXCEPTION_DISPOSITION(*__C_specific_handler_t)(EXCEPTION_RECORD *ExceptionRecord, void *EstablisherFrame, CONTEXT *ContextRecord, DISPATCHER_CONTEXT *DispatcherContext);
+
+// https://ntdoc.m417z.com/rtlsetunhandledexceptionfilter
+typedef void (*RtlSetUnhandledExceptionFilter_t)(exception_handler_t UnhandledExceptionFilter);
+
+// https://ntdoc.m417z.com/rtladdvectoredexceptionhandler
+typedef void *(*RtlAddVectoredExceptionHandler_t)(bool_t First, exception_handler_t Handler);
+
+// https://ntdoc.m417z.com/rtladdvectoredcontinuehandler
+typedef void *(*RtlAddVectoredContinueHandler_t)(bool_t First, exception_handler_t Handler);
+
+// https://ntdoc.m417z.com/rtlremovevectoredcontinuehandler
+typedef int32_t(*RtlRemoveVectoredContinueHandler_t)(exception_handler_t Handler);
+
+// https://ntdoc.m417z.com/rtlremovevectoredexceptionhandler
+typedef int32_t(*RtlRemoveVectoredExceptionHandler_t)(exception_handler_t Handler);
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntcreatesection
 typedef NtStatus(*NtCreateSection_t)(Handle *SectionHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes, uint64_t *MaximumSize, uint32_t SectionPageProtection, uint32_t AllocationAttributes, Handle FileHandle);
@@ -1741,6 +1765,11 @@ struct NtDllFunctions
 	NtSetInformationProcess_t NtSetInformationProcess;
 	NtQuerySystemInformation_t NtQuerySystemInformation;
 	LdrGetProcedureAddressEx_t LdrGetProcedureAddressEx;
+	RtlAddVectoredContinueHandler_t RtlAddVectoredContinueHandler;
+	RtlSetUnhandledExceptionFilter_t RtlSetUnhandledExceptionFilter;
+	RtlAddVectoredExceptionHandler_t RtlAddVectoredExceptionHandler;
+	RtlRemoveVectoredContinueHandler_t RtlRemoveVectoredContinueHandler;
+	RtlRemoveVectoredExceptionHandler_t RtlRemoveVectoredExceptionHandler;
 };
 
 extern struct NtDllFunctions NtDll;
@@ -1793,6 +1822,12 @@ static __forceinline NtStatus LdrGetProcedureAddressEx(Handle DllHandle, STRING 
 
 static __forceinline void RtlTimeToTimeFields(uint64_t *Time, TIME_FIELDS *TimeFields) { NtDll.RtlTimeToTimeFields(Time, TimeFields); }
 static __forceinline NtStatus RtlUnicodeToUTF8N(char_t *UTF8StringDestination, uint32_t UTF8StringMaxByteCount, uint32_t * UTF8StringActualByteCount, wchar_t const *UnicodeStringSource, uint32_t UnicodeStringByteCount) { return NtDll.RtlUnicodeToUTF8N(UTF8StringDestination, UTF8StringMaxByteCount, UTF8StringActualByteCount, UnicodeStringSource, UnicodeStringByteCount); }
+
+static __forceinline void RtlSetUnhandledExceptionFilter(exception_handler_t UnhandledExceptionFilter) { NtDll.RtlSetUnhandledExceptionFilter(UnhandledExceptionFilter); }
+static __forceinline void *RtlAddVectoredContinueHandler(bool_t First, exception_handler_t Handler) { return NtDll.RtlAddVectoredContinueHandler(First, Handler); }
+static __forceinline void *RtlAddVectoredExceptionHandler(bool_t First, exception_handler_t Handler) { return NtDll.RtlAddVectoredExceptionHandler(First, Handler); }
+static __forceinline int32_t RtlRemoveVectoredContinueHandler(exception_handler_t Handler) { return NtDll.RtlRemoveVectoredContinueHandler(Handler); }
+static __forceinline int32_t RtlRemoveVectoredExceptionHandler(exception_handler_t Handler) { return NtDll.RtlRemoveVectoredExceptionHandler(Handler); }
 
 // ░░░ Normal implementations ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 

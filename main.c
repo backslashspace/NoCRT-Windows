@@ -10,17 +10,71 @@
 
 /* ------------------------------------------------------------------------------------- */
 
-int32_t Filter(EXCEPTION_POINTERS *ep)
+int32_t VectorHandler(EXCEPTION_POINTERS *ExceptionInfo)
 {
 	//ep->ExceptionRecord->ExceptionFlags
 
 	_mm_pause();
 	//*(uint32_t *)(ep->ContextRecord->Rbp) = 4;
-	return 1;
+	return EXCEPTION_CONTINUE_SEARCH;
+}
+
+int32_t SEHFilter(EXCEPTION_POINTERS *ep)
+{
+	//ep->ExceptionRecord->ExceptionFlags
+
+	_mm_pause();
+	//*(uint32_t *)(ep->ContextRecord->Rbp) = 4;
+	return EXCEPTION_CONTINUE_SEARCH;
+}
+
+int32_t VectorContinueHandler(EXCEPTION_POINTERS *ExceptionInfo)
+{
+	//ep->ExceptionRecord->ExceptionFlags
+
+	_mm_pause();
+	//*(uint32_t *)(ep->ContextRecord->Rbp) = 4;
+	return EXCEPTION_CONTINUE_SEARCH;
+}
+
+int32_t VectorContinueHandler2(EXCEPTION_POINTERS *ExceptionInfo)
+{
+	//ep->ExceptionRecord->ExceptionFlags
+
+	_mm_pause();
+	//*(uint32_t *)(ep->ContextRecord->Rbp) = 4;
+	return EXCEPTION_CONTINUE_SEARCH;
+}
+
+int32_t UnhandledSEHFilter(EXCEPTION_POINTERS *ExceptionInfo)
+{
+	//ep->ExceptionRecord->ExceptionFlags
+
+	_mm_pause();
+	//*(uint32_t *)(ep->ContextRecord->Rbp) = 4;
+	return EXCEPTION_CONTINUE_EXECUTION;
 }
 
 static void Test()
 {
+	RtlSetUnhandledExceptionFilter(&UnhandledSEHFilter);
+
+	if (!RtlAddVectoredExceptionHandler(false, &VectorHandler))
+	{
+		__fastfail(1);
+	}
+
+	if (!RtlAddVectoredContinueHandler(false, &VectorContinueHandler))
+	{
+		__fastfail(1);
+	}
+
+	if (!RtlAddVectoredContinueHandler(false, &VectorContinueHandler2))
+	{
+		__fastfail(1);
+	}
+
+	// seh
 
 	__try
 	{
@@ -38,12 +92,12 @@ static void Test()
 			test = +2;
 		}
 	}
-	__except (Filter(_exception_info()))
+	__except (SEHFilter(_exception_info()))
 	{
 		_mm_pause();
 	}
 
-
+	_mm_pause();
 
 
 

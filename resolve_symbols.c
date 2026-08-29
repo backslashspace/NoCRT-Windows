@@ -34,6 +34,11 @@ static boolean_t ResolveNtSymbols()
 	if (!LoadNtAllocateVirtualMemory()) return false;
 	if (!LoadNtAdjustPrivilegesToken()) return false;
 	if (!LoadNtQueryInformationToken()) return false;
+	if (!LoadRtlAddVectoredContinueHandler()) return false;
+	if (!LoadRtlAddVectoredExceptionHandler()) return false;
+	if (!LoadRtlSetUnhandledExceptionFilter()) return false;
+	if (!LoadRtlRemoveVectoredContinueHandler()) return false;
+	if (!LoadRtlRemoveVectoredExceptionHandler()) return false;
 
 	return true;
 }
