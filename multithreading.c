@@ -1,11 +1,13 @@
 ﻿#include "ntdll.h"
 #include "console.h"
+#include "testing.h"
 #include "intrinsics.h"
 
 typedef struct THREAD_START_PARAMETER
 {
 	NtTerminateThread_t NtTerminateThread;
 	void *StackBase; // base is bottom of buffer - stack grows down - StackBase = buffer + bufferSize - must be 16 byte aligned
+	void *StackLimit; // the allocation pointer
 	uint64_t Argument;
 	uint64_t volatile Flag;	// will turn non 0 when entry stub is reached
 	NtStatus (*ThreadMain)(void *argument);
@@ -29,8 +31,12 @@ NtStatus TestThreadMain(void *argument)
 	ConsoleWrite("[WORKER] Message from worker thread: argument was ");
 	ConsoleWrite(string + 20 - length);
 
-	return status;
+	TestExceptions();
+
+	return 420;
 }
+
+// ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 #define STACK_SIZE (2 * 1'024 * 1'024)
 
@@ -53,6 +59,7 @@ boolean_t Multithreading()
 	threadStartParameter.Flag = 0;
 	threadStartParameter.Argument = 42067;	
 	threadStartParameter.StackBase = threadStack + STACK_SIZE;
+	threadStartParameter.StackLimit = threadStack;
 	threadStartParameter.NtTerminateThread = NtDll.NtTerminateThread;
 	if (STATUS_SUCCESS != NtCreateThreadEx(&threadHandle, THREAD_ALL_ACCESS, null, (Handle)-1i64, &ThreadEntry, &threadStartParameter, THREAD_CREATE_FLAGS_SKIP_THREAD_ATTACH | THREAD_CREATE_FLAGS_CREATE_SUSPENDED, 0, 4096, 4096, null))
 	{
@@ -61,9 +68,9 @@ boolean_t Multithreading()
 	}
 	ConsoleWrite("[MAIN] Starting worker thread\n");
 
-	//_mm_lfence();
-	//uint64_t now = __rdtsc();
-	//_mm_lfence();
+	_mm_lfence();
+	uint64_t now = __rdtsc();
+	_mm_lfence();
 
 	if (STATUS_SUCCESS != NtResumeThread(threadHandle, null))
 	{
@@ -73,7 +80,7 @@ boolean_t Multithreading()
 
 	// wait for thread to consume THREAD_START_PARAMETER
 	while (!threadStartParameter.Flag) _mm_pause();
-	// returning is safe now - since THREAD_START_PARAMETER was on the stack
+	// returning is safe now - since THREAD_START_PARAMETER was already read
 
 	if (STATUS_SUCCESS != NtWaitForSingleObject(threadHandle, false, null))
 	{

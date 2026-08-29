@@ -1,4 +1,4 @@
-#include "console.h"
+﻿#include "console.h"
 #include "intrinsics.h"
 
 typedef union CPUID_FIELDS
@@ -162,8 +162,12 @@ typedef union CPUID_FIELDS
 } CPUID_FIELDS;
 _Static_assert(sizeof(CPUID_FIELDS) == 16, "CPUID_FIELDS was NOT 16 bytes.");
 
+// ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
 void PrintCPUIDInformation()
 {
+	ConsoleWrite("# CPU ID\n\n");
+
 	char_t processorName[49];
 	char_t vendorString[13];
 
@@ -238,8 +242,6 @@ void PrintCPUIDInformation()
 
 	// ---------------------------------------------------------------------
 
-	ConsoleWrite("# CPU Features\n\n");
-
 	ConsoleWrite("Vendor: ");
 	ConsoleWrite(vendorString);
 	ConsoleWrite("\nModel name: ");
@@ -270,5 +272,5 @@ void PrintCPUIDInformation()
 		else ConsoleWrite("MonitorX interrupt eFLAGS ignore NOT supported\n");
 	}
 
-	ConsoleWrite("\n");
+	ConsoleWrite("\n----------------------------------------------------------------\n\n");
 }

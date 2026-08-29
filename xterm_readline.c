@@ -1,4 +1,4 @@
-#include "ntdll.h"
+﻿#include "ntdll.h"
 #include "console.h"
 #include "utility.h"
 #include "intrinsics.h"
@@ -23,7 +23,7 @@ static __forceinline boolean_t ConsumeUnhandled(READ_LINE_CONTEXT *const context
 {
 	uint8_t controlCharacter;
 READ_NEXT:
-	if (NtReadFile(ProcessInformation.StandardInput, null, null, null, &context->IoStatusBlock, &controlCharacter, 1, null, null)) return false;
+	if (NtReadFile(OwnProcessInformation.StandardInput, null, null, null, &context->IoStatusBlock, &controlCharacter, 1, null, null)) return false;
 	if (controlCharacter >= 0x40 && 0x7E >= controlCharacter) return true;
 	else goto READ_NEXT;
 }
@@ -35,7 +35,7 @@ static boolean_t HandleCSI(READ_LINE_CONTEXT *const context)
 	__stosb(escapeBuffer, 0, 32);
 
 READ_NEXT:
-	if (escapeIndex == 31 || NtReadFile(ProcessInformation.StandardInput, null, null, null, &context->IoStatusBlock, escapeBuffer + escapeIndex, 1, null, null)) return false;
+	if (escapeIndex == 31 || NtReadFile(OwnProcessInformation.StandardInput, null, null, null, &context->IoStatusBlock, escapeBuffer + escapeIndex, 1, null, null)) return false;
 	if (escapeBuffer[escapeIndex] < 0x40 || 0x7E < escapeBuffer[escapeIndex])
 	{
 		++escapeIndex;
@@ -47,12 +47,12 @@ READ_NEXT:
 	case 'D': // arrow left
 		if (context->Position < 1) return true;
 		--context->Position;
-		return !NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\x1b[D", 3, null, null);
+		return !NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\x1b[D", 3, null, null);
 
 	case 'C': // arrow right
 		if (context->Position + 1 > context->WrittenBytes) return true;
 		++context->Position;
-		return !NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\x1b[C", 3, null, null);
+		return !NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\x1b[C", 3, null, null);
 
 	case '2': // insert
 		if (escapeIndex == 1)
@@ -60,12 +60,12 @@ READ_NEXT:
 			 if (context->OverwriteMode)
 			 {
 				 context->OverwriteMode = false;
-				 return !NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\x1b[0 q", 5, null, null);
+				 return !NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\x1b[0 q", 5, null, null);
 			 }
 			 else
 			 {
 				 context->OverwriteMode = true;
-				 return !NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\x1b[3 q", 5, null, null);
+				 return !NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\x1b[3 q", 5, null, null);
 			 }
 		}
 		else return true; // modifier was present
@@ -76,7 +76,7 @@ READ_NEXT:
 			if (context->Position == context->WrittenBytes) return true; // end of line - nothing to do
 			--context->WrittenBytes;
 			__movsb(context->Buffer + context->Position, context->Buffer + context->Position + 1, (uint64_t)context->WrittenBytes - context->Position);
-			return !NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\x1b[P", 3, null, null);
+			return !NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\x1b[P", 3, null, null);
 		}
 		else return true; // modifier was present
 
@@ -84,7 +84,7 @@ READ_NEXT:
 		if (escapeIndex == 0)
 		{
 			context->Position = 0;
-			return !NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\r", 1, null, null);
+			return !NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, "\r", 1, null, null);
 		}		
 		else return true; // modifier was present
 
@@ -98,7 +98,7 @@ READ_NEXT:
 			escapeBuffer[20 - length - 2] = '\x1b';
 			escapeBuffer[20 - length - 1] = '[';
 			escapeBuffer[20] = 'G';
-			return !NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, escapeBuffer + 20 - length - 2, length + 3, null, null);
+			return !NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context->IoStatusBlock, escapeBuffer + 20 - length - 2, length + 3, null, null);
 		}
 		else return true; // modifier was present
 
@@ -110,7 +110,7 @@ READ_NEXT:
 static boolean_t HandleEscapeSequence(READ_LINE_CONTEXT *const context)
 {
 	uint8_t controlCharacter;
-	if (NtReadFile(ProcessInformation.StandardInput, null, null, null, &context->IoStatusBlock, &controlCharacter, 1, null, null)) return false;
+	if (NtReadFile(OwnProcessInformation.StandardInput, null, null, null, &context->IoStatusBlock, &controlCharacter, 1, null, null)) return false;
 
 	switch (controlCharacter)
 	{
@@ -141,15 +141,15 @@ boolean_t ReadLine(uint8_t *const restrict buffer, uint16_t const length, uint16
 	boolean_t printPlaceholder;
 
 READ_NEXT:
-	if (NtReadFile(ProcessInformation.StandardInput, null, null, null, &context.IoStatusBlock, &character, 1, null, null)) return false;
+	if (NtReadFile(OwnProcessInformation.StandardInput, null, null, null, &context.IoStatusBlock, &character, 1, null, null)) return false;
 
 	// ------------------------------------------------------------------------------------------
 
 	if (character == '\r')
 	{
 		*writtenBytes = context.WrittenBytes;
-		if (context.OverwriteMode && NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\x1b[0 q", 5, null, null)) return false;
-		return !NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\n", 1, null, null);
+		if (context.OverwriteMode && NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\x1b[0 q", 5, null, null)) return false;
+		return !NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\n", 1, null, null);
 	}
 
 	// ----------------------------------
@@ -158,7 +158,7 @@ READ_NEXT:
 	{
 		if (context.Position == 0) goto READ_NEXT;
 
-		if (NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\x1b[D\x1b[P", 6, null, null)) return false;
+		if (NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\x1b[D\x1b[P", 6, null, null)) return false;
 
 		--context.Position;
 		--context.WrittenBytes;
@@ -183,7 +183,7 @@ READ_NEXT:
 	{
 		context.Position = 0;
 		context.WrittenBytes = 0;
-		if (NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\x1b[2K\r", 5, null, null)) return false;
+		if (NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\x1b[2K\r", 5, null, null)) return false;
 		goto READ_NEXT;
 	}
 
@@ -214,7 +214,7 @@ READ_NEXT:
 	if (!context.OverwriteMode && context.WrittenBytes != context.Position) // move line one right from curser when in middle
 	{
 		MemoryInverseCopyX86(context.WrittenBytes - context.Position, context.Buffer + context.Position, context.Buffer + context.Position + 1);
-		if (NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\x1b[@", 3, null, null)) return false;
+		if (NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\x1b[@", 3, null, null)) return false;
 	}
 
 	// don't inc when in insert mode and not at end of line
@@ -225,8 +225,8 @@ READ_NEXT:
 	if (!context.HideOutput)
 	{
 		// red space or actual char
-		if (printPlaceholder) { if (NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\x1B[41m \x1B[0m", 10, null, null)) return false; }
-		else { if (NtWriteFile(ProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, &character, 1, null, null)) return false; }
+		if (printPlaceholder) { if (NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, "\x1B[41m \x1B[0m", 10, null, null)) return false; }
+		else { if (NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &context.IoStatusBlock, &character, 1, null, null)) return false; }
 	}
 	
 	goto READ_NEXT;

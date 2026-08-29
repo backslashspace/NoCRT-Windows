@@ -1,13 +1,7 @@
 ﻿#pragma once
 #include "types.h"
 
-// ░░░ structs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-
-typedef struct COMMAND_LINE_STRING
-{
-	wchar_t *Buffer;
-	uint64_t Length;
-} COMMAND_LINE_STRING;
+// ░░░ Structures ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 typedef struct
 {
@@ -21,23 +15,19 @@ typedef struct
 
 	Handle WorkingDirectoryHandle;
 	wchar_t *WorkingDirectoryBuffer;
-	uint16_t WorkingDirectoryLength;
+	uint16_t WorkingDirectoryByteCount;
 
 	wchar_t *ImagePathNameBuffer;
-	uint16_t ImagePathNameLength;
+	uint16_t ImagePathNameByteCount;
 
 	wchar_t *CommandLineBuffer;
-	uint16_t CommandLineLength;
-} BasicProcessInformation;
+	uint16_t CommandLineByteCount;
+} OWN_PROCESS_INFORMATION;
 
 // ░░░ Global Data ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-extern BasicProcessInformation ProcessInformation;
+extern OWN_PROCESS_INFORMATION OwnProcessInformation;
 
-// ░░░ Function Definitions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+// ░░░ Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-__declspec(noreturn) void Exit(int32_t exitCode);
-
-void ReadOwnProcessInformation(BasicProcessInformation *processInfo);
-
-uint64_t ParseCommandLine(wchar_t const *restrict const commandLine, uint64_t const commandLineLength, COMMAND_LINE_STRING *restrict const *restrict const arguments, uint64_t const argumentBufferLength);
+void ReadOwnProcessInformation();

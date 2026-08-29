@@ -1,4 +1,4 @@
-#include "ntdll.h"
+﻿#include "ntdll.h"
 #include "console.h"
 #include "utility.h"
 #include "intrinsics.h"
@@ -153,7 +153,7 @@ bool_t ConsoleLog(char_t const *const message, LogLevel logLevel, char_t const *
     uint16_t sourceLength = (uint16_t)MemoryGetFirstByteMatchIndexX86(256, null, source);
     uint16_t messageLength = (uint16_t)MemoryGetFirstByteMatchIndexX86(256, null, message);
 
-    return ConsoleLogA(message, messageLength, logLevel, source, sourceLength, ProcessInformation.StandardOutput);
+    return ConsoleLogA(message, messageLength, logLevel, source, sourceLength, OwnProcessInformation.StandardOutput);
 }
 
 bool_t ConsoleLogA(char_t const *const message, uint16_t const messageLength, LogLevel const logLevel, char_t const *const source, uint16_t const sourceLength, Handle const outputHandle)

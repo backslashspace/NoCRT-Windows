@@ -1,6 +1,18 @@
-#pragma once
+﻿#pragma once
 #include "types.h"
 #include "intrinsics.h"
+
+// ░░░ Structures ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+typedef struct COMMAND_LINE_STRING
+{
+	wchar_t const *Buffer;
+	uint64_t Length;
+} COMMAND_LINE_STRING;
+ 
+// ░░░ Macros ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+uint64_t ParseCommandLine(wchar_t const *restrict const commandLine, uint64_t const commandLineLength, COMMAND_LINE_STRING *restrict const arguments, uint64_t const argumentBufferLength);
 
 // ░░░ Macros ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 

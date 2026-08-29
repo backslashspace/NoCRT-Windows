@@ -1,30 +1,30 @@
-#include "ntdll.h"
+﻿#include "ntdll.h"
 #include "utility.h"
 #include "console.h"
 #include "kernelbase.h"
 
 static uint32_t _globalVariable = 0;
 
-void ASLR(Handle const outputHandle)
+boolean_t ASLR()
 {
-	ConsoleWrite("# ASLR\n\nFunction and global data ASLR should at least change after a reboot.\n");
+	ConsoleWrite("# ASLR\n\nFunction and global data ASLR should at least change after a reboot\n");
 
 	uint32_t stackVariable = 67;
 
 	uint32_t *stackVariablePointer = &stackVariable;
 	uint32_t *globalVariablePointer = &_globalVariable;
 
-	void (*functionPointer)() = &ASLR;
+	boolean_t(*functionPointer)() = &ASLR;
 
 	uint64_t size = 4096;
 	void *heapMemory = null;
 	if (0 != NtAllocateVirtualMemory((Handle)-1, &heapMemory, 0, &size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE))
 	{
 		ConsoleWrite("Failed to allocate heap memory");
-		NtTerminateProcess((Handle)-1, 67);
+		return false;
 	}
 
-	/* ----------------------------------------------------- */
+	/* -------------------------------------------------------------------------- */
 
 	char_t *stackVariableString = (char_t *)_alloca(21);
 	stackVariableString[20] = '\n';
@@ -42,13 +42,15 @@ void ASLR(Handle const outputHandle)
 	uint16_t heapVariableStringLength = UInt64ToChar((uint64_t)heapMemory, heapVariableString);
 	heapVariableString[20] = '\n';
 
-	ConsoleWrite("Stack Variable: ");
-	WriteConsoleA(outputHandle, stackVariableString + (20 - stackVariableStringLength), stackVariableStringLength + 1, null, null);
-	ConsoleWrite("Global Variable: ");
-	WriteConsoleA(outputHandle, globalVariableString + (20 - globalVariableStringLength), globalVariableStringLength + 1, null, null);
+	ConsoleWrite("Stack Variable:   ");
+	WriteConsoleA(OwnProcessInformation.StandardOutput, stackVariableString + (20 - stackVariableStringLength), stackVariableStringLength + 1, null, null);
+	ConsoleWrite("Global Variable:  ");
+	WriteConsoleA(OwnProcessInformation.StandardOutput, globalVariableString + (20 - globalVariableStringLength), globalVariableStringLength + 1, null, null);
 	ConsoleWrite("Function Pointer: ");
-	WriteConsoleA(outputHandle, functionVariableString + (20 - functionVariableStringLength), functionVariableStringLength + 1, null, null);
-	ConsoleWrite("Heap Memory: ");
-	WriteConsoleA(outputHandle, heapVariableString + (20 - heapVariableStringLength), heapVariableStringLength + 1, null, null);
-	ConsoleWrite("\n");
+	WriteConsoleA(OwnProcessInformation.StandardOutput, functionVariableString + (20 - functionVariableStringLength), functionVariableStringLength + 1, null, null);
+	ConsoleWrite("Heap Memory:      ");
+	WriteConsoleA(OwnProcessInformation.StandardOutput, heapVariableString + (20 - heapVariableStringLength), heapVariableStringLength + 1, null, null);
+	
+	ConsoleWrite("\n----------------------------------------------------------------\n\n");
+	return true;
 }

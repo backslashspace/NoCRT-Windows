@@ -19,17 +19,17 @@ boolean_t EnableXTerm()
 	// TL;DR: use "Virtual Terminal" - old is deprecated - "support will continue for indefinite future"
 
 	uint32_t modeInfo = 0;
-	if (!GetConsoleMode(ProcessInformation.StandardInput, &modeInfo)) return false;
+	if (!GetConsoleMode(OwnProcessInformation.StandardInput, &modeInfo)) return false;
 	_standardInputMode = modeInfo;
 	modeInfo |= ENABLE_VIRTUAL_TERMINAL_INPUT;
 	modeInfo &= ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT);
-	if (!SetConsoleMode(ProcessInformation.StandardInput, modeInfo)) return false;
+	if (!SetConsoleMode(OwnProcessInformation.StandardInput, modeInfo)) return false;
 
 	modeInfo = 0;
-	if (!GetConsoleMode(ProcessInformation.StandardOutput, &modeInfo)) return false;
+	if (!GetConsoleMode(OwnProcessInformation.StandardOutput, &modeInfo)) return false;
 	_standardOutputMode = modeInfo;
 	modeInfo |= ENABLE_PROCESSED_OUTPUT | ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-	if (!SetConsoleMode(ProcessInformation.StandardOutput, modeInfo)) return false;
+	if (!SetConsoleMode(OwnProcessInformation.StandardOutput, modeInfo)) return false;
 
 	return true;
 }
@@ -39,6 +39,6 @@ void RestoreConsoleMode()
 	SetConsoleCP(_standardCodePage);
 	SetConsoleOutputCP(_standardOutputCodePage);
 
-	SetConsoleMode(ProcessInformation.StandardInput, _standardInputMode);
-	SetConsoleMode(ProcessInformation.StandardOutput, _standardOutputMode);
+	SetConsoleMode(OwnProcessInformation.StandardInput, _standardInputMode);
+	SetConsoleMode(OwnProcessInformation.StandardOutput, _standardOutputMode);
 }

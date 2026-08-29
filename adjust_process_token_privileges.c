@@ -3,7 +3,7 @@
 
 boolean_t AdjustProcessTokenPrivileges()
 {
-	ConsoleWrite("Adjusting token privileges\n → Enabling SeLockMemoryPrivilege\n → Keeping SeChangeNotifyPrivilege\n");
+	ConsoleWrite("# Adjusting token privileges\n\n\t→ Enabling SeLockMemoryPrivilege\n\t→ Keeping SeChangeNotifyPrivilege\n");
 
 	Handle token = null;
 	if (STATUS_SUCCESS != NtOpenProcessToken((Handle)-1i64, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token))
@@ -47,7 +47,7 @@ boolean_t AdjustProcessTokenPrivileges()
 	{
 		LUID_AND_ATTRIBUTES *entry = &tokenPrivilegesPointer->Privileges[i];
 
-		// chek if SeChangeNotifyPrivilege or SeLockMemoryPrivilege
+		// check if SeChangeNotifyPrivilege or SeLockMemoryPrivilege
 		if ((entry->Luid.LowPart == 4 || entry->Luid.LowPart == 23) && entry->Luid.HighPart == 0) continue;
 
 		tokenPrivileges.Privileges[0].Luid = entry->Luid;
@@ -60,114 +60,116 @@ boolean_t AdjustProcessTokenPrivileges()
 		}
 	}
 
+	ConsoleWrite("\n----------------------------------------------------------------\n\n");
+
 	return true;
 }
 
 // ░░░ verbose advapi32 version  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-#include "advapi32.h"
-
-static wchar_t const SeLockMemoryPrivilege[] = u"SeLockMemoryPrivilege";
-static wchar_t const SeChangeNotifyPrivilege[] = u"SeChangeNotifyPrivilege";
-
-static boolean_t DisablePrivilege(Handle token, LUID *luid)
-{
-	TOKEN_PRIVILEGES tokenPrivileges;
-	tokenPrivileges.PrivilegeCount = 1;
-	tokenPrivileges.Privileges[0].Luid = *luid;
-	tokenPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_REMOVED;
-
-	if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(TOKEN_PRIVILEGES), null, null))
-	{
-		ConsoleWrite("NtAdjustPrivilegesToken() failed at step remove privilege\n");
-		return false;
-	}
-
-	return true;
-}
-
-static boolean_t EnableSeLockMemoryPrivilege(Handle token)
-{
-	LUID luid = { 0 };
-	if (!LookupPrivilegeValueW(null, SeLockMemoryPrivilege, &luid))
-	{
-		ConsoleWrite("NtAdjustPrivilegesToken() failed at step enable SeLockMemoryPrivilege\n");
-		return false;
-	}
-
-	TOKEN_PRIVILEGES tokenPrivileges;
-	tokenPrivileges.PrivilegeCount = 1;
-	tokenPrivileges.Privileges[0].Luid = luid;
-	tokenPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-
-	if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(TOKEN_PRIVILEGES), null, null))
-	{
-		ConsoleWrite("NtAdjustPrivilegesToken() failed at step enable SeLockMemoryPrivilege\n");
-		return false;
-	}
-
-	return true;
-}
-
-boolean_t AdjustProcessTokenPrivilegesVerbose(Handle const outputHandle)
-{
-	Handle token = null;
-	if (STATUS_SUCCESS != NtOpenProcessToken((Handle)-1i64, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token))
-	{
-		ConsoleWrite("NtOpenProcessToken() failed.\n");
-		return false;
-	}
-
-	if (!EnableSeLockMemoryPrivilege(token)) return false;
-	ConsoleWrite("Enabled: EnableSeLockMemoryPrivilege\n\n");
-
-	// -----------------------------------------------------------------
-
-	uint32_t length = 0;
-	if (STATUS_BUFFER_TOO_SMALL != NtQueryInformationToken(token, TokenPrivileges, null, 0, &length))
-	{
-		ConsoleWrite("NtQueryInformationToken() failed at step length query\n");
-		return false;
-	}
-
-	TOKEN_PRIVILEGES *tokenPrivilegesPointer = (TOKEN_PRIVILEGES *)_alloca(length);
-	if (STATUS_SUCCESS != NtQueryInformationToken(token, TokenPrivileges, tokenPrivilegesPointer, length, &length))
-	{
-		ConsoleWrite("NtQueryInformationToken() failed at step query data\n");
-		return false;
-	}
-
-	// -----------------------------------------------------------------
-
-	wchar_t *name = _alloca(256);
-
-	for (uint16_t i = 0; i < tokenPrivilegesPointer->PrivilegeCount; ++i)
-	{
-		uint32_t nameLength = 128;
-		LUID_AND_ATTRIBUTES *entry = &tokenPrivilegesPointer->Privileges[i];
-
-		if (!LookupPrivilegeNameW(null, &entry->Luid, name, &nameLength))
-		{
-			ConsoleWrite("LookupPrivilegeNameA() failed\n");
-			return false;
-		}
-
-		if (!MemoryCompareX86(nameLength, name, SeLockMemoryPrivilege) && !MemoryCompareX86(nameLength, name, SeChangeNotifyPrivilege))
-		{
-			if (DisablePrivilege(token, &entry->Luid))
-			{
-				ConsoleWrite("Removed: ");
-				WriteConsoleW(outputHandle ,name, nameLength, null, null);
-				ConsoleWrite("\n");
-			}
-		}
-		else
-		{
-			ConsoleWrite("Keeping: ");
-			WriteConsoleW(outputHandle, name, nameLength, null, null);
-			ConsoleWrite("\n");
-		}
-	}
-
-	return true;
-}
+//#include "advapi32.h"
+//
+//static wchar_t const SeLockMemoryPrivilege[] = u"SeLockMemoryPrivilege";
+//static wchar_t const SeChangeNotifyPrivilege[] = u"SeChangeNotifyPrivilege";
+//
+//static boolean_t DisablePrivilege(Handle token, LUID *luid)
+//{
+//	TOKEN_PRIVILEGES tokenPrivileges;
+//	tokenPrivileges.PrivilegeCount = 1;
+//	tokenPrivileges.Privileges[0].Luid = *luid;
+//	tokenPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_REMOVED;
+//
+//	if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(TOKEN_PRIVILEGES), null, null))
+//	{
+//		ConsoleWrite("NtAdjustPrivilegesToken() failed at step remove privilege\n");
+//		return false;
+//	}
+//
+//	return true;
+//}
+//
+//static boolean_t EnableSeLockMemoryPrivilege(Handle token)
+//{
+//	LUID luid = { 0 };
+//	if (!LookupPrivilegeValueW(null, SeLockMemoryPrivilege, &luid))
+//	{
+//		ConsoleWrite("NtAdjustPrivilegesToken() failed at step enable SeLockMemoryPrivilege\n");
+//		return false;
+//	}
+//
+//	TOKEN_PRIVILEGES tokenPrivileges;
+//	tokenPrivileges.PrivilegeCount = 1;
+//	tokenPrivileges.Privileges[0].Luid = luid;
+//	tokenPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+//
+//	if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(TOKEN_PRIVILEGES), null, null))
+//	{
+//		ConsoleWrite("NtAdjustPrivilegesToken() failed at step enable SeLockMemoryPrivilege\n");
+//		return false;
+//	}
+//
+//	return true;
+//}
+//
+//boolean_t AdjustProcessTokenPrivilegesVerbose(Handle const outputHandle)
+//{
+//	Handle token = null;
+//	if (STATUS_SUCCESS != NtOpenProcessToken((Handle)-1i64, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token))
+//	{
+//		ConsoleWrite("NtOpenProcessToken() failed.\n");
+//		return false;
+//	}
+//
+//	if (!EnableSeLockMemoryPrivilege(token)) return false;
+//	ConsoleWrite("Enabled: EnableSeLockMemoryPrivilege\n\n");
+//
+//	// -----------------------------------------------------------------
+//
+//	uint32_t length = 0;
+//	if (STATUS_BUFFER_TOO_SMALL != NtQueryInformationToken(token, TokenPrivileges, null, 0, &length))
+//	{
+//		ConsoleWrite("NtQueryInformationToken() failed at step length query\n");
+//		return false;
+//	}
+//
+//	TOKEN_PRIVILEGES *tokenPrivilegesPointer = (TOKEN_PRIVILEGES *)_alloca(length);
+//	if (STATUS_SUCCESS != NtQueryInformationToken(token, TokenPrivileges, tokenPrivilegesPointer, length, &length))
+//	{
+//		ConsoleWrite("NtQueryInformationToken() failed at step query data\n");
+//		return false;
+//	}
+//
+//	// -----------------------------------------------------------------
+//
+//	wchar_t *name = _alloca(256);
+//
+//	for (uint16_t i = 0; i < tokenPrivilegesPointer->PrivilegeCount; ++i)
+//	{
+//		uint32_t nameLength = 128;
+//		LUID_AND_ATTRIBUTES *entry = &tokenPrivilegesPointer->Privileges[i];
+//
+//		if (!LookupPrivilegeNameW(null, &entry->Luid, name, &nameLength))
+//		{
+//			ConsoleWrite("LookupPrivilegeNameA() failed\n");
+//			return false;
+//		}
+//
+//		if (!MemoryCompareX86(nameLength, name, SeLockMemoryPrivilege) && !MemoryCompareX86(nameLength, name, SeChangeNotifyPrivilege))
+//		{
+//			if (DisablePrivilege(token, &entry->Luid))
+//			{
+//				ConsoleWrite("Removed: ");
+//				WriteConsoleW(outputHandle ,name, nameLength, null, null);
+//				ConsoleWrite("\n");
+//			}
+//		}
+//		else
+//		{
+//			ConsoleWrite("Keeping: ");
+//			WriteConsoleW(outputHandle, name, nameLength, null, null);
+//			ConsoleWrite("\n");
+//		}
+//	}
+//
+//	return true;
+//}

@@ -1703,7 +1703,7 @@ typedef NtStatus(*NtSetInformationThread_t)(Handle ThreadHandle, THREADINFOCLASS
 typedef NtStatus(*NtQueryInformationToken_t)(Handle TokenHandle, TOKEN_INFORMATION_CLASS TokenInformationClass, void *TokenInformation, uint32_t TokenInformationLength, uint32_t *ReturnLength);
 
 // // https://ntdoc.m417z.com/ntsetinformationprocess
-typedef NtStatus(*NtSetInformationProcess_t)(Handle ProcessHandle, PROCESSINFOCLASS ProcessInformationClass, void *ProcessInformation, uint32_t ProcessInformationLength);
+typedef NtStatus(*NtSetInformationProcess_t)(Handle ProcessHandle, PROCESSINFOCLASS ProcessInformationClass, void *OwnProcessInformation, uint32_t ProcessInformationLength);
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntopenprocesstoken
 typedef NtStatus(*NtOpenProcessToken_t)(Handle ProcessHandle, uint32_t DesiredAccess, Handle *TokenHandle);
@@ -1801,7 +1801,7 @@ static __forceinline NtStatus NtGetContextThread(Handle ThreadHandle, CONTEXT *T
 static __forceinline NtStatus NtSetContextThread(Handle ThreadHandle, CONTEXT *ThreadContext) { return NtDll.NtSetContextThread(ThreadHandle, ThreadContext); }
 static __forceinline NtStatus NtAlertResumeThread(Handle ThreadHandle, uint32_t *PreviousSuspendCount) { return NtDll.NtAlertResumeThread(ThreadHandle, PreviousSuspendCount); }
 static __forceinline NtStatus NtSetInformationThread(Handle ThreadHandle, THREADINFOCLASS ThreadInformationClass, void *ThreadInformation, uint32_t ThreadInformationLength) { return NtDll.NtSetInformationThread(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength); }
-static __forceinline NtStatus NtSetInformationProcess(Handle ProcessHandle, PROCESSINFOCLASS ProcessInformationClass, void *ProcessInformation, uint32_t ProcessInformationLength) { return NtDll.NtSetInformationProcess(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength); }
+static __forceinline NtStatus NtSetInformationProcess(Handle ProcessHandle, PROCESSINFOCLASS ProcessInformationClass, void *OwnProcessInformation, uint32_t ProcessInformationLength) { return NtDll.NtSetInformationProcess(ProcessHandle, ProcessInformationClass, OwnProcessInformation, ProcessInformationLength); }
 static __forceinline NtStatus NtQuerySystemInformation(SYSTEM_INFORMATION_CLASS SystemInformationClass, void *SystemInformation, uint32_t SystemInformationLength, uint32_t *ReturnLength) { return NtDll.NtQuerySystemInformation(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength); }
 
 static __forceinline NtStatus NtOpenSection(Handle *SectionHandle, uint32_t DesiredAccess, OBJECT_ATTRIBUTES *ObjectAttributes) { return NtDll.NtOpenSection(SectionHandle, DesiredAccess, ObjectAttributes); }

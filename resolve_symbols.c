@@ -43,15 +43,6 @@ static boolean_t ResolveNtSymbols()
 	return true;
 }
 
-static boolean_t ResolveShell32Symbols()
-{
-	if (!InitializeShell32()) return false;
-
-	if (!LoadCommandLineToArgvW()) return false;
-
-	return true;
-}
-
 static boolean_t LoadAndResolveAdvapi32Symbols()
 {
 	if (!InitializeAdvapi32()) return false;
@@ -84,8 +75,6 @@ static boolean_t LoadAndResolveKernelbaseSymbols()
 boolean_t ResolveSymbols()
 {
 	if (!ResolveNtSymbols()) return false;
-	//if (!ResolveShell32Symbols()) return false;
-	//if (!LoadAndResolveAdvapi32Symbols()) return false;
 	if (!LoadAndResolveKernelbaseSymbols()) return false;
 
 	return true;

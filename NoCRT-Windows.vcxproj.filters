@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="start.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="log_w.c">
       <Filter>Source Files\core\console</Filter>
     </ClCompile>
@@ -26,24 +23,12 @@
       <Filter>Source Files\external</Filter>
     </ClCompile>
     <ClCompile Include="process_information.c">
-      <Filter>Source Files\base</Filter>
-    </ClCompile>
-    <ClCompile Include="resolve_symbols.c">
-      <Filter>Source Files\base</Filter>
+      <Filter>Source Files\startup</Filter>
     </ClCompile>
     <ClCompile Include="shell32.c">
       <Filter>Source Files\external</Filter>
     </ClCompile>
     <ClCompile Include="aslr.c">
-      <Filter>Source Files\core\testing</Filter>
-    </ClCompile>
-    <ClCompile Include="adjust_process_token_privileges.c">
-      <Filter>Source Files\base</Filter>
-    </ClCompile>
-    <ClCompile Include="main.c">
-      <Filter>Source Files\core</Filter>
-    </ClCompile>
-    <ClCompile Include="multithreading.c">
       <Filter>Source Files\core\testing</Filter>
     </ClCompile>
     <ClCompile Include="kernelbase.c">
@@ -67,6 +52,30 @@
     <ClCompile Include="ole32.c">
       <Filter>Source Files\external</Filter>
     </ClCompile>
+    <ClCompile Include="main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="adjust_process_token_privileges.c">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="resolve_symbols.c">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="start.c">
+      <Filter>Source Files\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="parse_command_line.c">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="exceptions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="enable_and_text_xterm_output.c">
+      <Filter>Source Files\core\testing</Filter>
+    </ClCompile>
+    <ClCompile Include="multithreading.c">
+      <Filter>Source Files\core\testing\multithreading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.h">
@@ -74,9 +83,6 @@
     </ClInclude>
     <ClInclude Include="types.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resolve_symbols.h">
-      <Filter>Header Files\base</Filter>
     </ClInclude>
     <ClInclude Include="ntdll.h">
       <Filter>Header Files\external</Filter>
@@ -86,9 +92,6 @@
     </ClInclude>
     <ClInclude Include="intrinsics.h">
       <Filter>Header Files\external</Filter>
-    </ClInclude>
-    <ClInclude Include="process_information.h">
-      <Filter>Header Files\base</Filter>
     </ClInclude>
     <ClInclude Include="shell32.h">
       <Filter>Header Files\external</Filter>
@@ -105,11 +108,14 @@
     <ClInclude Include="kernelbase.h">
       <Filter>Header Files\external</Filter>
     </ClInclude>
-    <ClInclude Include="initialization.h">
-      <Filter>Header Files\base</Filter>
-    </ClInclude>
     <ClInclude Include="ole32.h">
       <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="process_information.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -134,9 +140,6 @@
     <Filter Include="Source Files\utility">
       <UniqueIdentifier>{e92f796f-a82b-4450-bfb8-0c007d17825f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\base">
-      <UniqueIdentifier>{b2ca2aa8-253d-4259-8916-e26f0ba2bf03}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\external">
       <UniqueIdentifier>{4c56a01c-8603-4b78-8ac8-8ae87a6dfb70}</UniqueIdentifier>
     </Filter>
@@ -149,28 +152,34 @@
     <Filter Include="Source Files\core\testing">
       <UniqueIdentifier>{d83ccfe8-eab6-4e2d-b087-7f1b0ec81af4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\base">
-      <UniqueIdentifier>{10cf667d-493b-4dcd-afc7-42715f8b1019}</UniqueIdentifier>
+    <Filter Include="Source Files\msvc">
+      <UniqueIdentifier>{36f0c417-08c7-4356-af8a-5249fc403bd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\startup">
+      <UniqueIdentifier>{b2ca2aa8-253d-4259-8916-e26f0ba2bf03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core\testing\multithreading">
+      <UniqueIdentifier>{1321d1be-f296-44a6-9c81-06a1e2d4dc25}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="get_first_mismatch_index.asm">
       <Filter>Source Files\utility</Filter>
     </MASM>
-    <MASM Include="__chkstk.asm">
-      <Filter>Source Files\utility</Filter>
-    </MASM>
     <MASM Include="memory_compare.asm">
       <Filter>Source Files\utility</Filter>
-    </MASM>
-    <MASM Include="thread_entry.asm">
-      <Filter>Source Files\core</Filter>
     </MASM>
     <MASM Include="inverse_memory_copy.asm">
       <Filter>Source Files\utility</Filter>
     </MASM>
     <MASM Include="test_asm.asm">
       <Filter>Source Files\core\testing</Filter>
+    </MASM>
+    <MASM Include="__chkstk.asm">
+      <Filter>Source Files\msvc</Filter>
+    </MASM>
+    <MASM Include="thread_entry.asm">
+      <Filter>Source Files\core\testing\multithreading</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>
@@ -179,8 +188,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="c.hint">
-      <Filter>Resource Files</Filter>
-    </None>
+    <None Include="c.hint" />
   </ItemGroup>
 </Project>
