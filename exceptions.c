@@ -1,7 +1,7 @@
 ﻿#include "ntdll.h"
 #include "intrinsics.h"
 
-int32_t VectorHandler(EXCEPTION_POINTERS *ExceptionInfo)
+static int32_t VectorHandler(EXCEPTION_POINTERS *ExceptionInfo)
 {
 	//ep->ExceptionRecord->ExceptionFlags
 
@@ -10,7 +10,7 @@ int32_t VectorHandler(EXCEPTION_POINTERS *ExceptionInfo)
 	return EXCEPTION_CONTINUE_SEARCH;
 }
 
-int32_t SEHFilter(EXCEPTION_POINTERS *ep)
+static int32_t SEHFilter(EXCEPTION_POINTERS *ep)
 {
 	//ep->ExceptionRecord->ExceptionFlags
 
@@ -19,7 +19,7 @@ int32_t SEHFilter(EXCEPTION_POINTERS *ep)
 	return EXCEPTION_EXECUTE_HANDLER;
 }
 
-int32_t VectorContinueHandler(EXCEPTION_POINTERS *ExceptionInfo)
+static int32_t VectorContinueHandler(EXCEPTION_POINTERS *ExceptionInfo)
 {
 	//ep->ExceptionRecord->ExceptionFlags
 
@@ -28,7 +28,7 @@ int32_t VectorContinueHandler(EXCEPTION_POINTERS *ExceptionInfo)
 	return EXCEPTION_CONTINUE_SEARCH;
 }
 
-int32_t VectorContinueHandler2(EXCEPTION_POINTERS *ExceptionInfo)
+static int32_t VectorContinueHandler2(EXCEPTION_POINTERS *ExceptionInfo)
 {
 	//ep->ExceptionRecord->ExceptionFlags
 
@@ -37,7 +37,7 @@ int32_t VectorContinueHandler2(EXCEPTION_POINTERS *ExceptionInfo)
 	return EXCEPTION_CONTINUE_SEARCH;
 }
 
-int32_t UnhandledSEHFilter(EXCEPTION_POINTERS *ExceptionInfo)
+static int32_t UnhandledSEHFilter(EXCEPTION_POINTERS *ExceptionInfo)
 {
 	//ep->ExceptionRecord->ExceptionFlags
 

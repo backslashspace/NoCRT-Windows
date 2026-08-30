@@ -64,7 +64,7 @@ int32_t Main()
 
 	PrintCPUIDInformation();
 
-	//TestExceptions();
+	TestExceptions();
 
 	if (!Multithreading())
 	{
@@ -72,7 +72,7 @@ int32_t Main()
 		goto ERROR_EXIT;
 	}
 
-
+	TestMWaitXSpinWait();
 
 
 
@@ -101,11 +101,10 @@ int32_t Main()
 	//	goto AGAIN;
 	//}
 
-	ConsoleWrite(u"\n----------------------------------------------------------------\n\n");
 
 //SKIP_READLINE:
 
-	//MWaitX();
+	
 
 	TestStatusBar(OwnProcessInformation.StandardOutput);
 

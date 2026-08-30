@@ -1,4 +1,4 @@
-﻿#include "ntdll.h"
+#include "ntdll.h"
 #include "console.h"
 #include "testing.h"
 #include "intrinsics.h"
@@ -74,5 +74,8 @@ boolean_t Multithreading()
 	ConsoleWrite(u"[MAIN] Thread exited\n");
 
 	size = 0;
+
+	ConsoleWrite(u"\n----------------------------------------------------------------\n\n");
+
 	return !NtFreeVirtualMemory((Handle)-1, &threadStack, &size, MEM_RELEASE);
 }

@@ -47,7 +47,7 @@
     <ClCompile Include="xterm_status_bar.c" />
     <MASM Include="memory_compare.asm" />
     <MASM Include="inverse_memory_copy.asm" />
-    <MASM Include="test_asm.asm" />
+    <MASM Include="mwaitx_spin_wait.asm" />
     <MASM Include="large_stack_thread_entry.asm" />
     <MASM Include="__chkstk.asm">
       <FileType>Document</FileType>

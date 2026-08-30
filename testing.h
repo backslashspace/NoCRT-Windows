@@ -12,7 +12,7 @@ void PrintCPUIDInformation();
 boolean_t Multithreading();
 NtStatus LargePageStackTestThreadMain(void *argument);
 
-void MWaitX();
+void TestMWaitXSpinWait();
 
 void TestStatusBar(Handle const outputHandle);
 

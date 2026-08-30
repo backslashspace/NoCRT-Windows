@@ -43,9 +43,6 @@
     <ClCompile Include="print_cpuid.c">
       <Filter>Source Files\core\testing</Filter>
     </ClCompile>
-    <ClCompile Include="mwaitx.c">
-      <Filter>Source Files\core\testing</Filter>
-    </ClCompile>
     <ClCompile Include="xterm_status_bar.c">
       <Filter>Source Files\core\testing</Filter>
     </ClCompile>
@@ -78,6 +75,9 @@
     </ClCompile>
     <ClCompile Include="large_page_stack_worker.c">
       <Filter>Source Files\core\testing\multithreading</Filter>
+    </ClCompile>
+    <ClCompile Include="mwaitx.c">
+      <Filter>Source Files\core\testing\mwaitx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +164,9 @@
     <Filter Include="Source Files\core\testing\multithreading">
       <UniqueIdentifier>{1321d1be-f296-44a6-9c81-06a1e2d4dc25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\core\testing\mwaitx">
+      <UniqueIdentifier>{141dfb4b-e1f3-462f-8435-64b655b7b0ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="get_first_mismatch_index.asm">
@@ -175,14 +178,14 @@
     <MASM Include="inverse_memory_copy.asm">
       <Filter>Source Files\utility</Filter>
     </MASM>
-    <MASM Include="test_asm.asm">
-      <Filter>Source Files\core\testing</Filter>
-    </MASM>
     <MASM Include="__chkstk.asm">
       <Filter>Source Files\msvc</Filter>
     </MASM>
     <MASM Include="large_stack_thread_entry.asm">
       <Filter>Source Files\core\testing\multithreading</Filter>
+    </MASM>
+    <MASM Include="mwaitx_spin_wait.asm">
+      <Filter>Source Files\core\testing\mwaitx</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>

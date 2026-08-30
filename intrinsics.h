@@ -178,9 +178,9 @@ void _mm_monitorx(void *__p, uint32_t __extensions, uint32_t __hints) {}
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/writebarrier?view=msvc-170
 void _WriteBarrier() {}
-// https://learn.microsoft.com/de-de/cpp/intrinsics/readwritebarrier?view=msvc-170
+// https://learn.microsoft.com/en-us/cpp/intrinsics/readwritebarrier?view=msvc-170
 void _ReadWriteBarrier() {}
-// https://learn.microsoft.com/de-de/cpp/intrinsics/readbarrier?view=msvc-170
+// https://learn.microsoft.com/en-us/cpp/intrinsics/readbarrier?view=msvc-170
 void _ReadBarrier() {}
 
 // filter and __except
