@@ -24,6 +24,7 @@
     <ClCompile Include="aslr.c" />
     <ClCompile Include="enable_and_text_xterm_output.c" />
     <ClCompile Include="exceptions.c" />
+    <ClCompile Include="large_page_stack_worker.c" />
     <ClCompile Include="mwaitx.c" />
     <ClCompile Include="ole32.c" />
     <ClCompile Include="parse_command_line.c" />
@@ -47,7 +48,7 @@
     <MASM Include="memory_compare.asm" />
     <MASM Include="inverse_memory_copy.asm" />
     <MASM Include="test_asm.asm" />
-    <MASM Include="thread_entry.asm" />
+    <MASM Include="large_stack_thread_entry.asm" />
     <MASM Include="__chkstk.asm">
       <FileType>Document</FileType>
     </MASM>

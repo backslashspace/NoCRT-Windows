@@ -84,34 +84,34 @@ int32_t Main()
 
 
 
-	goto SKIP_READLINE;
-	uint8_t *buffer = _alloca(258);
-AGAIN:
-	uint16_t writtenBytes;
-	__stosb(buffer, 0, 257);
-	ReadLine(buffer, 256, &writtenBytes);
+//	goto SKIP_READLINE;
+//	uint8_t *buffer = _alloca(258);
+//AGAIN:
+//	uint16_t writtenBytes;
+//	__stosb(buffer, 0, 257);
+//	ReadLine(buffer, 256, &writtenBytes);
+//
+//	buffer[writtenBytes] = '\n';
+//	buffer[writtenBytes + 1] = 0;
+//	//ConsoleWrite((char_t *)buffer);
 
-	buffer[writtenBytes] = '\n';
-	buffer[writtenBytes + 1] = 0;
-	ConsoleWrite((char_t *)buffer);
+	//if (writtenBytes != 2 || buffer[0] != 'O' || buffer[1] != 'K')
+	//{
+	//	ConsoleWrite(u"- - - - - -\n");
+	//	goto AGAIN;
+	//}
 
-	if (writtenBytes != 2 || buffer[0] != 'O' || buffer[1] != 'K')
-	{
-		ConsoleWrite("- - - - - -\n");
-		goto AGAIN;
-	}
+	ConsoleWrite(u"\n----------------------------------------------------------------\n\n");
 
-	ConsoleWrite("\n----------------------------------------------------------------\n\n");
-
-SKIP_READLINE:
+//SKIP_READLINE:
 
 	//MWaitX();
 
 	TestStatusBar(OwnProcessInformation.StandardOutput);
 
-	ConsoleWrite("\n----------------------------------------------------------------\n\n");
+	ConsoleWrite(u"\n----------------------------------------------------------------\n\n");
 
-	ConsoleWrite("DONE - exiting\n");
+	ConsoleWrite(u"DONE - exiting\n");
 
 ERROR_EXIT:
 	RestoreConsoleMode();

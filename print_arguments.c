@@ -3,11 +3,11 @@
 
 void PrintArguments()
 {
-	ConsoleWrite("# Start arguments\n\n");
+	ConsoleWrite(u"# Start arguments\n\n");
 
 	if (OwnProcessInformation.CommandLineBuffer == null || OwnProcessInformation.CommandLineBuffer[0] == null)
 	{
-		ConsoleWrite("CommandLine was null or empty\n");
+		ConsoleWrite(u"CommandLine was null or empty\n");
 		return;
 	}
 
@@ -22,5 +22,5 @@ void PrintArguments()
 		WriteConsoleW(OwnProcessInformation.StandardOutput, u"\n", 1, null, null);
 	}
 
-	ConsoleWrite("\n----------------------------------------------------------------\n\n");
+	ConsoleWrite(u"\n----------------------------------------------------------------\n\n");
 }

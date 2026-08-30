@@ -7,7 +7,7 @@ static uint32_t _globalVariable = 0;
 
 boolean_t ASLR()
 {
-	ConsoleWrite("# ASLR\n\nFunction and global data ASLR should at least change after a reboot\n");
+	ConsoleWrite(u"# ASLR\n\nFunction and global data ASLR should at least change after a reboot\n");
 
 	uint32_t stackVariable = 67;
 
@@ -20,7 +20,7 @@ boolean_t ASLR()
 	void *heapMemory = null;
 	if (0 != NtAllocateVirtualMemory((Handle)-1, &heapMemory, 0, &size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE))
 	{
-		ConsoleWrite("Failed to allocate heap memory");
+		ConsoleWrite(u"Failed to allocate heap memory");
 		return false;
 	}
 
@@ -42,15 +42,15 @@ boolean_t ASLR()
 	uint16_t heapVariableStringLength = UInt64ToChar((uint64_t)heapMemory, heapVariableString);
 	heapVariableString[20] = '\n';
 
-	ConsoleWrite("Stack Variable:   ");
+	ConsoleWrite(u"Stack Variable:   ");
 	WriteConsoleA(OwnProcessInformation.StandardOutput, stackVariableString + (20 - stackVariableStringLength), stackVariableStringLength + 1, null, null);
-	ConsoleWrite("Global Variable:  ");
+	ConsoleWrite(u"Global Variable:  ");
 	WriteConsoleA(OwnProcessInformation.StandardOutput, globalVariableString + (20 - globalVariableStringLength), globalVariableStringLength + 1, null, null);
-	ConsoleWrite("Function Pointer: ");
+	ConsoleWrite(u"Function Pointer: ");
 	WriteConsoleA(OwnProcessInformation.StandardOutput, functionVariableString + (20 - functionVariableStringLength), functionVariableStringLength + 1, null, null);
-	ConsoleWrite("Heap Memory:      ");
+	ConsoleWrite(u"Heap Memory:      ");
 	WriteConsoleA(OwnProcessInformation.StandardOutput, heapVariableString + (20 - heapVariableStringLength), heapVariableStringLength + 1, null, null);
 	
-	ConsoleWrite("\n----------------------------------------------------------------\n\n");
+	ConsoleWrite(u"\n----------------------------------------------------------------\n\n");
 	return true;
 }

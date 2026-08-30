@@ -3,12 +3,12 @@
 
 boolean_t AdjustProcessTokenPrivileges()
 {
-	ConsoleWrite("# Adjusting token privileges\n\n\t→ Enabling SeLockMemoryPrivilege\n\t→ Keeping SeChangeNotifyPrivilege\n");
+	ConsoleWrite(u"# Adjusting token privileges\n\n\t→ Enabling SeLockMemoryPrivilege\n\t→ Keeping SeChangeNotifyPrivilege\n");
 
 	Handle token = null;
 	if (STATUS_SUCCESS != NtOpenProcessToken((Handle)-1i64, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token))
 	{
-		ConsoleWrite("NtOpenProcessToken() failed.\n");
+		ConsoleWrite(u"NtOpenProcessToken() failed.\n");
 		return false;
 	}
 
@@ -21,7 +21,7 @@ boolean_t AdjustProcessTokenPrivileges()
 
 	if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(TOKEN_PRIVILEGES), null, null))
 	{
-		ConsoleWrite("NtAdjustPrivilegesToken() failed at step enable SeLockMemoryPrivilege\n");
+		ConsoleWrite(u"NtAdjustPrivilegesToken() failed at step enable SeLockMemoryPrivilege\n");
 		return false;
 	}
 
@@ -30,14 +30,14 @@ boolean_t AdjustProcessTokenPrivileges()
 	uint32_t length = 0;
 	if (STATUS_BUFFER_TOO_SMALL != NtQueryInformationToken(token, TokenPrivileges, null, 0, &length))
 	{
-		ConsoleWrite("NtQueryInformationToken() failed at step length query\n");
+		ConsoleWrite(u"NtQueryInformationToken() failed at step length query\n");
 		return false;
 	}
 
 	TOKEN_PRIVILEGES *tokenPrivilegesPointer = (TOKEN_PRIVILEGES *)_alloca(length);
 	if (STATUS_SUCCESS != NtQueryInformationToken(token, TokenPrivileges, tokenPrivilegesPointer, length, &length))
 	{
-		ConsoleWrite("NtQueryInformationToken() failed at step query data\n");
+		ConsoleWrite(u"NtQueryInformationToken() failed at step query data\n");
 		return false;
 	}
 
@@ -55,12 +55,12 @@ boolean_t AdjustProcessTokenPrivileges()
 
 		if (STATUS_SUCCESS != NtAdjustPrivilegesToken(token, 0, &tokenPrivileges, sizeof(TOKEN_PRIVILEGES), null, null))
 		{
-			ConsoleWrite("NtAdjustPrivilegesToken() failed at step remove privilege\n");
+			ConsoleWrite(u"NtAdjustPrivilegesToken() failed at step remove privilege\n");
 			return false;
 		}
 	}
 
-	ConsoleWrite("\n----------------------------------------------------------------\n\n");
+	ConsoleWrite(u"\n----------------------------------------------------------------\n\n");
 
 	return true;
 }

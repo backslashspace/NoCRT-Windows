@@ -1,5 +1,7 @@
 ﻿#include "console.h"
 #include "intrinsics.h"
+#include "kernelbase.h"
+#include "process_information.h"
 
 typedef union CPUID_FIELDS
 {
@@ -166,26 +168,26 @@ _Static_assert(sizeof(CPUID_FIELDS) == 16, "CPUID_FIELDS was NOT 16 bytes.");
 
 void PrintCPUIDInformation()
 {
-	ConsoleWrite("# CPU ID\n\n");
+	ConsoleWrite(u"# CPU ID\n\n");
 
-	char_t processorName[49];
 	char_t vendorString[13];
+	char_t processorName[49];
 
-	boolean_t isAMD;
-	boolean_t isIntel;
+	boolean_t isAMD = false;
+	boolean_t isIntel = false;
 
 	boolean_t erms = false;
-	boolean_t rdrand;
-	boolean_t rdseed;
-	boolean_t amxTile;
-	boolean_t avx512F;
-	boolean_t _1GBPages;
-	boolean_t monitorX;
-	boolean_t invariantTSC;
-	boolean_t monitorXExtensions;
-	boolean_t monitorXInterrupExempt;
+	boolean_t rdrand = false;
+	boolean_t rdseed = false;
+	boolean_t amxTile = false;
+	boolean_t avx512F = false;
+	boolean_t _1GBPages = false;
+	boolean_t monitorX = false;
+	boolean_t invariantTSC = false;
+	boolean_t monitorXExtensions = false;
+	boolean_t monitorXInterrupExempt = false;
 
-	CPUID_FIELDS cpuid;
+	CPUID_FIELDS cpuid = { 0 };
 
 	// cpu brand string
 	__cpuidex((uint32_t *)&processorName, 0x80000002, 0);
@@ -242,35 +244,35 @@ void PrintCPUIDInformation()
 
 	// ---------------------------------------------------------------------
 
-	ConsoleWrite("Vendor: ");
-	ConsoleWrite(vendorString);
-	ConsoleWrite("\nModel name: ");
-	ConsoleWrite(processorName);
+	ConsoleWrite(u"Vendor: ");
+	WriteConsoleA(OwnProcessInformation.StandardOutput, vendorString, (uint32_t)MemoryGetFirstByteMatchIndexX86(256, null, vendorString), null, null);
+	ConsoleWrite(u"\nModel name: ");
+	WriteConsoleA(OwnProcessInformation.StandardOutput, processorName, (uint32_t)MemoryGetFirstByteMatchIndexX86(256, null, processorName), null, null);
 
-	if (erms) ConsoleWrite("\n\nEnhanced REP MOVSB/STOSB supported\n");
-	else ConsoleWrite("\n\nEnhanced REP MOVSB/STOSB NOT supported\n");
-	if (rdrand) ConsoleWrite("RDRAND supported\n");
-	else ConsoleWrite("RDRAND NOT supported\n");
-	if (rdseed) ConsoleWrite("RDSEED supported\n");
-	else ConsoleWrite("RDSEED NOT supported\n");
-	if (amxTile) ConsoleWrite("Intel AMX Tile supported\n");
-	else ConsoleWrite("Intel AMX-Tile NOT supported\n");
-	if (avx512F) ConsoleWrite("AVX512F supported\n");
-	else ConsoleWrite("AVX512F NOT supported\n");
-	if (_1GBPages) ConsoleWrite("1GB pages supported\n");
-	else ConsoleWrite("1GB pages NOT supported\n");
-	if (invariantTSC) ConsoleWrite("Invariant TSC supported\n");
-	else ConsoleWrite("TSC NOT invariant\n");
+	if (erms) ConsoleWrite(u"\n\nEnhanced REP MOVSB/STOSB supported\n");
+	else ConsoleWrite(u"\n\nEnhanced REP MOVSB/STOSB NOT supported\n");
+	if (rdrand) ConsoleWrite(u"RDRAND supported\n");
+	else ConsoleWrite(u"RDRAND NOT supported\n");
+	if (rdseed) ConsoleWrite(u"RDSEED supported\n");
+	else ConsoleWrite(u"RDSEED NOT supported\n");
+	if (amxTile) ConsoleWrite(u"Intel AMX Tile supported\n");
+	else ConsoleWrite(u"Intel AMX-Tile NOT supported\n");
+	if (avx512F) ConsoleWrite(u"AVX512F supported\n");
+	else ConsoleWrite(u"AVX512F NOT supported\n");
+	if (_1GBPages) ConsoleWrite(u"1GB pages supported\n");
+	else ConsoleWrite(u"1GB pages NOT supported\n");
+	if (invariantTSC) ConsoleWrite(u"Invariant TSC supported\n");
+	else ConsoleWrite(u"TSC NOT invariant\n");
 	
 	if (isAMD)
 	{
-		if (monitorX) ConsoleWrite("MonitorX supported\n");
-		else ConsoleWrite("MonitorX NOT supported\n");
-		if (monitorXExtensions) ConsoleWrite("MonitorX extensions supported\n");
-		else ConsoleWrite("MonitorX extensions NOT supported\n");
-		if (monitorXInterrupExempt) ConsoleWrite("MonitorX interrupt eFLAGS ignore supported\n");
-		else ConsoleWrite("MonitorX interrupt eFLAGS ignore NOT supported\n");
+		if (monitorX) ConsoleWrite(u"MonitorX supported\n");
+		else ConsoleWrite(u"MonitorX NOT supported\n");
+		if (monitorXExtensions) ConsoleWrite(u"MonitorX extensions supported\n");
+		else ConsoleWrite(u"MonitorX extensions NOT supported\n");
+		if (monitorXInterrupExempt) ConsoleWrite(u"MonitorX interrupt eFLAGS ignore supported\n");
+		else ConsoleWrite(u"MonitorX interrupt eFLAGS ignore NOT supported\n");
 	}
 
-	ConsoleWrite("\n----------------------------------------------------------------\n\n");
+	ConsoleWrite(u"\n----------------------------------------------------------------\n\n");
 }

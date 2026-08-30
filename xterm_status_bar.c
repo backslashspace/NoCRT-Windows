@@ -6,15 +6,15 @@ void TestStatusBar(Handle const outputHandle)
 {
 	IO_STATUS_BLOCK ioStatusBlock = { 0 };
 
-	ConsoleWrite("10 seconds, update every 100ms\n");
+	ConsoleWrite(u"10 seconds, update every 100ms\n");
 
 	int64_t delay = 100 * -10'000;
 	
-	ConsoleWrite("╔═══════════════════════════════╗\n");
-	ConsoleWrite("║ Data Point 1: 0               ║\n");
-	ConsoleWrite("║ Progress: 000%                ║\n");
-	ConsoleWrite("║ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ║\n");
-	ConsoleWrite("╚═══════════════════════════════╝\n");
+	ConsoleWrite(u"╔═══════════════════════════════╗\n");
+	ConsoleWrite(u"║ Data Point 1: 0               ║\n");
+	ConsoleWrite(u"║ Progress: 000%                ║\n");
+	ConsoleWrite(u"║ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ║\n");
+	ConsoleWrite(u"╚═══════════════════════════════╝\n");
 
 	NtDelayExecution(false, &delay);
 
@@ -65,8 +65,6 @@ AGAIN:
 	}
 
 	NtWriteFile(outputHandle, null, null, null, &ioStatusBlock, "\x1B[2B\r", 5, null, null);
-	
-	
 
 	NtDelayExecution(false, &delay);
 	if (progresss != 100)
@@ -77,5 +75,5 @@ AGAIN:
 	}
 
 	// show curser
-	NtWriteFile(outputHandle, null, null, null, &ioStatusBlock, "\x1B[?25h", 6, null, null);
+	NtWriteFile(outputHandle, null, null, null, &ioStatusBlock, u8"\x1B[?25h", 6, null, null);
 }

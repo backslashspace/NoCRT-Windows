@@ -3,70 +3,52 @@
 #include "testing.h"
 #include "intrinsics.h"
 
-typedef struct THREAD_START_PARAMETER
-{
-	NtTerminateThread_t NtTerminateThread;
-	void *StackBase; // base is bottom of buffer - stack grows down - StackBase = buffer + bufferSize - must be 16 byte aligned
-	void *StackLimit; // the allocation pointer
-	uint64_t Argument;
-	uint64_t volatile Flag;	// will turn non 0 when entry stub is reached
-	NtStatus (*ThreadMain)(void *argument);
-} THREAD_START_PARAMETER;
-
-// thread entry via asm - to set RSP
-__declspec(noreturn) NtStatus ThreadEntry(THREAD_START_PARAMETER *threadStartParameter);
-
-// called by ThreadEntry
-NtStatus TestThreadMain(void *argument)
-{
-	THREAD_NAME_INFORMATION nameInformation;
-	nameInformation.ThreadName.Buffer = u"Test Worker Thread";
-	nameInformation.ThreadName.Length = 36;
-	nameInformation.ThreadName.MaximumLength = 38;
-	NtStatus status = NtSetInformationThread((Handle)-2, ThreadNameInformation, &nameInformation, sizeof(THREAD_NAME_INFORMATION));
-
-	char_t *string = _alloca(21);
-	string[20] = '\n';
-	uint16_t length = UInt64ToChar((uint64_t)argument, string);
-	ConsoleWrite("[WORKER] Message from worker thread: argument was ");
-	ConsoleWrite(string + 20 - length);
-
-	TestExceptions();
-
-	return 420;
-}
-
-// ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+/* -------------------------------------------------------------------------- */
 
 #define STACK_SIZE (2 * 1'024 * 1'024)
 
+typedef struct LARGE_STACK_THREAD_START_PARAMETER
+{
+	uint64_t StackSize;
+	uint8_t *StackMemory;
+	uint64_t Argument;
+	NtStatus (*Procedure)(void *argument);
+	uint64_t volatile Flag;	// set to non zero when done reading this structure
+	NtTerminateThread_t NtTerminateThread;
+} LARGE_STACK_THREAD_START_PARAMETER;
+
+__declspec(noreturn) NtStatus LargeStackThreadEntry(LARGE_STACK_THREAD_START_PARAMETER *threadStartParameter);
+
+/* -------------------------------------------------------------------------- */
+
 boolean_t Multithreading()
 {
-	ConsoleWrite("# Multithreading\n\n");
+	ConsoleWrite(u"# Multithreading\n\n");
 
 	uint8_t *threadStack = null;
 	uint64_t size = STACK_SIZE;
 	if (STATUS_SUCCESS != NtAllocateVirtualMemory((Handle)-1i64, &threadStack, null, &size, MEM_RESERVE | MEM_COMMIT | MEM_LARGE_PAGES, PAGE_READWRITE))
 	{
-		ConsoleWrite("NtAllocateVirtualMemory failed to allocate large pages\n");
+		ConsoleWrite(u"NtAllocateVirtualMemory failed to allocate large pages\n");
 		return false;
 	}
 
 	/* ---------------------------------------------------------------------------------- */
 
 	Handle threadHandle;
-	THREAD_START_PARAMETER threadStartParameter;
+	LARGE_STACK_THREAD_START_PARAMETER threadStartParameter;
 	threadStartParameter.Flag = 0;
+	threadStartParameter.Procedure = &LargePageStackTestThreadMain;
 	threadStartParameter.Argument = 42067;	
-	threadStartParameter.StackBase = threadStack + STACK_SIZE;
-	threadStartParameter.StackLimit = threadStack;
+	threadStartParameter.StackSize = STACK_SIZE;
+	threadStartParameter.StackMemory = threadStack;
 	threadStartParameter.NtTerminateThread = NtDll.NtTerminateThread;
-	if (STATUS_SUCCESS != NtCreateThreadEx(&threadHandle, THREAD_ALL_ACCESS, null, (Handle)-1i64, &ThreadEntry, &threadStartParameter, THREAD_CREATE_FLAGS_SKIP_THREAD_ATTACH | THREAD_CREATE_FLAGS_CREATE_SUSPENDED, 0, 4096, 4096, null))
+	if (STATUS_SUCCESS != NtCreateThreadEx(&threadHandle, THREAD_ALL_ACCESS, null, (Handle)-1i64, &LargeStackThreadEntry, &threadStartParameter, THREAD_CREATE_FLAGS_SKIP_THREAD_ATTACH | THREAD_CREATE_FLAGS_CREATE_SUSPENDED, 0, 4096, 4096, null))
 	{
-		ConsoleWrite("[MAIN] Failed to create thread\n");
+		ConsoleWrite(u"[MAIN] Failed to create thread\n");
 		return false;
 	}
-	ConsoleWrite("[MAIN] Starting worker thread\n");
+	ConsoleWrite(u"[MAIN] Starting worker thread\n");
 
 	_mm_lfence();
 	uint64_t now = __rdtsc();
@@ -74,7 +56,7 @@ boolean_t Multithreading()
 
 	if (STATUS_SUCCESS != NtResumeThread(threadHandle, null))
 	{
-		ConsoleWrite("[MAIN] Failed to start thread\n");
+		ConsoleWrite(u"[MAIN] Failed to start thread\n");
 		return false;
 	}
 
@@ -84,12 +66,12 @@ boolean_t Multithreading()
 
 	if (STATUS_SUCCESS != NtWaitForSingleObject(threadHandle, false, null))
 	{
-		ConsoleWrite("[MAIN] Failed to wait for thread to end\n");
+		ConsoleWrite(u"[MAIN] Failed to wait for thread to end\n");
 		return false;
 	}
 	NtClose(threadHandle);
 
-	ConsoleWrite("[MAIN] Thread exited\n\n");
+	ConsoleWrite(u"[MAIN] Thread exited\n");
 
 	size = 0;
 	return !NtFreeVirtualMemory((Handle)-1, &threadStack, &size, MEM_RELEASE);

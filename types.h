@@ -31,5 +31,5 @@ typedef unsigned __int16 wchar_t;
 // ░░░ Scalars ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 typedef uint64_t Handle;
-typedef uint32_t NtStatus;
+typedef int32_t NtStatus;
 typedef uint32_t HResult;

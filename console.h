@@ -27,10 +27,10 @@ void RestoreConsoleMode();
 
 bool_t ConsoleLog(char_t const *const message, LogLevel logLevel, char_t const *const source);
 
-static __forceinline bool_t ConsoleWrite(char_t const *const message)
+static __forceinline bool_t ConsoleWrite(wchar_t const *const message)
 {
-	uint32_t length = (uint32_t)MemoryGetFirstByteMatchIndexX86(256, null, message);
-	return WriteConsoleA(OwnProcessInformation.StandardOutput, message, length, null, null);
+	uint32_t length = (uint32_t)MemoryGetFirstWordMatchIndexX86(256, null, message);
+	return WriteConsoleW(OwnProcessInformation.StandardOutput, message, length, null, null);
 }
 
 /* -------------------------------------------------------------------------- */

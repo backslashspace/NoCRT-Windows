@@ -5,9 +5,9 @@ static bool_t ConsoleControlHandler(uint32_t dwCtrlType)
 	RestoreConsoleMode();
 
 	// show curser
-	ConsoleWrite("\x1B[?25h");
+	ConsoleWrite(u"\x1B[?25h");
 
-	ConsoleWrite("Received a Console Signal - Terminating\n");
+	ConsoleWrite(u"Received a Console Signal - Terminating\n");
 
 	NtTerminateProcess((Handle)-1i64, dwCtrlType);
 	__assume(0);
@@ -23,7 +23,7 @@ boolean_t EnableAndTestXTermOutput()
 	if (!SetConsoleCtrlHandler(&ConsoleControlHandler, true))
 	{
 		//uint32_t errorValue = GetLastError;
-		ConsoleWrite("SetConsoleCtrlHandler failed\n");
+		ConsoleWrite(u"SetConsoleCtrlHandler failed\n");
 		return false;
 	}
 	ConsoleLog("Registered ConsoleCtrlHandler", Info, "Main");
@@ -68,7 +68,7 @@ boolean_t EnableAndTestXTermOutput()
 	// converter expects UTF-8, we send UTF-8 → OK
 	NtWriteFile(OwnProcessInformation.StandardOutput, null, null, null, &ioStatusBlock, u8"UTF-8 NtWriteFile test message: 𐍈 öüäß\n", 46, 0, null);
 
-	ConsoleWrite("\n----------------------------------------------------------------\n\n");
+	ConsoleWrite(u"\n----------------------------------------------------------------\n\n");
 
 	return true;
 }
