@@ -1,5 +1,6 @@
 ﻿#include "core.h"
 #include "ntdll.h"
+#include "dnsapi.h"
 #include "testing.h"
 #include "console.h"
 #include "utility.h"
@@ -9,6 +10,20 @@
 
 static void Test()
 {
+	DNS_RECORD_W *record;
+
+	DNS_STATUS test = DnsQuery_UTF8(u8"test.net", DNS_TYPE_A, DNS_QUERY_STANDARD, null, &record, null);
+
+	if (test != STATUS_SUCCESS) ConsoleWrite(u"DnsQuery_UTF8() failed");
+	else DnsFree(record, DnsFreeRecordList);
+
+	test = DnsValidateName_UTF8(u8"fih", DnsNameDomain);
+	test = DnsValidateName_UTF8(u8"musty.com", DnsNameDomain);
+
+	_mm_pause();
+
+	/* - - - - - - - - - - - - - - - - - - - */
+
 	//UNICODE_STRING unicodeString;
 	//unicodeString.Length = 53 << 1;
 	//unicodeString.MaximumLength = 54 << 1;
@@ -72,9 +87,23 @@ int32_t Main()
 		goto ERROR_EXIT;
 	}
 
+	Test();
+
 	TestMWaitXSpinWait();
 
+	/* - - - - - - - - - - - - - - - - - - - */
 
+	//UNICODE_STRING moduleName;
+	//moduleName.Buffer = u"dnsapi";
+	//moduleName.Length = 12;
+	//moduleName.MaximumLength = 14;
+
+	//Handle dnsapiHandle;
+
+	//if (LdrLoadDll(null, null, &moduleName, &dnsapiHandle)) ConsoleWrite(u"Failed to load dnsapi.dll\n");
+	//else PrintDllExports((uint8_t *)dnsapiHandle);
+	
+	/* - - - - - - - - - - - - - - - - - - - */
 
 
 

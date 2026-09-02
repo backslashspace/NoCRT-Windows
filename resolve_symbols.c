@@ -1,4 +1,5 @@
 ﻿#include "ntdll.h"
+#include "dnsapi.h"
 #include "shell32.h"
 #include "advapi32.h"
 #include "kernelbase.h"
@@ -70,11 +71,25 @@ static boolean_t LoadAndResolveKernelbaseSymbols()
 	return true;
 }
 
+static boolean_t LoadAndResolveDnsApiSymbols()
+{
+	if (!InitializeDnsApi(false)) return false;
+
+	if (!LoadDnsFree()) return false;
+	if (!LoadDnsQuery_W()) return false;
+	if (!LoadDnsQuery_UTF8()) return false;
+	if (!LoadDnsValidateName_W()) return false;
+	if (!LoadDnsValidateName_UTF8()) return false;
+
+	return true;
+}
+
 // ░░░ Loader ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 boolean_t ResolveSymbols()
 {
 	if (!ResolveNtSymbols()) return false;
+	if (!LoadAndResolveDnsApiSymbols()) return false;
 	if (!LoadAndResolveKernelbaseSymbols()) return false;
 
 	return true;
