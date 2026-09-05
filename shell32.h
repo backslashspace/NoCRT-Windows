@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "types.h"
 
-// ░░░ Structs uses by shell32 Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-
 // ░░░ Loader API ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 boolean_t InitializeShell32();
@@ -10,7 +8,7 @@ extern Handle Shell32DllBaseAddress;
 
 boolean_t LoadCommandLineToArgvW();
 
-// ░░░ shell32 Function Typedefs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+// ░░░ Structs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 // https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-commandlinetoargvw
 typedef wchar_t **(*CommandLineToArgvW_t)(wchar_t const *lpCmdLine, uint32_t *pNumArgs);

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "types.h"
 
-// ░░░ Definitions uses by kernelbase Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+// ░░░ Definitions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 //
 // Input Mode flags:
@@ -40,7 +40,7 @@
 #define CTRL_LOGOFF_EVENT   5
 #define CTRL_SHUTDOWN_EVENT 6
 
-// ░░░ Structs uses by kernelbase Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+// ░░░ Structs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 
 

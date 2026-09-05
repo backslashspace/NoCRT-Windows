@@ -9,7 +9,12 @@ boolean_t ASLR();
 
 void PrintCPUIDInformation();
 
-boolean_t Multithreading();
+void TestDNS();
+
+void TestUDP();
+void TestTCP();
+
+boolean_t TestLargePageThreadStack();
 NtStatus LargePageStackTestThreadMain(void *argument);
 
 void TestMWaitXSpinWait();

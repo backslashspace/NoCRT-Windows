@@ -1,6 +1,6 @@
 .code
 
-MWaitXSpinWait PROC ; void MWaitXSpinWait(boolean_t *flag)
+MWaitXSpinWait PROC ; void MWaitXSpinWait(boolean_t volatile *flag)
 
 	cmp			BYTE PTR [RCX], 0
 	jne			EXIT				; early exit

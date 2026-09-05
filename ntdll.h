@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "types.h"
 
-// ░░░ Definitions uses by NtXxx Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+// ░░░ Definitions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 // ################# winnt.h #################
 
@@ -447,282 +447,7 @@
 #define EXCEPTION_INVALID_HANDLE            STATUS_INVALID_HANDLE
 #define CONTROL_C_EXIT                      STATUS_CONTROL_C_EXIT
 
-// ░░░ Structs uses by NtXxx Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-
-typedef struct EXCEPTION_RECORD
-{
-	uint32_t ExceptionCode;
-	uint32_t ExceptionFlags;
-	struct EXCEPTION_RECORD *ExceptionRecord;
-	void *ExceptionAddress;
-	uint32_t NumberParameters;
-	uint64_t ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
-} EXCEPTION_RECORD;
-
-typedef struct IMAGE_RUNTIME_FUNCTION_ENTRY
-{
-	uint32_t BeginAddress;
-	uint32_t EndAddress;
-	union
-	{
-		uint32_t UnwindInfoAddress;
-		uint32_t UnwindData;
-	} DUMMYUNIONNAME;
-} IMAGE_RUNTIME_FUNCTION_ENTRY;
-
-typedef struct UNWIND_HISTORY_TABLE_ENTRY
-{
-	uint64_t ImageBase;
-	IMAGE_RUNTIME_FUNCTION_ENTRY *FunctionEntry;
-} UNWIND_HISTORY_TABLE_ENTRY;
-
-typedef struct UNWIND_HISTORY_TABLE
-{
-	uint32_t Count;
-	uint8_t  LocalHint;
-	uint8_t  GlobalHint;
-	uint8_t  Search;
-	uint8_t  Once;
-	uint64_t LowAddress;
-	uint64_t HighAddress;
-	UNWIND_HISTORY_TABLE_ENTRY Entry[UNWIND_HISTORY_TABLE_SIZE];
-} UNWIND_HISTORY_TABLE;
-
-// https://learn.microsoft.com/en-us/windows/win32/api/subauth/ns-subauth-unicode_string
-typedef struct UNICODE_STRING
-{
-	uint16_t Length;
-	uint16_t MaximumLength;
-	wchar_t *Buffer;
-} UNICODE_STRING;
-
-// https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-string
-typedef struct STRING
-{
-	uint16_t Length;
-	uint16_t MaximumLength;
-	char_t *Buffer;
-} STRING;
-
-// https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_object_attributes
-typedef struct OBJECT_ATTRIBUTES
-{
-	uint32_t Length;
-	Handle RootDirectory;
-	UNICODE_STRING *ObjectName;
-	uint32_t Attributes;
-	void *SecurityDescriptor;
-	void *SecurityQualityOfService;
-} OBJECT_ATTRIBUTES;
-
-// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_io_status_block
-typedef struct IO_STATUS_BLOCK
-{
-	union
-	{
-		NtStatus Status;
-		void *Pointer;
-	};
-	uint64_t Information;
-} IO_STATUS_BLOCK;
-
-// // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-time_fields
-typedef struct TIME_FIELDS
-{
-	uint16_t Year;        // range [1601...]
-	uint16_t Month;       // range [1..12]
-	uint16_t Day;         // range [1..31]
-	uint16_t Hour;        // range [0..23]
-	uint16_t Minute;      // range [0..59]
-	uint16_t Second;      // range [0..59]
-	uint16_t Milliseconds;// range [0..999]
-	uint16_t Weekday;     // range [0..6] == [Sunday..Saturday]
-} TIME_FIELDS;
-
-// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_mode_information
-typedef struct FILE_MODE_INFORMATION
-{
-	uint32_t Mode;
-} FILE_MODE_INFORMATION;
-
-// https://learn.microsoft.com/de-de/windows-hardware/drivers/ddi/igpupvdev/ns-igpupvdev-_luid
-typedef struct LUID
-{
-	uint32_t LowPart;
-	int32_t HighPart;
-} LUID;
-
-// https://learn.microsoft.com/de-de/windows-hardware/drivers/ddi/wdm/ns-wdm-_luid_and_attributes
-typedef struct LUID_AND_ATTRIBUTES
-{
-	LUID Luid;
-	uint32_t Attributes;
-} LUID_AND_ATTRIBUTES;
-
-// https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-token_privileges
-typedef struct TOKEN_PRIVILEGES
-{
-	uint32_t PrivilegeCount;
-	LUID_AND_ATTRIBUTES Privileges[1];
-} TOKEN_PRIVILEGES;
-
-// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_standard_information
-typedef struct FILE_STANDARD_INFORMATION
-{
-	uint64_t AllocationSize;
-	uint64_t EndOfFile;
-	uint32_t NumberOfLinks;
-	boolean_t DeletePending;
-	boolean_t Directory;
-} FILE_STANDARD_INFORMATION;
-
-// https://ntdoc.m417z.com/ps_attribute
-typedef struct PS_ATTRIBUTE
-{
-	uint64_t Attribute;
-	uint64_t Size;
-	union
-	{
-		uint64_t Value;
-		void *ValuePtr;
-	};
-	uint64_t *ReturnLength;
-} PS_ATTRIBUTE;
-
-// https://ntdoc.m417z.com/ps_attribute_list
-typedef struct PS_ATTRIBUTE_LIST
-{
-	uint64_t TotalLength;
-	PS_ATTRIBUTE Attributes[1];
-} PS_ATTRIBUTE_LIST;
-
-__declspec(align(16)) typedef struct M128A
-{
-	uint64_t Low;
-	uint64_t High;
-} M128A;
-
-__declspec(align(16)) typedef struct XSAVE_FORMAT
-{
-	uint16_t ControlWord;
-	uint16_t StatusWord;
-	uint8_t TagWord;
-	uint8_t Reserved1;
-	uint16_t ErrorOpcode;
-	uint32_t ErrorOffset;
-	uint16_t ErrorSelector;
-	uint16_t Reserved2;
-	uint32_t DataOffset;
-	uint16_t DataSelector;
-	uint16_t Reserved3;
-	uint32_t MxCsr;
-	uint32_t MxCsr_Mask;
-	M128A FloatRegisters[8];
-	M128A XmmRegisters[16];
-	uint8_t Reserved4[96];
-} XSAVE_FORMAT;
-
-// from windows.h
-// https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-context
-__declspec(align(16)) typedef struct CONTEXT
-{
-	// Register parameter home addresses.
-	//
-	// N.B. These fields are for convience - they could be used to extend the
-	//      context record in the future.
-	uint64_t P1Home;
-	uint64_t P2Home;
-	uint64_t P3Home;
-	uint64_t P4Home;
-	uint64_t P5Home;
-	uint64_t P6Home;
-
-	// Control flags.
-	uint32_t ContextFlags;
-	uint32_t MxCsr;
-
-	// Segment Registers and processor flags.
-	uint16_t   SegCs;
-	uint16_t   SegDs;
-	uint16_t   SegEs;
-	uint16_t   SegFs;
-	uint16_t   SegGs;
-	uint16_t   SegSs;
-	uint32_t EFlags;
-
-	// Debug registers
-	uint64_t Dr0;
-	uint64_t Dr1;
-	uint64_t Dr2;
-	uint64_t Dr3;
-	uint64_t Dr6;
-	uint64_t Dr7;
-
-	// Integer registers.
-	uint64_t Rax;
-	uint64_t Rcx;
-	uint64_t Rdx;
-	uint64_t Rbx;
-	uint64_t Rsp;
-	uint64_t Rbp;
-	uint64_t Rsi;
-	uint64_t Rdi;
-	uint64_t R8;
-	uint64_t R9;
-	uint64_t R10;
-	uint64_t R11;
-	uint64_t R12;
-	uint64_t R13;
-	uint64_t R14;
-	uint64_t R15;
-
-	// Program counter.
-	uint64_t Rip;
-
-	// Floating point state.
-	union
-	{
-		XSAVE_FORMAT FltSave;
-		struct
-		{
-			M128A Header[2];
-			M128A Legacy[8];
-			M128A Xmm0;
-			M128A Xmm1;
-			M128A Xmm2;
-			M128A Xmm3;
-			M128A Xmm4;
-			M128A Xmm5;
-			M128A Xmm6;
-			M128A Xmm7;
-			M128A Xmm8;
-			M128A Xmm9;
-			M128A Xmm10;
-			M128A Xmm11;
-			M128A Xmm12;
-			M128A Xmm13;
-			M128A Xmm14;
-			M128A Xmm15;
-		} DUMMYSTRUCTNAME;
-	} DUMMYUNIONNAME;
-
-	// Vector registers.
-	M128A VectorRegister[26];
-	uint64_t VectorControl;
-
-	// Special debug control registers.
-	uint64_t DebugControl;
-	uint64_t LastBranchToRip;
-	uint64_t LastBranchFromRip;
-	uint64_t LastExceptionToRip;
-	uint64_t LastExceptionFromRip;
-} CONTEXT;
-
-typedef struct EXCEPTION_POINTERS
-{
-	EXCEPTION_RECORD *ExceptionRecord;
-	CONTEXT *ContextRecord;
-} EXCEPTION_POINTERS;
+// ░░░ Enums ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 // excpt.h
 typedef enum EXCEPTION_DISPOSITION
@@ -732,34 +457,6 @@ typedef enum EXCEPTION_DISPOSITION
 	ExceptionNestedException,
 	ExceptionCollidedUnwind
 } EXCEPTION_DISPOSITION;
-
-typedef struct DISPATCHER_CONTEXT
-{
-	uint64_t ControlPc;
-	uint64_t ImageBase;
-	IMAGE_RUNTIME_FUNCTION_ENTRY *FunctionEntry;
-	uint64_t EstablisherFrame;
-	uint64_t TargetIp;
-	CONTEXT *ContextRecord;
-	EXCEPTION_DISPOSITION(*LanguageHandler)(EXCEPTION_RECORD *ExceptionRecord, void *EstablisherFrame, CONTEXT *ContextRecord, void *DispatcherContext);
-	void *HandlerData;
-	UNWIND_HISTORY_TABLE *HistoryTable;
-	uint32_t ScopeIndex;
-	uint32_t Fill0;
-} DISPATCHER_CONTEXT;
-
-// https://ntdoc.m417z.com/thread_name_information
-typedef struct THREAD_NAME_INFORMATION
-{
-	UNICODE_STRING ThreadName;
-} THREAD_NAME_INFORMATION;
-
-// https://ntdoc.m417z.com/client_id
-typedef struct CLIENT_ID
-{
-	Handle UniqueProcess;
-	Handle UniqueThread;
-} CLIENT_ID;
 
 // https://ntdoc.m417z.com/kthread_state
 typedef enum KTHREAD_STATE
@@ -825,53 +522,6 @@ typedef enum KWAIT_REASON
 	WrRcu,                   // Waiting for read-copy-update (RCU) synchronization.
 	MaximumWaitReason
 } KWAIT_REASON;
-
-// https://ntdoc.m417z.com/system_thread_information
-typedef struct SYSTEM_THREAD_INFORMATION
-{
-	uint64_t KernelTime;                   // Number of 100-nanosecond intervals spent executing kernel code.
-	uint64_t UserTime;                     // Number of 100-nanosecond intervals spent executing user code.
-	uint64_t CreateTime;                   // The date and time when the thread was created.
-	uint32_t WaitTime;                             // The current time spent in ready queue or waiting (depending on the thread state).
-	void *StartAddress;                         // The initial start address of the thread.
-	CLIENT_ID ClientId;                         // The identifier of the thread and the process owning the thread.
-	uint32_t Priority;                         // The dynamic priority of the thread.
-	uint32_t BasePriority;                     // The starting priority of the thread.
-	uint32_t ContextSwitches;                      // The total number of context switches performed.
-	KTHREAD_STATE ThreadState;                  // The current state of the thread.
-	KWAIT_REASON WaitReason;                    // The current reason the thread is waiting.
-} SYSTEM_THREAD_INFORMATION;
-
-// ntddk.h - https://ntdoc.m417z.com/system_firmware_table_information
-typedef struct SYSTEM_FIRMWARE_TABLE_INFORMATION
-{
-	uint32_t ProviderSignature;   // 'RSMB'
-	uint32_t Action;              // 1 = Get
-	uint32_t TableID;             // 0 for SMBIOS
-	uint32_t TableBufferLength;
-	uint8_t TableBuffer[1];
-} SYSTEM_FIRMWARE_TABLE_INFORMATION;
-
-// https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemfirmwaretable
-typedef struct RawSMBIOSData
-{
-	uint8_t Used20CallingMethod;
-	uint8_t SMBIOSMajorVersion;
-	uint8_t SMBIOSMinorVersion;
-	uint8_t DmiRevision;
-	uint32_t Length;
-	uint8_t SMBIOSTableData[1];
-} RawSMBIOSData;
-
-// https://ntdoc.m417z.com/smbios_header
-#pragma pack(push, 1)
-typedef struct SMBIOS_HEADER
-{
-	uint8_t Type;
-	uint8_t Length;
-	uint16_t Handle;
-} SMBIOS_HEADER;
-#pragma pack(pop)
 
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ne-ntifs-_object_information_class
 typedef enum OBJECT_INFORMATION_CLASS
@@ -1509,6 +1159,358 @@ typedef enum SYSTEM_INFORMATION_CLASS
 	SystemCodeIntegrityEndpointSecurityInformation,         // q: SYSTEM_CODE_INTEGRITY_ENDPOINT_SECURITY_INFORMATION
 	MaxSystemInfoClass
 } SYSTEM_INFORMATION_CLASS;
+
+// ░░░ Structs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+typedef struct EXCEPTION_RECORD
+{
+	uint32_t ExceptionCode;
+	uint32_t ExceptionFlags;
+	struct EXCEPTION_RECORD *ExceptionRecord;
+	void *ExceptionAddress;
+	uint32_t NumberParameters;
+	uint64_t ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
+} EXCEPTION_RECORD;
+
+typedef struct IMAGE_RUNTIME_FUNCTION_ENTRY
+{
+	uint32_t BeginAddress;
+	uint32_t EndAddress;
+	union
+	{
+		uint32_t UnwindInfoAddress;
+		uint32_t UnwindData;
+	} DUMMYUNIONNAME;
+} IMAGE_RUNTIME_FUNCTION_ENTRY;
+
+typedef struct UNWIND_HISTORY_TABLE_ENTRY
+{
+	uint64_t ImageBase;
+	IMAGE_RUNTIME_FUNCTION_ENTRY *FunctionEntry;
+} UNWIND_HISTORY_TABLE_ENTRY;
+
+typedef struct UNWIND_HISTORY_TABLE
+{
+	uint32_t Count;
+	uint8_t  LocalHint;
+	uint8_t  GlobalHint;
+	uint8_t  Search;
+	uint8_t  Once;
+	uint64_t LowAddress;
+	uint64_t HighAddress;
+	UNWIND_HISTORY_TABLE_ENTRY Entry[UNWIND_HISTORY_TABLE_SIZE];
+} UNWIND_HISTORY_TABLE;
+
+// https://learn.microsoft.com/en-us/windows/win32/api/subauth/ns-subauth-unicode_string
+typedef struct UNICODE_STRING
+{
+	uint16_t Length;
+	uint16_t MaximumLength;
+	wchar_t *Buffer;
+} UNICODE_STRING;
+
+// https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-string
+typedef struct STRING
+{
+	uint16_t Length;
+	uint16_t MaximumLength;
+	char_t *Buffer;
+} STRING;
+
+// https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_object_attributes
+typedef struct OBJECT_ATTRIBUTES
+{
+	uint32_t Length;
+	Handle RootDirectory;
+	UNICODE_STRING *ObjectName;
+	uint32_t Attributes;
+	void *SecurityDescriptor;
+	void *SecurityQualityOfService;
+} OBJECT_ATTRIBUTES;
+
+// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_io_status_block
+typedef struct IO_STATUS_BLOCK
+{
+	union
+	{
+		NtStatus Status;
+		void *Pointer;
+	};
+	uint64_t Information;
+} IO_STATUS_BLOCK;
+
+// // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-time_fields
+typedef struct TIME_FIELDS
+{
+	uint16_t Year;        // range [1601...]
+	uint16_t Month;       // range [1..12]
+	uint16_t Day;         // range [1..31]
+	uint16_t Hour;        // range [0..23]
+	uint16_t Minute;      // range [0..59]
+	uint16_t Second;      // range [0..59]
+	uint16_t Milliseconds;// range [0..999]
+	uint16_t Weekday;     // range [0..6] == [Sunday..Saturday]
+} TIME_FIELDS;
+
+// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_mode_information
+typedef struct FILE_MODE_INFORMATION
+{
+	uint32_t Mode;
+} FILE_MODE_INFORMATION;
+
+// https://learn.microsoft.com/de-de/windows-hardware/drivers/ddi/igpupvdev/ns-igpupvdev-_luid
+typedef struct LUID
+{
+	uint32_t LowPart;
+	int32_t HighPart;
+} LUID;
+
+// https://learn.microsoft.com/de-de/windows-hardware/drivers/ddi/wdm/ns-wdm-_luid_and_attributes
+typedef struct LUID_AND_ATTRIBUTES
+{
+	LUID Luid;
+	uint32_t Attributes;
+} LUID_AND_ATTRIBUTES;
+
+// https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-token_privileges
+typedef struct TOKEN_PRIVILEGES
+{
+	uint32_t PrivilegeCount;
+	LUID_AND_ATTRIBUTES Privileges[1];
+} TOKEN_PRIVILEGES;
+
+// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_file_standard_information
+typedef struct FILE_STANDARD_INFORMATION
+{
+	uint64_t AllocationSize;
+	uint64_t EndOfFile;
+	uint32_t NumberOfLinks;
+	boolean_t DeletePending;
+	boolean_t Directory;
+} FILE_STANDARD_INFORMATION;
+
+// https://ntdoc.m417z.com/ps_attribute
+typedef struct PS_ATTRIBUTE
+{
+	uint64_t Attribute;
+	uint64_t Size;
+	union
+	{
+		uint64_t Value;
+		void *ValuePtr;
+	};
+	uint64_t *ReturnLength;
+} PS_ATTRIBUTE;
+
+// https://ntdoc.m417z.com/ps_attribute_list
+typedef struct PS_ATTRIBUTE_LIST
+{
+	uint64_t TotalLength;
+	PS_ATTRIBUTE Attributes[1];
+} PS_ATTRIBUTE_LIST;
+
+__declspec(align(16)) typedef struct M128A
+{
+	uint64_t Low;
+	uint64_t High;
+} M128A;
+
+__declspec(align(16)) typedef struct XSAVE_FORMAT
+{
+	uint16_t ControlWord;
+	uint16_t StatusWord;
+	uint8_t TagWord;
+	uint8_t Reserved1;
+	uint16_t ErrorOpcode;
+	uint32_t ErrorOffset;
+	uint16_t ErrorSelector;
+	uint16_t Reserved2;
+	uint32_t DataOffset;
+	uint16_t DataSelector;
+	uint16_t Reserved3;
+	uint32_t MxCsr;
+	uint32_t MxCsr_Mask;
+	M128A FloatRegisters[8];
+	M128A XmmRegisters[16];
+	uint8_t Reserved4[96];
+} XSAVE_FORMAT;
+
+// from windows.h
+// https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-context
+__declspec(align(16)) typedef struct CONTEXT
+{
+	// Register parameter home addresses.
+	//
+	// N.B. These fields are for convience - they could be used to extend the
+	//      context record in the future.
+	uint64_t P1Home;
+	uint64_t P2Home;
+	uint64_t P3Home;
+	uint64_t P4Home;
+	uint64_t P5Home;
+	uint64_t P6Home;
+
+	// Control flags.
+	uint32_t ContextFlags;
+	uint32_t MxCsr;
+
+	// Segment Registers and processor flags.
+	uint16_t   SegCs;
+	uint16_t   SegDs;
+	uint16_t   SegEs;
+	uint16_t   SegFs;
+	uint16_t   SegGs;
+	uint16_t   SegSs;
+	uint32_t EFlags;
+
+	// Debug registers
+	uint64_t Dr0;
+	uint64_t Dr1;
+	uint64_t Dr2;
+	uint64_t Dr3;
+	uint64_t Dr6;
+	uint64_t Dr7;
+
+	// Integer registers.
+	uint64_t Rax;
+	uint64_t Rcx;
+	uint64_t Rdx;
+	uint64_t Rbx;
+	uint64_t Rsp;
+	uint64_t Rbp;
+	uint64_t Rsi;
+	uint64_t Rdi;
+	uint64_t R8;
+	uint64_t R9;
+	uint64_t R10;
+	uint64_t R11;
+	uint64_t R12;
+	uint64_t R13;
+	uint64_t R14;
+	uint64_t R15;
+
+	// Program counter.
+	uint64_t Rip;
+
+	// Floating point state.
+	union
+	{
+		XSAVE_FORMAT FltSave;
+		struct
+		{
+			M128A Header[2];
+			M128A Legacy[8];
+			M128A Xmm0;
+			M128A Xmm1;
+			M128A Xmm2;
+			M128A Xmm3;
+			M128A Xmm4;
+			M128A Xmm5;
+			M128A Xmm6;
+			M128A Xmm7;
+			M128A Xmm8;
+			M128A Xmm9;
+			M128A Xmm10;
+			M128A Xmm11;
+			M128A Xmm12;
+			M128A Xmm13;
+			M128A Xmm14;
+			M128A Xmm15;
+		} DUMMYSTRUCTNAME;
+	} DUMMYUNIONNAME;
+
+	// Vector registers.
+	M128A VectorRegister[26];
+	uint64_t VectorControl;
+
+	// Special debug control registers.
+	uint64_t DebugControl;
+	uint64_t LastBranchToRip;
+	uint64_t LastBranchFromRip;
+	uint64_t LastExceptionToRip;
+	uint64_t LastExceptionFromRip;
+} CONTEXT;
+
+typedef struct EXCEPTION_POINTERS
+{
+	EXCEPTION_RECORD *ExceptionRecord;
+	CONTEXT *ContextRecord;
+} EXCEPTION_POINTERS;
+
+typedef struct DISPATCHER_CONTEXT
+{
+	uint64_t ControlPc;
+	uint64_t ImageBase;
+	IMAGE_RUNTIME_FUNCTION_ENTRY *FunctionEntry;
+	uint64_t EstablisherFrame;
+	uint64_t TargetIp;
+	CONTEXT *ContextRecord;
+	EXCEPTION_DISPOSITION(*LanguageHandler)(EXCEPTION_RECORD *ExceptionRecord, void *EstablisherFrame, CONTEXT *ContextRecord, void *DispatcherContext);
+	void *HandlerData;
+	UNWIND_HISTORY_TABLE *HistoryTable;
+	uint32_t ScopeIndex;
+	uint32_t Fill0;
+} DISPATCHER_CONTEXT;
+
+// https://ntdoc.m417z.com/thread_name_information
+typedef struct THREAD_NAME_INFORMATION
+{
+	UNICODE_STRING ThreadName;
+} THREAD_NAME_INFORMATION;
+
+// https://ntdoc.m417z.com/client_id
+typedef struct CLIENT_ID
+{
+	Handle UniqueProcess;
+	Handle UniqueThread;
+} CLIENT_ID;
+
+// https://ntdoc.m417z.com/system_thread_information
+typedef struct SYSTEM_THREAD_INFORMATION
+{
+	uint64_t KernelTime;                   // Number of 100-nanosecond intervals spent executing kernel code.
+	uint64_t UserTime;                     // Number of 100-nanosecond intervals spent executing user code.
+	uint64_t CreateTime;                   // The date and time when the thread was created.
+	uint32_t WaitTime;                             // The current time spent in ready queue or waiting (depending on the thread state).
+	void *StartAddress;                         // The initial start address of the thread.
+	CLIENT_ID ClientId;                         // The identifier of the thread and the process owning the thread.
+	uint32_t Priority;                         // The dynamic priority of the thread.
+	uint32_t BasePriority;                     // The starting priority of the thread.
+	uint32_t ContextSwitches;                      // The total number of context switches performed.
+	KTHREAD_STATE ThreadState;                  // The current state of the thread.
+	KWAIT_REASON WaitReason;                    // The current reason the thread is waiting.
+} SYSTEM_THREAD_INFORMATION;
+
+// ntddk.h - https://ntdoc.m417z.com/system_firmware_table_information
+typedef struct SYSTEM_FIRMWARE_TABLE_INFORMATION
+{
+	uint32_t ProviderSignature;   // 'RSMB'
+	uint32_t Action;              // 1 = Get
+	uint32_t TableID;             // 0 for SMBIOS
+	uint32_t TableBufferLength;
+	uint8_t TableBuffer[1];
+} SYSTEM_FIRMWARE_TABLE_INFORMATION;
+
+// https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemfirmwaretable
+typedef struct RawSMBIOSData
+{
+	uint8_t Used20CallingMethod;
+	uint8_t SMBIOSMajorVersion;
+	uint8_t SMBIOSMinorVersion;
+	uint8_t DmiRevision;
+	uint32_t Length;
+	uint8_t SMBIOSTableData[1];
+} RawSMBIOSData;
+
+// https://ntdoc.m417z.com/smbios_header
+#pragma pack(push, 1)
+typedef struct SMBIOS_HEADER
+{
+	uint8_t Type;
+	uint8_t Length;
+	uint16_t Handle;
+} SMBIOS_HEADER;
+#pragma pack(pop)
 
 // ░░░ Loader API ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 

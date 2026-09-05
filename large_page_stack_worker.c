@@ -24,7 +24,10 @@ NtStatus LargePageStackTestThreadMain(void *argument)
 
 		TestExceptions();
 
+#pragma warning(push)
+#pragma warning(disable:4311)
 		return (NtStatus)argument;
+#pragma warning(pop)
 	}
 #pragma warning(push)
 #pragma warning(disable:6320)

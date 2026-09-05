@@ -1,18 +1,12 @@
 ﻿#pragma once
-#include "types.h"
+#include "generic_windows.h"
 
-// ░░░ Definitions uses by ole32 Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+// ░░░ Definitions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 #define S_OK 0L
 #define S_FALSE 1L
 
-typedef struct GUID
-{
-	uint32_t Data1;
-	uint16_t Data2;
-	uint16_t Data3;
-	char_t Data4[8];
-} GUID;
+// ░░░ Structs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 // extended waveform format structure used for all non-PCM formats. this
 // structure is common to all non-PCM formats.

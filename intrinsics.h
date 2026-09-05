@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "ntdll.h"
 
-// ░░░ Constants ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+// ░░░ Definitions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 #define FAST_FAIL_LEGACY_GS_VIOLATION               0
 #define FAST_FAIL_VTGUARD_CHECK_FAILURE             1
@@ -88,109 +88,114 @@
 void *memcpy(void *destination, const void *source, uint64_t count);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/stosb?view=msvc-170
-void __stosb(void *Destination, uint8_t Data, uint64_t Count) {}
+void __stosb(void *Destination, uint8_t Data, uint64_t Count);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/movsb?view=msvc-170
-void __movsb(void *Destination, void const *Source, uint64_t Count) {}
+void __movsb(void *Destination, void const *Source, uint64_t Count);
 
 // https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/alloca?view=msvc-170
-void *_alloca(uint64_t size) {}
+void *_alloca(uint64_t size);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/readgsbyte-readgsdword-readgsqword-readgsword?view=msvc-170
-uint64_t __readgsqword(uint32_t Offset) {}
-uint32_t __readgsdword(uint32_t Offset) {}
+uint64_t __readgsqword(uint32_t Offset);
+uint32_t __readgsdword(uint32_t Offset);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/writegsbyte-writegsdword-writegsqword-writegsword?view=msvc-170
-void __writegsqword(uint32_t Offset, uint64_t Data) {}
-void __writegsdword(uint32_t Offset, uint32_t Data) {}
+void __writegsqword(uint32_t Offset, uint64_t Data);
+void __writegsdword(uint32_t Offset, uint32_t Data);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/rdtscp?view=msvc-170
-uint64_t __rdtscp(uint32_t *AUX) {}
+uint64_t __rdtscp(uint32_t *AUX);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/rdtsc?view=msvc-170
-uint64_t __rdtsc() {}
+uint64_t __rdtsc();
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/fastfail?view=msvc-170
-__declspec(noreturn) void __fastfail(uint32_t code) {}
+__declspec(noreturn) void __fastfail(uint32_t code);
 
 // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#othertechs=CRC32
-uint32_t _mm_crc32_u8(uint32_t crc, uint8_t v) {}
-uint32_t _mm_crc32_u16(uint32_t crc, uint16_t v) {}
-uint32_t _mm_crc32_u32(uint32_t crc, uint32_t v) {}
-uint64_t _mm_crc32_u64(uint64_t crc, uint64_t v) {}
+uint32_t _mm_crc32_u8(uint32_t crc, uint8_t v);
+uint32_t _mm_crc32_u16(uint32_t crc, uint16_t v);
+uint32_t _mm_crc32_u32(uint32_t crc, uint32_t v);
+uint64_t _mm_crc32_u64(uint64_t crc, uint64_t v);
+
+// https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/byteswap-uint64-byteswap-ulong-byteswap-ushort?view=msvc-170
+uint16_t _byteswap_ushort(uint16_t val);
+uint32_t _byteswap_ulong(uint32_t val);
+uint64_t _byteswap_uint64(uint64_t val);
 
 // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#othertechs=RDRAND
-uint32_t _rdrand16_step(uint16_t *val) {}
-uint32_t _rdrand32_step(uint32_t *val) {}
-uint32_t _rdrand64_step(uint64_t *val) {}
+uint32_t _rdrand16_step(uint16_t *val);
+uint32_t _rdrand32_step(uint32_t *val);
+uint32_t _rdrand64_step(uint64_t *val);
 
 // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#othertechs=RDSEED
-uint32_t _rdseed16_step(uint16_t *val) {}
-uint32_t _rdseed32_step(uint32_t *val) {}
-uint32_t _rdseed64_step(uint64_t *val) {}
+uint32_t _rdseed16_step(uint16_t *val);
+uint32_t _rdseed32_step(uint32_t *val);
+uint32_t _rdseed64_step(uint64_t *val);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/interlockedcompareexchange-intrinsic-functions?view=msvc-170
-uint8_t _InterlockedCompareExchange8(uint8_t volatile *Destination, uint8_t Exchange, uint8_t Comparand) {}
-uint16_t _InterlockedCompareExchange16(uint16_t volatile *Destination, uint16_t Exchange, uint16_t Comparand) {}
-uint32_t _InterlockedCompareExchange(uint32_t volatile *Destination, uint32_t Exchange, uint32_t Comparand) {}
-uint64_t _InterlockedCompareExchange64(uint64_t volatile *Destination, uint64_t Exchange, uint64_t Comparand) {}
+uint8_t _InterlockedCompareExchange8(uint8_t volatile *Destination, uint8_t Exchange, uint8_t Comparand);
+uint16_t _InterlockedCompareExchange16(uint16_t volatile *Destination, uint16_t Exchange, uint16_t Comparand);
+uint32_t _InterlockedCompareExchange(uint32_t volatile *Destination, uint32_t Exchange, uint32_t Comparand);
+uint64_t _InterlockedCompareExchange64(uint64_t volatile *Destination, uint64_t Exchange, uint64_t Comparand);
 // https://learn.microsoft.com/en-us/cpp/intrinsics/interlockedcompareexchangepointer-intrinsic-functions?view=msvc-170
-void *_InterlockedCompareExchangePointer(void *volatile *Destination, void *Exchange, void *Comparand) {}
+void *_InterlockedCompareExchangePointer(void *volatile *Destination, void *Exchange, void *Comparand);
 // https://learn.microsoft.com/en-us/cpp/intrinsics/interlockedcompareexchange128?view=msvc-170
-uint8_t _InterlockedCompareExchange128(uint64_t volatile *Destination, uint64_t ExchangeHigh, uint64_t ExchangeLow, uint64_t *ComparandResult) {}
+uint8_t _InterlockedCompareExchange128(uint64_t volatile *Destination, uint64_t ExchangeHigh, uint64_t ExchangeLow, uint64_t *ComparandResult);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/interlockedexchange-intrinsic-functions?view=msvc-170
-uint8_t _InterlockedExchange8(uint8_t volatile *Target, uint8_t Value) {}
-uint16_t _InterlockedExchange16(uint16_t volatile *Target, uint16_t Value) {}
-uint32_t _InterlockedExchange(uint32_t volatile *Target, uint32_t Value) {}
-uint64_t _InterlockedExchange64(uint64_t volatile *Target, uint64_t Value) {}
+uint8_t _InterlockedExchange8(uint8_t volatile *Target, uint8_t Value);
+uint16_t _InterlockedExchange16(uint16_t volatile *Target, uint16_t Value);
+uint32_t _InterlockedExchange(uint32_t volatile *Target, uint32_t Value);
+uint64_t _InterlockedExchange64(uint64_t volatile *Target, uint64_t Value);
 // https://learn.microsoft.com/en-us/cpp/intrinsics/interlockedexchangepointer-intrinsic-functions?view=msvc-170
-void* _InterlockedExchangePointer(void *volatile *Target, void *Value) {}
+void* _InterlockedExchangePointer(void *volatile *Target, void *Value);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/interlockedexchangeadd-intrinsic-functions?view=msvc-170
-uint8_t _InterlockedExchangeAdd8(uint8_t volatile *Addend, uint8_t Value) {}
-uint16_t _InterlockedExchangeAdd16(uint16_t volatile *Addend, uint16_t Value) {}
-uint32_t _InterlockedExchangeAdd(uint32_t volatile *Addend, uint32_t Value) {}
-uint64_t _InterlockedExchangeAdd64(uint64_t volatile *Addend, uint64_t Value) {}
+uint8_t _InterlockedExchangeAdd8(uint8_t volatile *Addend, uint8_t Value);
+uint16_t _InterlockedExchangeAdd16(uint16_t volatile *Addend, uint16_t Value);
+uint32_t _InterlockedExchangeAdd(uint32_t volatile *Addend, uint32_t Value);
+uint64_t _InterlockedExchangeAdd64(uint64_t volatile *Addend, uint64_t Value);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/interlockedincrement-intrinsic-functions?view=msvc-170
-uint16_t _InterlockedIncrement16(uint16_t volatile *lpAddend) {}
-uint32_t _InterlockedIncrement(uint32_t volatile *lpAddend) {}
-uint64_t _InterlockedIncrement64(uint64_t volatile *lpAddend) {}
+uint16_t _InterlockedIncrement16(uint16_t volatile *lpAddend);
+uint32_t _InterlockedIncrement(uint32_t volatile *lpAddend);
+uint64_t _InterlockedIncrement64(uint64_t volatile *lpAddend);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/cpuid-cpuidex?view=msvc-170
 void __cpuid(uint32_t cpuInfo[4], uint32_t function_id);
 void __cpuidex(uint32_t cpuInfo[4], uint32_t function_id, uint32_t subfunction_id);
 
 // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm_pause
-void _mm_pause() {}
+void _mm_pause();
 
 // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm_lfence
-void _mm_lfence() {}
+void _mm_lfence();
 // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm_sfence
-void _mm_sfence() {}
+void _mm_sfence();
 // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm_mfence
-void _mm_mfence() {}
+void _mm_mfence();
 
 // https://clang.llvm.org/doxygen/mwaitxintrin_8h.html
-void _mm_mwaitx(void *__extensions, uint32_t __hints, uint32_t __clock) {}
-void _mm_monitorx(void *__p, uint32_t __extensions, uint32_t __hints) {}
+void _mm_mwaitx(void *__extensions, uint32_t __hints, uint32_t __clock);
+void _mm_monitorx(void *__p, uint32_t __extensions, uint32_t __hints);
 
 // https://learn.microsoft.com/en-us/cpp/intrinsics/writebarrier?view=msvc-170
-void _WriteBarrier() {}
+void _WriteBarrier();
 // https://learn.microsoft.com/en-us/cpp/intrinsics/readwritebarrier?view=msvc-170
-void _ReadWriteBarrier() {}
+void _ReadWriteBarrier();
 // https://learn.microsoft.com/en-us/cpp/intrinsics/readbarrier?view=msvc-170
-void _ReadBarrier() {}
+void _ReadBarrier();
 
 // filter and __except
 // https://learn.microsoft.com/en-us/windows/win32/debug/getexceptioncode
-uint32_t _exception_code() {};
+uint32_t _exception_code();
 // can only be used in filter
 // https://learn.microsoft.com/en-us/windows/win32/debug/getexceptioninformation
-EXCEPTION_POINTERS *_exception_info() {};
+EXCEPTION_POINTERS *_exception_info();
 // https://learn.microsoft.com/en-us/windows/win32/debug/abnormaltermination
 // was __finally entered by normal execution (0) or by unwinding or jumping out (1)
-bool_t _abnormal_termination() {};
+bool_t _abnormal_termination();
 
 #endif

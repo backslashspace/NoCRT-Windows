@@ -21,9 +21,9 @@ __declspec(noreturn) NtStatus LargeStackThreadEntry(LARGE_STACK_THREAD_START_PAR
 
 /* -------------------------------------------------------------------------- */
 
-boolean_t Multithreading()
+boolean_t TestLargePageThreadStack()
 {
-	ConsoleWrite(u"# Multithreading\n\n");
+	ConsoleWrite(u"# TestLargePageThreadStack\n\n");
 
 	uint8_t *threadStack = null;
 	uint64_t size = STACK_SIZE;
@@ -51,7 +51,11 @@ boolean_t Multithreading()
 	ConsoleWrite(u"[MAIN] Starting worker thread\n");
 
 	_mm_lfence();
+#pragma warning(push)
+#pragma warning(disable:4189)
 	uint64_t now = __rdtsc();
+#pragma warning(pop)
+	
 	_mm_lfence();
 
 	if (STATUS_SUCCESS != NtResumeThread(threadHandle, null))

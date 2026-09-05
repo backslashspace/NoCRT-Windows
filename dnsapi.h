@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "types.h"
 
-// ░░░ Definitions uses by dnsapi Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+// ░░░ Definitions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 //
 //  DNS Query API
@@ -2308,7 +2308,47 @@
 //                  9000 to 9999                 //
 ///////////////////////////////////////////////////
 
-// ░░░ Structs uses by dnsapi Functions ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+// ░░░ Enums ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+// DNS_RECORD_W.Flags.S.CharSet
+typedef enum DNS_CHARSET
+{
+	DnsCharSetUnknown,
+	DnsCharSetUnicode,
+	DnsCharSetUtf8,
+	DnsCharSetAnsi,
+} DNS_CHARSET;
+
+//
+//  Free structures returned from dnsapi.dll
+//
+//  Currently supported free structures:
+//      Flat -- flat structure, including those allocated by DnsQueryConfig()
+//      RecordList -- deep record list free, including sub-fields of DNS_RECORD;
+//          includes those returned by DnsQuery() or DnsRecordSetCopy()
+//
+// https://learn.microsoft.com/en-us/windows/win32/api/windns/ne-windns-dns_free_type
+typedef enum DNS_FREE_TYPE
+{
+	DnsFreeFlat = 0,
+	DnsFreeRecordList,
+	DnsFreeParsedMessageFields
+} DNS_FREE_TYPE;
+
+//  DNS name validation
+// https://learn.microsoft.com/en-us/windows/win32/api/windns/ne-windns-dns_name_format
+typedef enum DNS_NAME_FORMAT
+{
+	DnsNameDomain,
+	DnsNameDomainLabel,
+	DnsNameHostnameFull,	// strict RFC 952/1123 hostname (letters, digits, hyphen - no leading/trailing hyphen - not all-numeric)
+	DnsNameHostnameLabel,
+	DnsNameWildcard,
+	DnsNameSrvRecord,
+	DnsNameValidateTld		// rejects names that would need search-suffix
+} DNS_NAME_FORMAT;
+
+// ░░░ Structs ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 typedef int32_t DNS_STATUS;
 
@@ -2705,44 +2745,6 @@ typedef struct DNS_RECORD_W
 
 	} Data;
 } DNS_RECORD_W;
-
-// DNS_RECORD_W.Flags.S.CharSet
-typedef enum DNS_CHARSET
-{
-	DnsCharSetUnknown,
-	DnsCharSetUnicode,
-	DnsCharSetUtf8,
-	DnsCharSetAnsi,
-} DNS_CHARSET;
-
-//
-//  Free structures returned from dnsapi.dll
-//
-//  Currently supported free structures:
-//      Flat -- flat structure, including those allocated by DnsQueryConfig()
-//      RecordList -- deep record list free, including sub-fields of DNS_RECORD;
-//          includes those returned by DnsQuery() or DnsRecordSetCopy()
-//
-// https://learn.microsoft.com/en-us/windows/win32/api/windns/ne-windns-dns_free_type
-typedef enum DNS_FREE_TYPE
-{
-	DnsFreeFlat = 0,
-	DnsFreeRecordList,
-	DnsFreeParsedMessageFields
-} DNS_FREE_TYPE;
-
-//  DNS name validation
-// https://learn.microsoft.com/en-us/windows/win32/api/windns/ne-windns-dns_name_format
-typedef enum DNS_NAME_FORMAT
-{
-	DnsNameDomain,
-	DnsNameDomainLabel,
-	DnsNameHostnameFull,	// strict RFC 952/1123 hostname (letters, digits, hyphen - no leading/trailing hyphen - not all-numeric)
-	DnsNameHostnameLabel,
-	DnsNameWildcard,
-	DnsNameSrvRecord,
-	DnsNameValidateTld		// rejects names that would need search-suffix
-} DNS_NAME_FORMAT;
 
 // ░░░ Loader API ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 

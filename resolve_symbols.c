@@ -1,5 +1,6 @@
 ﻿#include "ntdll.h"
 #include "dnsapi.h"
+#include "ws2_32.h"
 #include "shell32.h"
 #include "advapi32.h"
 #include "kernelbase.h"
@@ -84,12 +85,42 @@ static boolean_t LoadAndResolveDnsApiSymbols()
 	return true;
 }
 
+static boolean_t LoadAndResolveWS2_32Symbols()
+{
+	if (!InitializeWS2_32(false)) return false;
+
+	if (!Loadbind()) return false;
+	if (!Loadlisten()) return false;
+	if (!LoadWSASend()) return false;
+	if (!LoadWSARecv()) return false;
+	if (!LoadWSAPoll()) return false;
+	if (!Loadshutdown()) return false;
+	if (!LoadWSAIoctl()) return false;
+	if (!LoadInetPtonW()) return false;
+	if (!LoadInetNtopW()) return false;
+	if (!LoadWSAAccept()) return false;
+	if (!LoadWSASendTo()) return false;
+	if (!LoadWSAConnect()) return false;
+	if (!LoadWSACleanup()) return false;
+	if (!LoadWSASocketW()) return false;
+	if (!LoadWSAStartup()) return false;
+	if (!Loadgetsockopt()) return false;
+	if (!Loadsetsockopt()) return false;
+	if (!LoadWSARecvFrom()) return false;
+	if (!Loadclosesocket()) return false;
+	if (!Loadgetsockname()) return false;
+	if (!Loadgetpeername()) return false;
+
+	return true;
+}
+
 // ░░░ Loader ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 boolean_t ResolveSymbols()
 {
 	if (!ResolveNtSymbols()) return false;
 	if (!LoadAndResolveDnsApiSymbols()) return false;
+	if (!LoadAndResolveWS2_32Symbols()) return false;
 	if (!LoadAndResolveKernelbaseSymbols()) return false;
 
 	return true;

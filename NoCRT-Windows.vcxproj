@@ -22,7 +22,15 @@
     <ClCompile Include="adjust_process_token_privileges.c" />
     <ClCompile Include="advapi32.c" />
     <ClCompile Include="aslr.c" />
+    <ClCompile Include="dns.c">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="dnsapi.c">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="generic_windows.h">
       <SubType>
       </SubType>
     </ClCompile>
@@ -37,6 +45,18 @@
     <ClCompile Include="ole32.c" />
     <ClCompile Include="parse_command_line.c" />
     <ClCompile Include="print_cpuid.c" />
+    <ClCompile Include="tcp.c">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="udp.c">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="ws2_32.c">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="xterm_readline.c" />
     <ClCompile Include="enable_xterm.c" />
     <ClCompile Include="kernelbase.c" />
@@ -79,6 +99,10 @@
     <ClInclude Include="testing.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="utility.h" />
+    <ClInclude Include="ws2_32.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="get_first_mismatch_index.asm" />

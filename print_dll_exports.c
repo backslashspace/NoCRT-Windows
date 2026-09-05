@@ -31,7 +31,7 @@ NEXT_FUNCTION:;
 	__movsb(buffer, functionName, length);
 	*(uint16_t *)(&buffer[length]) = '\r\n';
 
-	WriteConsoleA(OwnProcessInformation.StandardOutput, buffer, length + 2, null, null);
+	WriteConsoleA(OwnProcessInformation.StandardOutput, buffer, (uint32_t)length + 2, null, null);
 
 	if (++index < numberOfNames) goto NEXT_FUNCTION;
 }

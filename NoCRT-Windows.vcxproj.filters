@@ -85,6 +85,21 @@
     <ClCompile Include="dnsapi.c">
       <Filter>Source Files\external</Filter>
     </ClCompile>
+    <ClCompile Include="ws2_32.c">
+      <Filter>Source Files\external</Filter>
+    </ClCompile>
+    <ClCompile Include="dns.c">
+      <Filter>Source Files\core\testing\networking</Filter>
+    </ClCompile>
+    <ClCompile Include="tcp.c">
+      <Filter>Source Files\core\testing\networking</Filter>
+    </ClCompile>
+    <ClCompile Include="udp.c">
+      <Filter>Source Files\core\testing\networking</Filter>
+    </ClCompile>
+    <ClCompile Include="generic_windows.h">
+      <Filter>Header Files\external</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.h">
@@ -127,6 +142,9 @@
       <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="dnsapi.h">
+      <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="ws2_32.h">
       <Filter>Header Files\external</Filter>
     </ClInclude>
   </ItemGroup>
@@ -175,6 +193,9 @@
     </Filter>
     <Filter Include="Source Files\core\testing\mwaitx">
       <UniqueIdentifier>{141dfb4b-e1f3-462f-8435-64b655b7b0ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core\testing\networking">
+      <UniqueIdentifier>{bd4494af-593e-42e0-b044-f438ef8ea2e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

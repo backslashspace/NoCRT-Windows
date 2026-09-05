@@ -16,7 +16,7 @@ uint64_t ParseCommandLine(wchar_t const *restrict const commandLine, uint64_t co
 
 // ░░░ Macros ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-#define GetLastError __readgsdword(0x68);
+#define GET_LAST_ERROR __readgsdword(0x68)
 
 // ░░░ String ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 

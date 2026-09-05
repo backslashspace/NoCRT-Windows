@@ -11,7 +11,7 @@ typedef __declspec(align(64)) union CACHE_LINE
 } CACHE_LINE;
 _Static_assert(_Alignof(CACHE_LINE) == 64, "CACHE_LINE struct was NOT 64 byte aligned.");
 
-void MWaitXSpinWait(boolean_t *address);
+void MWaitXSpinWait(boolean_t volatile *address);
 
 NtStatus WaitingWorker(boolean_t *argument)
 {
@@ -23,7 +23,10 @@ NtStatus WaitingWorker(boolean_t *argument)
 		MWaitXSpinWait(&cacheLine->Flag);
 		ConsoleWrite(u"[Worker] flag was set\n");
 	}
+#pragma warning(push)
+#pragma warning(disable:6320)
 	__except (EXCEPTION_EXECUTE_HANDLER)
+#pragma warning(pop)
 	{
 		ConsoleWrite(u"MWaitXSpinWait error - not supported?\n");
 	}
@@ -42,14 +45,14 @@ void TestMWaitXSpinWait()
 	if (STATUS_SUCCESS != NtCreateThreadEx(&threadHandle, THREAD_ALL_ACCESS, null, (Handle)-1i64, &WaitingWorker, &cacheLine, THREAD_CREATE_FLAGS_SKIP_THREAD_ATTACH | THREAD_CREATE_FLAGS_CREATE_SUSPENDED, 0, 4096, 4096, null))
 	{
 		ConsoleWrite(u"[Main] Failed to create thread\n");
-		return false;
+		return;
 	}
 	ConsoleWrite(u"[Main] Starting worker thread\n");
 
 	if (STATUS_SUCCESS != NtResumeThread(threadHandle, null))
 	{
 		ConsoleWrite(u"[Main] Failed to start thread\n");
-		return false;
+		return;
 	}
 
 	int64_t delay = 4'000 * -10'000;
@@ -60,7 +63,7 @@ void TestMWaitXSpinWait()
 	if (STATUS_SUCCESS != NtWaitForSingleObject(threadHandle, false, null))
 	{
 		ConsoleWrite(u"[Main] Failed to wait for thread to end\n");
-		return false;
+		return;
 	}
 	NtClose(threadHandle);
 
